@@ -1,11 +1,11 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:test_build/home.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
+import 'package:test_build/upload_image.dart';
 
 void main() {
   if (kIsWeb) {
@@ -18,7 +18,9 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-  runApp(SidebarXExampleApp());
+  initSysAppDocDir().then((value) {
+    runApp(SidebarXExampleApp());
+  });
 }
 
 class CHContainer {
@@ -105,6 +107,7 @@ class SidebarXExampleApp extends StatelessWidget {
                       backgroundColor: canvasColor,
                       title: Text(
                         _getTitleByIndex(widgets, _controller.selectedIndex),
+                        style: TextStyle(color: white),
                       ),
                       leading: IconButton(
                         onPressed: () {
@@ -113,7 +116,7 @@ class SidebarXExampleApp extends StatelessWidget {
                           // }
                           _key.currentState?.openDrawer();
                         },
-                        icon: const Icon(Icons.menu),
+                        icon: const Icon(Icons.menu, color: white),
                       ),
                     )
                     : null,

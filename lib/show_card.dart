@@ -1,4 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
+import 'package:test_build/lite_func_icons.dart';
 import 'package:test_build/memos_database.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +48,12 @@ class _ShowCardState extends State<ShowCard> {
     },
   );
 
+  // fensh time 格式化时间
+  String getFormattedTime(int timestamp) {
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    return DateFormat('yyyy-MM-dd EEEE HH:mm:ss').format(dateTime);
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -57,7 +65,7 @@ class _ShowCardState extends State<ShowCard> {
   Widget build(BuildContext context) {
     textEditingController.text = widget.memo.context;
     canEdit = widget.memo.editorData.canEdit;
-
+    final time = getFormattedTime(widget.memo.creatDate);
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
@@ -68,10 +76,21 @@ class _ShowCardState extends State<ShowCard> {
       ),
       child: Column(
         children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0, top: 10.0),
+              child: Text(
+                time,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.start,
+              ),
+            ),
+          ),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 300.0),
             child: Padding(
-              padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
+              padding: const EdgeInsets.only(left: 20, top: 10.0, right: 20),
               child: GestureDetector(
                 onDoubleTap: () {
                   // double click 处理双击事件
@@ -104,30 +123,7 @@ class _ShowCardState extends State<ShowCard> {
           if (canEdit)
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.numbers),
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.code),
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.link),
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.attach_file),
-                    color: Colors.white,
-                    onPressed: () {},
-                  ),
-                ],
-              ),
+              child: LiteFuncIcons(),
             ),
           if (canEdit)
             const Divider(
@@ -140,7 +136,7 @@ class _ShowCardState extends State<ShowCard> {
             Padding(
               padding: const EdgeInsets.only(right: 20.0, bottom: 10.0),
               child: Row(
-                textDirection: TextDirection.rtl,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
                     onPressed: () {

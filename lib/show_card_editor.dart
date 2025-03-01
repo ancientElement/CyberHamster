@@ -1,6 +1,9 @@
+import 'package:path/path.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
+import 'package:test_build/lite_func_icons.dart';
 import 'package:test_build/memos_database.dart';
 import 'package:flutter/material.dart';
+import 'package:test_build/upload_image.dart';
 
 class ShowCardEditor extends StatefulWidget {
   final void Function(Memo value) addMemoToListView;
@@ -34,6 +37,8 @@ class _ShowCardState extends State<ShowCardEditor> {
       ),
     },
   );
+
+  final imageNames = <String>[];
 
   @override
   void dispose() {
@@ -76,29 +81,14 @@ class _ShowCardState extends State<ShowCardEditor> {
           const SizedBox(height: 10.0),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
-            child: Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.numbers),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.code),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.link),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.attach_file),
-                  color: Colors.white,
-                  onPressed: () {},
-                ),
-              ],
+            child: LiteFuncIcons(
+              onSaveImages: (value) {
+                setState(() {
+                  for (final imageName in value) {
+                    imageNames.add(imageName);
+                  }
+                });
+              },
             ),
           ),
           const Divider(

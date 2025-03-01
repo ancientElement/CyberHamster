@@ -6,7 +6,12 @@ import 'package:path_provider/path_provider.dart';
 
 late Directory sysAppDocDir;
 
+bool _isInitSysAppDocDir = false;
+
 Future<void> initSysAppDocDir() async {
+  if (_isInitSysAppDocDir) {
+    return;
+  }
   sysAppDocDir = await getSysAppDocDir();
   return;
 }
@@ -19,6 +24,7 @@ Future<Directory> getSysAppDocDir() async {
   } else {
     appDocDir = Directory(defualtDir);
   }
+  _isInitSysAppDocDir = true;
   return appDocDir;
 }
 

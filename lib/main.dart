@@ -18,9 +18,9 @@ void main() {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-  initSysAppDocDir().then((value) {
-    runApp(SidebarXExampleApp());
-  });
+  runApp(SidebarXExampleApp());
+  // init doc dir 初始化文档文件夹
+  initSysAppDocDir();
 }
 
 class CHContainer {

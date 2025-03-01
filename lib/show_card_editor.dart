@@ -1,9 +1,7 @@
-import 'package:path/path.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
 import 'package:test_build/lite_func_icons.dart';
 import 'package:test_build/memos_database.dart';
 import 'package:flutter/material.dart';
-import 'package:test_build/upload_image.dart';
 
 class ShowCardEditor extends StatefulWidget {
   final void Function(Memo value) addMemoToListView;

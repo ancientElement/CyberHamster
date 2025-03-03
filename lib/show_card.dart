@@ -122,7 +122,7 @@ class _ShowCardState extends State<ShowCard> {
               ),
             ),
           ),
-          if (imageNames.isNotEmpty && canEdit)
+          if ((imageNames.isNotEmpty || imagesWillAdd.isNotEmpty) && canEdit)
             SizedBox(
               height: 40,
               child: Padding(
@@ -163,19 +163,11 @@ class _ShowCardState extends State<ShowCard> {
                 onClickImage: () {
                   upLoadImage().then((value) {
                     if (value == null) return;
-                    if (canSwitch) {
-                      setState(() {
-                        for (final imageName in value) {
-                          imagesWillAdd.add(imageName);
-                        }
-                      });
-                    } else {
+                    setState(() {
                       for (final imageName in value) {
-                        setState(() {
-                          imageNames.add(imageName);
-                        });
+                        imagesWillAdd.add(imageName);
                       }
-                    }
+                    });
                   });
                 },
               ),
@@ -216,7 +208,7 @@ class _ShowCardState extends State<ShowCard> {
                         }
                       } else {
                         MemoDatabase.instance
-                            .create(textEditingController.text, imageNames)
+                            .create(textEditingController.text, imagesWillAdd)
                             .then((value) {
                               widget.addMemoToListView(value);
                             });

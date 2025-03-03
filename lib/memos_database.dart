@@ -11,6 +11,7 @@ class Memo {
   int id;
   String context;
   int creatDate;
+  List<String>? images;
   MemoEditorData editorData = MemoEditorData();
 
   // 私有构造函数
@@ -18,10 +19,15 @@ class Memo {
     required this.id,
     required this.context,
     required this.creatDate,
+    this.images,
   });
 
   initID(int id) {
     this.id = id;
+  }
+
+  void addImages(String image) {
+    images?.add(image);
   }
 
   // 工厂构造函数，确保只能通过 MemoDatabase 创建 Memo 对象
@@ -29,8 +35,14 @@ class Memo {
     required int id,
     required String context,
     required int creatDate,
+    List<String>? images,
   }) {
-    return Memo._internal(id: id, context: context, creatDate: creatDate);
+    return Memo._internal(
+      id: id,
+      context: context,
+      creatDate: creatDate,
+      images: images,
+    );
   }
 
   // 将 Memo 对象转换为 Map
@@ -39,11 +51,12 @@ class Memo {
   }
 
   // 从 Map 中创建 Memo 对象
-  factory Memo.fromMap(Map<String, dynamic> map) {
+  factory Memo.fromMap(Map<String, dynamic> map, List<String>? images) {
     return Memo._internal(
       id: map['ID'],
       context: map['CONTEXT'],
       creatDate: map['CREATDATE'],
+      images: images,
     );
   }
 
@@ -81,12 +94,19 @@ class MemoDatabase {
     return await openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute(
+      onCreate: (db, version) async {
+        await db.execute(
           'CREATE TABLE MEMOS ('
           'ID        INTEGER  PRIMARY KEY ASC AUTOINCREMENT,'
           'CONTEXT   TEXT,'
           'CREATDATE DATETIME'
+          ');',
+        );
+        await db.execute(
+          'CREATE TABLE MEMO_IMAGES ('
+          'ID         INTEGER PRIMARY KEY AUTOINCREMENT,'
+          'MEMO_ID    INTEGER REFERENCES MEMOS (ID),'
+          'IMAGE_NAME TEXT'
           ');',
         );
       },
@@ -94,7 +114,7 @@ class MemoDatabase {
   }
 
   // 插入一条记录
-  Future<Memo> create(String context) async {
+  Future<Memo> create(String context, List<String>? images) async {
     final db = await instance.database;
     final creatDate = DateTime.now().millisecondsSinceEpoch;
     Map<String, dynamic> map = {'CONTEXT': context, 'CREATDATE': creatDate};
@@ -103,19 +123,36 @@ class MemoDatabase {
       id: id,
       context: context,
       creatDate: creatDate,
+      images: images,
     );
     memo.initID(id);
+    if (images != null) {
+      for (final name in images) {
+        await db.insert('MEMO_IMAGES', {'MEMO_ID': id, 'IMAGE_NAME': name});
+      }
+    }
     return memo;
   }
 
   // 查询所有记录
   Future<List<Memo>> readAllMemos() async {
     final db = await instance.database;
-    final result = await db.query(
-      'MEMOS',
-      orderBy: 'CREATDATE DESC', // 按照 CREATDATE 降序排列
-    );
-    return result.map((json) => Memo.fromMap(json)).toList();
+    final memos = await db.query('MEMOS', orderBy: 'CREATDATE DESC');
+
+    List<Memo> memoList = [];
+    for (final memoMap in memos) {
+      // 查询对应的图片
+      final images = await db.query(
+        'MEMO_IMAGES',
+        where: 'MEMO_ID = ?',
+        whereArgs: [memoMap['ID']],
+      );
+
+      final memoImages =
+          images.map((img) => img['IMAGE_NAME'] as String).toList();
+      memoList.add(Memo.fromMap(memoMap, memoImages));
+    }
+    return memoList;
   }
 
   // 根据 ID 查询单条记录
@@ -129,14 +166,21 @@ class MemoDatabase {
     );
 
     if (maps.isNotEmpty) {
-      return Memo.fromMap(maps.first);
+      final images = await db.query(
+        'MEMO_IMAGES',
+        where: 'MEMO_ID = ?',
+        whereArgs: [id],
+      );
+      final memoImages =
+          images.map((img) => img['IMAGE_NAME'] as String).toList();
+      return Memo.fromMap(maps.first, memoImages);
     } else {
       return null;
     }
   }
 
   // 更新记录
-  Future<int> update(int id, String context) async {
+  Future<int> updateContext(int id, String context) async {
     final db = await instance.database;
     return db.update(
       'MEMOS',
@@ -149,6 +193,7 @@ class MemoDatabase {
   // 删除记录
   Future<int> delete(int id) async {
     final db = await instance.database;
+    await db.delete('MEMO_IMAGES', where: 'MEMO_ID = ?', whereArgs: [id]);
     return await db.delete('MEMOS', where: 'ID = ?', whereArgs: [id]);
   }
 

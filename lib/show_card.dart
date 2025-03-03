@@ -124,7 +124,10 @@ class _ShowCardState extends State<ShowCard> {
                   ElevatedButton(
                     onPressed: () {
                       MemoDatabase.instance
-                          .update(widget.memo.id, textEditingController.text)
+                          .updateContext(
+                            widget.memo.id,
+                            textEditingController.text,
+                          )
                           .then((value) {
                             widget.memo.context = textEditingController.text;
                             setState(() {

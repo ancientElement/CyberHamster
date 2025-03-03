@@ -116,7 +116,7 @@ class _ShowCardState extends State<ShowCardEditor> {
                 ElevatedButton(
                   onPressed: () {
                     MemoDatabase.instance
-                        .create(textEditingController.text)
+                        .create(textEditingController.text, imageNames)
                         .then((value) {
                           widget.addMemoToListView(value);
                         });

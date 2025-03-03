@@ -1,7 +1,6 @@
 import 'package:test_build/memos_database.dart';
 import 'package:test_build/show_card.dart';
 import 'package:flutter/material.dart';
-import 'package:test_build/show_card_editor.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -47,9 +46,13 @@ class _HomeState extends State<Home> {
         itemCount: memos.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return ShowCardEditor(addMemoToListView: addMemoToListView);
+            return ShowCard(
+              alwaysEdit: true,
+              addMemoToListView: addMemoToListView,
+            );
           }
           return ShowCard(
+            alwaysEdit: false,
             memo: memos[index - 1],
             addMemoToListView: addMemoToListView,
             removeMemoFromListView: removeMemoFromListView,

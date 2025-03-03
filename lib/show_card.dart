@@ -1,21 +1,27 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
 import 'package:test_build/lite_func_icons.dart';
 import 'package:test_build/memos_database.dart';
 import 'package:flutter/material.dart';
+import 'package:test_build/upload_image.dart';
 
 class ShowCard extends StatefulWidget {
-  final Memo memo;
-  final int index;
+  final bool alwaysEdit;
+  final Memo? memo;
+  final int? index;
   final void Function(Memo value) addMemoToListView;
-  final void Function(int value) removeMemoFromListView;
+  final void Function(int value)? removeMemoFromListView;
 
   const ShowCard({
     super.key,
-    required this.memo,
-    required this.index,
+    required this.alwaysEdit,
+    this.memo,
+    this.index,
     required this.addMemoToListView,
-    required this.removeMemoFromListView,
+    this.removeMemoFromListView,
   });
 
   @override
@@ -27,7 +33,7 @@ class _ShowCardState extends State<ShowCard> {
       MaterialTextSelectionControls();
   final foucsNode = FocusNode();
   bool canEdit = false;
-
+  List<String> imageNames = [];
   // register ruler 注册文本规则
   final textEditingController = CHTextEditingController();
 
@@ -46,9 +52,16 @@ class _ShowCardState extends State<ShowCard> {
 
   @override
   Widget build(BuildContext context) {
-    textEditingController.text = widget.memo.context;
-    canEdit = widget.memo.editorData.canEdit;
-    final time = getFormattedTime(widget.memo.creatDate);
+    late String time;
+    canEdit =
+        widget.alwaysEdit ? widget.alwaysEdit : widget.memo!.editorData.canEdit;
+    if (!widget.alwaysEdit) {
+      textEditingController.text = widget.memo!.context;
+      time = getFormattedTime(widget.memo!.creatDate);
+      if (widget.memo!.images != null) {
+        imageNames = widget.memo!.images!;
+      }
+    }
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
@@ -59,17 +72,18 @@ class _ShowCardState extends State<ShowCard> {
       ),
       child: Column(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 10.0),
-              child: Text(
-                time,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.start,
+          if (!widget.alwaysEdit)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 10.0),
+                child: Text(
+                  time,
+                  style: TextStyle(color: Colors.white),
+                  textAlign: TextAlign.start,
+                ),
               ),
             ),
-          ),
           ConstrainedBox(
             constraints: const BoxConstraints(maxHeight: 300.0),
             child: Padding(
@@ -77,11 +91,13 @@ class _ShowCardState extends State<ShowCard> {
               child: GestureDetector(
                 onDoubleTap: () {
                   // double click 处理双击事件
-                  setState(() {
-                    canEdit = !canEdit;
-                    widget.memo.editorData.canEdit = canEdit;
-                    foucsNode.requestFocus();
-                  });
+                  if (!widget.alwaysEdit) {
+                    setState(() {
+                      canEdit = !canEdit;
+                      widget.memo!.editorData.canEdit = canEdit;
+                      foucsNode.requestFocus();
+                    });
+                  }
                 },
                 child: TextField(
                   focusNode: foucsNode,
@@ -102,11 +118,46 @@ class _ShowCardState extends State<ShowCard> {
               ),
             ),
           ),
+          if (imageNames.isNotEmpty && canEdit)
+            SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 8.0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageNames.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [BoxShadow()],
+                      ),
+                      margin: EdgeInsets.only(right: 8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.file(
+                          File(join(sysAppDocDir.path, imageNames[index])),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           const SizedBox(height: 10.0),
           if (canEdit)
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
-              child: LiteFuncIcons(),
+              child: LiteFuncIcons(
+                onSaveImages: (value) {
+                  setState(() {
+                    for (final imageName in value) {
+                      imageNames.add(imageName);
+                    }
+                  });
+                },
+              ),
             ),
           if (canEdit)
             const Divider(
@@ -123,29 +174,37 @@ class _ShowCardState extends State<ShowCard> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      MemoDatabase.instance
-                          .updateContext(
-                            widget.memo.id,
-                            textEditingController.text,
-                          )
-                          .then((value) {
-                            widget.memo.context = textEditingController.text;
-                            setState(() {
-                              canEdit = false;
-                              widget.memo.editorData.canEdit = canEdit;
+                      if (!widget.alwaysEdit) {
+                        MemoDatabase.instance
+                            .updateContext(
+                              widget.memo!.id,
+                              textEditingController.text,
+                            )
+                            .then((value) {
+                              widget.memo!.context = textEditingController.text;
+                              setState(() {
+                                canEdit = false;
+                                widget.memo!.editorData.canEdit = canEdit;
+                              });
                             });
-                          });
+                      } else {
+                        MemoDatabase.instance
+                            .create(textEditingController.text, imageNames)
+                            .then((value) {
+                              widget.addMemoToListView(value);
+                            });
+                      }
                     },
                     child: const Text("保存"),
                   ),
-                  if (canEdit) const SizedBox(width: 10),
-                  if (canEdit)
+                  if (!widget.alwaysEdit && canEdit) const SizedBox(width: 10),
+                  if (!widget.alwaysEdit && canEdit)
                     ElevatedButton(
                       onPressed: () {
-                        MemoDatabase.instance.delete(widget.memo.id).then((
+                        MemoDatabase.instance.delete(widget.memo!.id).then((
                           value,
                         ) {
-                          widget.removeMemoFromListView(widget.index);
+                          widget.removeMemoFromListView!(widget.index!);
                         });
                       },
                       child: const Text("删除"),

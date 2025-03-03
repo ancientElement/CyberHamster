@@ -125,9 +125,9 @@ class _ShowCardState extends State<ShowCard> {
               ),
             ),
           ),
-          if ((imageNames.isNotEmpty || imagesWillAdd.isNotEmpty) && canEdit)
+          if ((imageNames.isNotEmpty || imagesWillAdd.isNotEmpty))
             SizedBox(
-              height: 40,
+              height: canEdit ? 40 : 200,
               child: Padding(
                 padding: const EdgeInsets.only(left: 20.0, top: 8.0),
                 child: ListView.builder(
@@ -153,50 +153,18 @@ class _ShowCardState extends State<ShowCard> {
                             padding: const EdgeInsets.all(4.0),
                             child: Image.file(File(path)),
                           ),
-                          IconButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              //TODO：删除图片
-                            },
-                            icon: Icon(
-                              Icons.highlight_remove,
-                              color: Colors.white70,
+                          if (canEdit)
+                            IconButton(
+                              padding: EdgeInsets.all(0),
+                              onPressed: () {
+                                //TODO：删除图片
+                              },
+                              icon: Icon(
+                                Icons.highlight_remove,
+                                color: Colors.white70,
+                              ),
                             ),
-                          ),
                         ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          if ((imageNames.isNotEmpty || imagesWillAdd.isNotEmpty) &&
-              !canEdit &&
-              canSwitch)
-            SizedBox(
-              height: 200,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0, top: 8.0),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: imageNames.length + imagesWillAdd.length,
-                  itemBuilder: (context, index) {
-                    late String path;
-                    if (index < imageNames.length) {
-                      path = join(sysAppDocDir.path, imageNames[index]);
-                    } else {
-                      path = imagesWillAdd[index - imageNames.length].path!;
-                    }
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        color: Colors.white.withValues(alpha: 0.5),
-                        boxShadow: const [BoxShadow()],
-                      ),
-                      margin: EdgeInsets.only(right: 8.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Image.file(File(path)),
                       ),
                     );
                   },
@@ -248,10 +216,14 @@ class _ShowCardState extends State<ShowCard> {
                             });
                         if (imagesWillAdd.isNotEmpty) {
                           uploadImage(imagesWillAdd).then((images) {
-                            MemoDatabase.instance.updateImages(
-                              widget.memo!.id,
-                              images!,
-                            );
+                            MemoDatabase.instance
+                                .updateImages(widget.memo!.id, images!)
+                                .then((value) {
+                                  setState(() {
+                                    imagesWillAdd.clear();
+                                    imageNames.addAll(images);
+                                  });
+                                });
                           });
                         }
                       } else {

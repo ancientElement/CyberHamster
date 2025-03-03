@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:test_build/upload_image.dart';
 
 class LiteFuncIcons extends StatelessWidget {
   final void Function()? onClickTag;
   final void Function()? onClickLink;
-  final void Function(List<String>)? onSaveImages;
+  final void Function()? onClickImage;
 
   const LiteFuncIcons({
     super.key,
     this.onClickTag,
     this.onClickLink,
-    this.onSaveImages,
+    this.onClickImage,
   });
 
   @override
@@ -27,13 +26,7 @@ class LiteFuncIcons extends StatelessWidget {
         ),
         IconButton(
           icon: const Icon(Icons.image_outlined, color: Colors.white),
-          onPressed: () {
-            upLoadImage().then((value) {
-              if (value == null) return;
-              if (onSaveImages == null) return;
-              onSaveImages!(value);
-            });
-          },
+          onPressed: onClickImage,
         ),
       ],
     );

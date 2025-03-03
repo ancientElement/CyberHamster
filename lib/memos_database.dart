@@ -180,14 +180,23 @@ class MemoDatabase {
   }
 
   // 更新记录
-  Future<int> updateContext(int id, String context) async {
+  Future<void> updateContext(int id, String context) async {
     final db = await instance.database;
-    return db.update(
+    await db.update(
       'MEMOS',
       {"CONTEXT": context},
       where: 'ID = ?',
       whereArgs: [id],
     );
+    return;
+  }
+
+  Future<void> updateImages(int id, List<String> images) async {
+    final db = await instance.database;
+    for (final name in images) {
+      await db.insert('MEMO_IMAGES', {'MEMO_ID': id, 'IMAGE_NAME': name});
+    }
+    return;
   }
 
   // 删除记录

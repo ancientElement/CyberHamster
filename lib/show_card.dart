@@ -34,6 +34,9 @@ class _ShowCardState extends State<ShowCard> {
   final foucsNode = FocusNode();
   bool canEdit = false;
   List<String> imageNames = [];
+  List<String> imagesWillRemove = [];
+  List<String> imagesWillAdd = [];
+
   // register ruler 注册文本规则
   final textEditingController = CHTextEditingController();
 
@@ -55,7 +58,8 @@ class _ShowCardState extends State<ShowCard> {
     late String time;
     canEdit =
         widget.alwaysEdit ? widget.alwaysEdit : widget.memo!.editorData.canEdit;
-    if (!widget.alwaysEdit) {
+    final canSwitch = !widget.alwaysEdit;
+    if (canSwitch) {
       textEditingController.text = widget.memo!.context;
       time = getFormattedTime(widget.memo!.creatDate);
       if (widget.memo!.images != null) {
@@ -72,7 +76,7 @@ class _ShowCardState extends State<ShowCard> {
       ),
       child: Column(
         children: [
-          if (!widget.alwaysEdit)
+          if (canSwitch)
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -91,7 +95,7 @@ class _ShowCardState extends State<ShowCard> {
               child: GestureDetector(
                 onDoubleTap: () {
                   // double click 处理双击事件
-                  if (!widget.alwaysEdit) {
+                  if (canSwitch) {
                     setState(() {
                       canEdit = !canEdit;
                       widget.memo!.editorData.canEdit = canEdit;
@@ -125,8 +129,14 @@ class _ShowCardState extends State<ShowCard> {
                 padding: const EdgeInsets.only(left: 20.0, top: 8.0),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: imageNames.length,
+                  itemCount: imageNames.length + imagesWillAdd.length,
                   itemBuilder: (context, index) {
+                    late String iamgeName;
+                    if (index < imageNames.length) {
+                      iamgeName = imageNames[index];
+                    } else {
+                      iamgeName = imagesWillAdd[index - imageNames.length];
+                    }
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.5),
@@ -137,7 +147,7 @@ class _ShowCardState extends State<ShowCard> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Image.file(
-                          File(join(sysAppDocDir.path, imageNames[index])),
+                          File(join(sysAppDocDir.path, iamgeName)),
                         ),
                       ),
                     );
@@ -150,10 +160,21 @@ class _ShowCardState extends State<ShowCard> {
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: LiteFuncIcons(
-                onSaveImages: (value) {
-                  setState(() {
-                    for (final imageName in value) {
-                      imageNames.add(imageName);
+                onClickImage: () {
+                  upLoadImage().then((value) {
+                    if (value == null) return;
+                    if (canSwitch) {
+                      setState(() {
+                        for (final imageName in value) {
+                          imagesWillAdd.add(imageName);
+                        }
+                      });
+                    } else {
+                      for (final imageName in value) {
+                        setState(() {
+                          imageNames.add(imageName);
+                        });
+                      }
                     }
                   });
                 },
@@ -174,7 +195,7 @@ class _ShowCardState extends State<ShowCard> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      if (!widget.alwaysEdit) {
+                      if (canSwitch) {
                         MemoDatabase.instance
                             .updateContext(
                               widget.memo!.id,
@@ -187,6 +208,12 @@ class _ShowCardState extends State<ShowCard> {
                                 widget.memo!.editorData.canEdit = canEdit;
                               });
                             });
+                        if (imagesWillAdd.isNotEmpty) {
+                          MemoDatabase.instance.updateImages(
+                            widget.memo!.id,
+                            imagesWillAdd,
+                          );
+                        }
                       } else {
                         MemoDatabase.instance
                             .create(textEditingController.text, imageNames)
@@ -197,8 +224,8 @@ class _ShowCardState extends State<ShowCard> {
                     },
                     child: const Text("保存"),
                   ),
-                  if (!widget.alwaysEdit && canEdit) const SizedBox(width: 10),
-                  if (!widget.alwaysEdit && canEdit)
+                  if (canSwitch && canEdit) const SizedBox(width: 10),
+                  if (canSwitch && canEdit)
                     ElevatedButton(
                       onPressed: () {
                         MemoDatabase.instance.delete(widget.memo!.id).then((

@@ -29,24 +29,7 @@ class _ShowCardState extends State<ShowCard> {
   bool canEdit = false;
 
   // register ruler 注册文本规则
-  final textEditingController = CHTextEditingController(
-    textMap: {RegExp.escape('-[]'): '✅'},
-    textStyleMap: {
-      RegExp.escape('apple'): const TextStyle(
-        color: Colors.green,
-        decoration: TextDecoration.underline,
-        fontSize: 36,
-      ),
-      RegExp.escape('orange'): TextStyle(
-        color: Colors.orange,
-        shadows: kElevationToShadow[2],
-      ),
-      r'^https?:\/\/[\w\-]+(\.[\w\-]+)*(:\d+)?([\/\?#].*)?$': const TextStyle(
-        color: Colors.blue,
-        decoration: TextDecoration.underline,
-      ),
-    },
-  );
+  final textEditingController = CHTextEditingController();
 
   // fensh time 格式化时间
   String getFormattedTime(int timestamp) {

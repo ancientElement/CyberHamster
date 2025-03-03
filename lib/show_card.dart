@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:test_build/upload_image.dart';
 
 class ShowCard extends StatefulWidget {
-  final bool alwaysEdit;
+  final bool canSwitch;
   final Memo? memo;
   final int? index;
   final void Function(Memo value) addMemoToListView;
@@ -17,7 +17,7 @@ class ShowCard extends StatefulWidget {
 
   const ShowCard({
     super.key,
-    required this.alwaysEdit,
+    required this.canSwitch,
     this.memo,
     this.index,
     required this.addMemoToListView,
@@ -56,9 +56,8 @@ class _ShowCardState extends State<ShowCard> {
   @override
   Widget build(BuildContext context) {
     late String time;
-    canEdit =
-        widget.alwaysEdit ? widget.alwaysEdit : widget.memo!.editorData.canEdit;
-    final canSwitch = !widget.alwaysEdit;
+    final canSwitch = widget.canSwitch;
+    canEdit = canSwitch ? widget.memo!.editorData.canEdit : true;
     if (canSwitch) {
       textEditingController.text = widget.memo!.context;
       time = getFormattedTime(widget.memo!.creatDate);

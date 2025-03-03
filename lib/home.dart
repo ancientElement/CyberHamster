@@ -47,12 +47,12 @@ class _HomeState extends State<Home> {
         itemBuilder: (context, index) {
           if (index == 0) {
             return ShowCard(
-              alwaysEdit: true,
+              canSwitch: false,
               addMemoToListView: addMemoToListView,
             );
           }
           return ShowCard(
-            alwaysEdit: false,
+            canSwitch: true,
             memo: memos[index - 1],
             addMemoToListView: addMemoToListView,
             removeMemoFromListView: removeMemoFromListView,

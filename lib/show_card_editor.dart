@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:path/path.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
 import 'package:test_build/lite_func_icons.dart';
 import 'package:test_build/memos_database.dart';
 import 'package:flutter/material.dart';
+import 'package:test_build/upload_image.dart';
 
 class ShowCardEditor extends StatefulWidget {
   final void Function(Memo value) addMemoToListView;
@@ -59,7 +63,33 @@ class _ShowCardState extends State<ShowCardEditor> {
               ),
             ),
           ),
-          const SizedBox(height: 10.0),
+          if (imageNames.isNotEmpty)
+            SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 8.0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageNames.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [BoxShadow()],
+                      ),
+                      margin: EdgeInsets.only(right: 8.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Image.file(
+                          File(join(sysAppDocDir.path, imageNames[index])),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: LiteFuncIcons(

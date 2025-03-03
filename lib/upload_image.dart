@@ -17,7 +17,8 @@ Future<void> initSysAppDocDir() async {
 }
 
 Future<Directory> getSysAppDocDir() async {
-  final String defualtDir = "F:/WorkPlace/Flutter/test_build/test_build/assets";
+  final String defualtDir =
+      "F:/WorkPlace/Flutter/test_build/test_build/assets/images/";
   Directory appDocDir;
   if (Platform.isIOS || Platform.isAndroid) {
     appDocDir = await getApplicationDocumentsDirectory();
@@ -55,7 +56,7 @@ Future<List<String>?> upLoadImage() async {
       // 4. 获取应用文档目录并创建目标文件夹
       final Directory appDocDir = sysAppDocDir;
 
-      final targetDir = Directory(path.join(appDocDir.path, 'images'));
+      final targetDir = appDocDir;
 
       if (!await targetDir.exists()) {
         await targetDir.create(recursive: true);

@@ -199,10 +199,10 @@ class MemoDatabase {
     return;
   }
 
-  Future<void> deleteImages(List<int> imageIds) async {
+  Future<void> deleteImages(List<String> imageNames) async {
     final db = await instance.database;
-    for (final id in imageIds) {
-      await db.delete('MEMO_IMAGES', where: 'ID = ?', whereArgs: [id]);
+    for (final id in imageNames) {
+      await db.delete('MEMO_IMAGES', where: 'IMAGE_NAME = ?', whereArgs: [id]);
     }
     return;
   }

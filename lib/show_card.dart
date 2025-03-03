@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:test_build/ch_text_edior_controller.dart';
@@ -34,8 +35,8 @@ class _ShowCardState extends State<ShowCard> {
   final foucsNode = FocusNode();
   bool canEdit = false;
   List<String> imageNames = [];
-  List<String> imagesWillRemove = [];
-  List<String> imagesWillAdd = [];
+  Map<int, String> imagesWillRemove = {};
+  List<PlatformFile> imagesWillAdd = [];
 
   // register ruler 注册文本规则
   final textEditingController = CHTextEditingController();
@@ -99,6 +100,11 @@ class _ShowCardState extends State<ShowCard> {
                       canEdit = !canEdit;
                       widget.memo!.editorData.canEdit = canEdit;
                       foucsNode.requestFocus();
+                      //canel 取消
+                      if (!canEdit) {
+                        imagesWillRemove.clear();
+                        imagesWillAdd.clear();
+                      }
                     });
                   }
                 },
@@ -130,11 +136,14 @@ class _ShowCardState extends State<ShowCard> {
                   scrollDirection: Axis.horizontal,
                   itemCount: imageNames.length + imagesWillAdd.length,
                   itemBuilder: (context, index) {
-                    late String iamgeName;
+                    late String path;
                     if (index < imageNames.length) {
-                      iamgeName = imageNames[index];
+                      if (imagesWillRemove[index] != null) {
+                        return Container();
+                      }
+                      path = join(sysAppDocDir.path, imageNames[index]);
                     } else {
-                      iamgeName = imagesWillAdd[index - imageNames.length];
+                      path = imagesWillAdd[index - imageNames.length].path!;
                     }
                     return Container(
                       decoration: BoxDecoration(
@@ -147,13 +156,13 @@ class _ShowCardState extends State<ShowCard> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(4.0),
-                            child: Image.file(
-                              File(join(sysAppDocDir.path, iamgeName)),
-                            ),
+                            child: Image.file(File(path)),
                           ),
                           IconButton(
                             padding: EdgeInsets.all(0),
-                            onPressed: () {},
+                            onPressed: () {
+                              //TODO：删除图片
+                            },
                             icon: Icon(
                               Icons.highlight_remove,
                               color: Colors.white70,
@@ -177,11 +186,11 @@ class _ShowCardState extends State<ShowCard> {
                   scrollDirection: Axis.horizontal,
                   itemCount: imageNames.length + imagesWillAdd.length,
                   itemBuilder: (context, index) {
-                    late String iamgeName;
+                    late String path;
                     if (index < imageNames.length) {
-                      iamgeName = imageNames[index];
+                      path = join(sysAppDocDir.path, imageNames[index]);
                     } else {
-                      iamgeName = imagesWillAdd[index - imageNames.length];
+                      path = imagesWillAdd[index - imageNames.length].path!;
                     }
                     return Container(
                       decoration: BoxDecoration(
@@ -192,9 +201,7 @@ class _ShowCardState extends State<ShowCard> {
                       margin: EdgeInsets.only(right: 8.0),
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Image.file(
-                          File(join(sysAppDocDir.path, iamgeName)),
-                        ),
+                        child: Image.file(File(path)),
                       ),
                     );
                   },
@@ -207,12 +214,10 @@ class _ShowCardState extends State<ShowCard> {
               padding: const EdgeInsets.only(left: 20.0),
               child: LiteFuncIcons(
                 onClickImage: () {
-                  upLoadImage().then((value) {
+                  pickUpImages().then((value) {
                     if (value == null) return;
                     setState(() {
-                      for (final imageName in value) {
-                        imagesWillAdd.add(imageName);
-                      }
+                      imagesWillAdd.addAll(value);
                     });
                   });
                 },
@@ -247,17 +252,21 @@ class _ShowCardState extends State<ShowCard> {
                               });
                             });
                         if (imagesWillAdd.isNotEmpty) {
-                          MemoDatabase.instance.updateImages(
-                            widget.memo!.id,
-                            imagesWillAdd,
-                          );
+                          uploadImage(imagesWillAdd).then((images) {
+                            MemoDatabase.instance.updateImages(
+                              widget.memo!.id,
+                              images!,
+                            );
+                          });
                         }
                       } else {
-                        MemoDatabase.instance
-                            .create(textEditingController.text, imagesWillAdd)
-                            .then((value) {
-                              widget.addMemoToListView(value);
-                            });
+                        uploadImage(imagesWillAdd).then((images) {
+                          MemoDatabase.instance
+                              .create(textEditingController.text, images!)
+                              .then((value) {
+                                widget.addMemoToListView(value);
+                              });
+                        });
                       }
                     },
                     child: const Text("保存"),
@@ -269,6 +278,7 @@ class _ShowCardState extends State<ShowCard> {
                         MemoDatabase.instance.delete(widget.memo!.id).then((
                           value,
                         ) {
+                          deleteImages(imageNames);
                           widget.removeMemoFromListView!(widget.index!);
                         });
                       },

@@ -29,9 +29,8 @@ Future<Directory> getSysAppDocDir() async {
   return appDocDir;
 }
 
-Future<List<String>?> upLoadImage() async {
+Future<List<PlatformFile>?> pickUpImages() async {
   try {
-    List<String>? fileNames = [];
     // 1. 选取文件
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.image,
@@ -44,6 +43,16 @@ Future<List<String>?> upLoadImage() async {
     // 2. 获取文件信息
     final platformFiles = result.files;
 
+    return platformFiles;
+  } catch (e) {
+    print('file save field 文件选取失败: $e');
+    return null;
+  }
+}
+
+Future<List<String>?> uploadImage(List<PlatformFile> platformFiles) async {
+  try {
+    List<String>? fileNames = [];
     int i = 0;
     for (final platformFile in platformFiles) {
       if (platformFile.path == null) continue;
@@ -79,7 +88,7 @@ Future<List<String>?> upLoadImage() async {
   }
 }
 
-void deleteImage(List<String> fileNames) async {
+Future<void> deleteImages(List<String> fileNames) async {
   try {
     for (final fileName in fileNames) {
       final Directory appDocDir = sysAppDocDir;

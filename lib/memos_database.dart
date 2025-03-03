@@ -199,6 +199,14 @@ class MemoDatabase {
     return;
   }
 
+  Future<void> deleteImages(List<int> imageIds) async {
+    final db = await instance.database;
+    for (final id in imageIds) {
+      await db.delete('MEMO_IMAGES', where: 'ID = ?', whereArgs: [id]);
+    }
+    return;
+  }
+
   // 删除记录
   Future<int> delete(int id) async {
     final db = await instance.database;

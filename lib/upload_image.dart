@@ -78,3 +78,17 @@ Future<List<String>?> upLoadImage() async {
     return null;
   }
 }
+
+void deleteImage(List<String> fileNames) async {
+  try {
+    for (final fileName in fileNames) {
+      final Directory appDocDir = sysAppDocDir;
+      final targetDir = appDocDir;
+      final newPath = path.join(targetDir.path, fileName);
+      final originalFile = File(newPath);
+      await originalFile.delete();
+    }
+  } catch (e) {
+    print('file save field 文件删除失败: $e');
+  }
+}

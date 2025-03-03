@@ -139,12 +139,59 @@ class _ShowCardState extends State<ShowCard> {
                     return Container(
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.5),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: const [BoxShadow()],
+                      ),
+                      margin: EdgeInsets.only(right: 8.0),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Image.file(
+                              File(join(sysAppDocDir.path, iamgeName)),
+                            ),
+                          ),
+                          IconButton(
+                            padding: EdgeInsets.all(0),
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.highlight_remove,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          if ((imageNames.isNotEmpty || imagesWillAdd.isNotEmpty) &&
+              !canEdit &&
+              canSwitch)
+            SizedBox(
+              height: 200,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 8.0),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: imageNames.length + imagesWillAdd.length,
+                  itemBuilder: (context, index) {
+                    late String iamgeName;
+                    if (index < imageNames.length) {
+                      iamgeName = imageNames[index];
+                    } else {
+                      iamgeName = imagesWillAdd[index - imageNames.length];
+                    }
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.white.withValues(alpha: 0.5),
                         boxShadow: const [BoxShadow()],
                       ),
                       margin: EdgeInsets.only(right: 8.0),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Image.file(
                           File(join(sysAppDocDir.path, iamgeName)),
                         ),

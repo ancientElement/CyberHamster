@@ -35,7 +35,6 @@ class _ShowCardState extends State<ShowCard> {
   final foucsNode = FocusNode();
   bool canEdit = false;
   List<String> imageNames = [];
-  Map<int, String> imagesWillRemove = {};
   List<PlatformFile> imagesWillAdd = [];
 
   // register ruler 注册文本规则
@@ -102,7 +101,6 @@ class _ShowCardState extends State<ShowCard> {
                       foucsNode.requestFocus();
                       //canel 取消
                       if (!canEdit) {
-                        imagesWillRemove.clear();
                         imagesWillAdd.clear();
                       }
                     });
@@ -138,9 +136,6 @@ class _ShowCardState extends State<ShowCard> {
                   itemBuilder: (context, index) {
                     late String path;
                     if (index < imageNames.length) {
-                      if (imagesWillRemove[index] != null) {
-                        return Container();
-                      }
                       path = join(sysAppDocDir.path, imageNames[index]);
                     } else {
                       path = imagesWillAdd[index - imageNames.length].path!;

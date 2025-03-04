@@ -36,7 +36,7 @@ class _ShowCardState extends State<ShowCard> {
   bool canEdit = false;
   List<String> imageNames = [];
   List<PlatformFile> imagesWillAdd = [];
-
+  List<String> imagesWillRemove = [];
   // register ruler 注册文本规则
   final textEditingController = CHTextEditingController();
 
@@ -54,16 +54,27 @@ class _ShowCardState extends State<ShowCard> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.canSwitch) {
+      reloadData();
+    }
+  }
+
+  void reloadData() {
+    textEditingController.text = widget.memo!.context;
+    if (widget.memo!.images != null) {
+      imageNames = widget.memo!.images!.toList();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    late String time;
     final canSwitch = widget.canSwitch;
     canEdit = canSwitch ? widget.memo!.editorData.canEdit : true;
+    late String time;
     if (canSwitch) {
-      textEditingController.text = widget.memo!.context;
       time = getFormattedTime(widget.memo!.creatDate);
-      if (widget.memo!.images != null) {
-        imageNames = widget.memo!.images!;
-      }
     }
     return Container(
       width: double.infinity,
@@ -101,7 +112,9 @@ class _ShowCardState extends State<ShowCard> {
                       foucsNode.requestFocus();
                       //canel 取消
                       if (!canEdit) {
+                        imagesWillRemove.clear();
                         imagesWillAdd.clear();
+                        reloadData();
                       }
                     });
                   }
@@ -157,7 +170,17 @@ class _ShowCardState extends State<ShowCard> {
                             IconButton(
                               padding: EdgeInsets.all(0),
                               onPressed: () {
-                                //TODO：删除图片
+                                setState(() {
+                                  // delete image 删除图片
+                                  if (index < imageNames.length) {
+                                    imagesWillRemove.add(imageNames[index]);
+                                    imageNames.removeAt(index);
+                                  } else {
+                                    imagesWillAdd.removeAt(
+                                      index - imageNames.length,
+                                    );
+                                  }
+                                });
                               },
                               icon: Icon(
                                 Icons.highlight_remove,
@@ -225,6 +248,14 @@ class _ShowCardState extends State<ShowCard> {
                                   });
                                 });
                           });
+                        }
+                        if (imagesWillRemove.isNotEmpty) {
+                          MemoDatabase.instance
+                              .deleteImages(imagesWillRemove)
+                              .then((value) {
+                                deleteImages(imagesWillRemove);
+                                imagesWillRemove.clear();
+                              });
                         }
                       } else {
                         uploadImage(imagesWillAdd).then((images) {

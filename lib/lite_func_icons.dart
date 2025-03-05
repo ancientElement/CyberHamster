@@ -19,14 +19,20 @@ class LiteFuncIcons extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.numbers, color: Colors.white),
           onPressed: onClickTag,
+          constraints: BoxConstraints(),
+          padding: EdgeInsets.only(right: 10),
         ),
         IconButton(
           icon: const Icon(Icons.link, color: Colors.white),
           onPressed: onClickLink,
+          constraints: BoxConstraints(),
+          padding: EdgeInsets.only(right: 10),
         ),
         IconButton(
           icon: const Icon(Icons.image_outlined, color: Colors.white),
           onPressed: onClickImage,
+          constraints: BoxConstraints(),
+          padding: EdgeInsets.only(right: 10),
         ),
       ],
     );

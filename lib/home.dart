@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
         itemBuilder: (context, index) {
           if (index == 0) {
             return ShowCard(
+              index: -1,
               canSwitch: false,
               addMemoToListView: addMemoToListView,
             );

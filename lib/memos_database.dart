@@ -2,17 +2,11 @@ import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class MemoEditorData {
-  // eidtor data 编辑器数据
-  bool canEdit = false;
-}
-
 class Memo {
   int id;
   String context;
   int creatDate;
   List<String>? images;
-  MemoEditorData editorData = MemoEditorData();
 
   // 私有构造函数
   Memo._internal({
@@ -63,6 +57,15 @@ class Memo {
   @override
   String toString() {
     return 'Memo{ID: $id, CONTEXT: $context, CREATDATE: $creatDate}';
+  }
+
+  Memo copy() {
+    return Memo._internal(
+      id: id,
+      context: context,
+      creatDate: creatDate,
+      images: images?.map((img) => img).toList(),
+    );
   }
 }
 

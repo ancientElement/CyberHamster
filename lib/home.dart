@@ -53,6 +53,7 @@ class _HomeState extends State<Home> {
             );
           }
           return ShowCard(
+            key: Key('show_card_${memos[index - 1].id}'),
             canSwitch: true,
             memo: memos[index - 1],
             addMemoToListView: addMemoToListView,

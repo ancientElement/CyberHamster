@@ -40,10 +40,12 @@ class _ShowCardState extends State<ShowCard> {
     if (widget.canSwitch) {
       if (!initialized) {
         initialized = true;
-        memo = widget.memo!;
+        memo = widget.memo!.copy();
       }
       textEditingController.text = memo!.context;
-      imageNames = memo!.images!;
+      if (memo!.images != null) {
+        imageNames = memo!.images!;
+      }
     } else {
       canEdit = true;
     }
@@ -182,16 +184,27 @@ class _ShowCardState extends State<ShowCard> {
     return DateFormat('yyyy-MM-dd EEEE HH:mm:ss').format(dateTime);
   }
 
-  void onRemoveMemo() {}
+  void onRemoveMemo() {
+    MemoDatabase.instance.delete(memo!.id).then((value) {
+      widget.removeMemoFromListView!(widget.index);
+    });
+  }
 
   void onSaveMemo() {
     if (!widget.canSwitch) {
-      MemoDatabase.instance.create(textEditingController.text, null);
+      MemoDatabase.instance.create(textEditingController.text, null).then((
+        value,
+      ) {
+        widget.addMemoToListView(value);
+        textEditingController.clear();
+      });
     } else {
       MemoDatabase.instance
           .updateContext(memo!.id, textEditingController.text)
           .then((value) {
             setState(() {
+              widget.memo!.context = textEditingController.text;
+              memo = widget.memo!.copy();
               canEdit = false;
             });
           });

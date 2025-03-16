@@ -8,15 +8,20 @@ import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:test_build/upload_image.dart';
 
 void main() {
-  if (kIsWeb) {
-    //databse adaptor 数据库适配
-    // Web platform Web 平台
-    databaseFactory = databaseFactoryFfiWeb;
-  } else if (Platform.isWindows || Platform.isLinux) {
-    // Windows or Linux Windows 或 Linux 平台
-    // set ffi  设置数据库工厂为 FFI 实现
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
+  try {
+    if (Platform.isWindows || Platform.isLinux) {
+      // Windows or Linux Windows 或 Linux 平台
+      // set ffi  设置数据库工厂为 FFI 实现
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    }
+  } catch (e) {
+    print("not windows or linux 非windows或linux平台 error:$e");
+    if (kIsWeb) {
+      //databse adaptor 数据库适配
+      // Web platform Web 平台
+      databaseFactory = databaseFactoryFfiWeb;
+    }
   }
   runApp(SidebarXExampleApp());
   // init doc dir 初始化文档文件夹

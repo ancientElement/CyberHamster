@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
@@ -19,11 +20,16 @@ Future<void> initSysAppDocDir() async {
 Future<Directory> getSysAppDocDir() async {
   final String defualtDir =
       "F:/WorkPlace/Flutter/test_build/test_build/assets/images/";
-  Directory appDocDir;
-  if (Platform.isIOS || Platform.isAndroid) {
-    appDocDir = await getApplicationDocumentsDirectory();
-  } else {
-    appDocDir = Directory(defualtDir);
+  Directory appDocDir = Directory(defualtDir);
+  try {
+    if (Platform.isIOS || Platform.isAndroid) {
+      appDocDir = await getApplicationDocumentsDirectory();
+    }
+  } catch (e) {
+    if (kIsWeb) {
+      // appDocDir = Directory(defualtDir);
+      print("not windows or linux 非windows或linux平台 error:$e");
+    }
   }
   _isInitSysAppDocDir = true;
   return appDocDir;

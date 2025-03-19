@@ -42,35 +42,35 @@ export const mockBookmarks: Bookmark[] = [
 // 模拟备忘录数据
 export const mockMemos: Memo[] = [
   {
-    id: 1,
+    id: 0,
     type: MemoType.NOTE,
     relativeID: 0,
     data: mockNotes[0],
     createdAt: '2024-01-15T10:00:00Z',
   },
   {
-    id: 2,
+    id: 1,
     type: MemoType.BOOKMARK,
     relativeID: 0,
     data: mockBookmarks[0],
     createdAt: '2024-01-15T08:00:00Z',
   },
   {
-    id: 3,
+    id: 2,
     type: MemoType.NOTE,
     relativeID: 1,
     data: mockNotes[1],
     createdAt: '2024-01-16T14:30:00Z',
   },
   {
-    id: 4,
+    id: 3,
     type: MemoType.BOOKMARK,
     relativeID: 1,
     data: mockBookmarks[1],
     createdAt: '2024-01-16T09:00:00Z',
   },
   {
-    id: 5,
+    id: 4,
     type: MemoType.NOTE,
     relativeID: 2,
     data: mockNotes[2],

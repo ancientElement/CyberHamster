@@ -41,7 +41,7 @@ const tabConfigs: TabConfig[] = [
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { width } = useWindowDimensions();
-  const isWideScreen = width >  ScreenAdapt.smallScreen;
+  const mediumScreen = width >  ScreenAdapt.smallScreen;
   const tabBarActiveColor = Colors[colorScheme ?? 'light'];
   return (
     <Tabs
@@ -50,14 +50,14 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
-        tabBarPosition: isWideScreen ? 'left' : 'bottom',
+        tabBarPosition: mediumScreen ? 'left' : 'bottom',
         tabBarStyle: Platform.select({
           ios: {
             // Use a transparent background on iOS to show the blur effect
             position: 'absolute',
           },
           default: {
-            minWidth: isWideScreen ? 100 : undefined,
+            minWidth: mediumScreen ? 100 : undefined,
           },
         }),
       }}>

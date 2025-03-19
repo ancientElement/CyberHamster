@@ -1,49 +1,79 @@
-import { StyleSheet, ScrollView, useWindowDimensions, ViewStyle, StyleProp } from 'react-native';
-import { NavigationData } from '@/constants/NavigationData';
+import { StyleSheet, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { NavigationCard } from '@/components/NavigationCard';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { FlatGrid } from 'react-native-super-grid';
+import { useApi } from '@/hooks/useApi';
+import { useState, useEffect } from 'react';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { Bookmark, Memo, MemoType } from '@/api/types';
 
 export default function NavigationScreen() {
   const { width } = useWindowDimensions();
   const isMediumScreen = width > ScreenAdapt.smallScreen;
+  const api = useApi();
 
-  const gridStyle = {
-    ...styles.grid,
-    gap: isMediumScreen ? 16 : 12,
-  };
+  const [bookmarks, setBookmarks] = useState<Memo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const cardStyle: StyleProp<ViewStyle> = {
-    width: isMediumScreen ? '25%' : '33.33%',
+  useEffect(() => {
+    loadBookmarks();
+  }, []);
+
+  const loadBookmarks = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.getMemosByType(MemoType.BOOKMARK);
+      if (response.status === 200 && response.data) {
+        setBookmarks(response.data);
+      } else {
+        setError('获取书签失败');
+      }
+    } catch (err) {
+      setError('加载数据时发生错误');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <FlatGrid
-      itemDimension={isMediumScreen ? 200 : 120}
-      spacing={isMediumScreen ? 16 : 12}
-      style={styles.container}
-      data={NavigationData}
-      renderItem={({ item }) => (
-        <NavigationCard
-          id={item.id}
-          icon={item.icon}
-          title={item.title}
-          url={item.url}
+    <ThemedView style={styles.container}>
+      {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
+      {loading && <ActivityIndicator style={styles.loading} />}
+      <FlatGrid
+        itemDimension={isMediumScreen ? 200 : 120}
+        spacing={isMediumScreen ? 16 : 12}
+        style={styles.grid}
+        data={bookmarks}
+        renderItem={({ item }) => {
+          const bookmark = item.data as Bookmark;
+          return <NavigationCard
+          icon={bookmark.icon}
+          title={bookmark.title}
+          url={bookmark.url}
         />
-      )}
-    />
+        }}
+      />
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 16
   },
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1
   },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  loading: {
+    marginVertical: 10
+  }
 });

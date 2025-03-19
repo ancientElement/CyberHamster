@@ -1,4 +1,4 @@
-import { MemoType, Memo, Note, BookMark, Tag, MemoTag } from '../types';
+import { MemoType, Memo, Note, Bookmark, Tag, MemoTag } from '../types';
 
 // 模拟笔记数据
 export const mockNotes: Note[] = [
@@ -15,19 +15,21 @@ export const mockNotes: Note[] = [
 ];
 
 // 模拟书签数据
-export const mockBookmarks: BookMark[] = [
+export const mockBookmarks: Bookmark[] = [
   {
+    id: 1,
     title: 'React Native官方文档',
     url: 'https://reactnative.dev/docs/getting-started',
-    description: 'React Native的官方文档，包含完整的入门指南和API参考。',
-    icon: '',
+    description: 'React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。React Native的官方文档，包含完整的入门指南和API参考。',
+    icon: 'https://github.com/favicon.ico',
     createdAt: '2024-01-15T08:00:00Z'
   },
   {
+    id: 2,
     title: 'TypeScript Handbook',
     url: 'https://www.typescriptlang.org/docs/',
     description: 'TypeScript官方手册，详细介绍了TypeScript的所有特性。',
-    icon: '',
+    icon: 'https://github.com/favicon.ico',
     createdAt: '2024-01-16T09:00:00Z'
   }
 ];
@@ -40,7 +42,6 @@ export const mockMemos: Memo[] = [
     relativeID: 1,
     data: mockNotes[0],
     createdAt: '2024-01-15T10:00:00Z',
-    updatedAt: '2024-01-15T10:00:00Z'
   },
   {
     id: 2,
@@ -48,7 +49,6 @@ export const mockMemos: Memo[] = [
     relativeID: 1,
     data: mockBookmarks[0],
     createdAt: '2024-01-15T08:00:00Z',
-    updatedAt: '2024-01-15T08:00:00Z'
   },
   {
     id: 3,
@@ -56,7 +56,6 @@ export const mockMemos: Memo[] = [
     relativeID: 2,
     data: mockNotes[1],
     createdAt: '2024-01-16T14:30:00Z',
-    updatedAt: '2024-01-16T14:30:00Z'
   },
   {
     id: 4,
@@ -64,7 +63,6 @@ export const mockMemos: Memo[] = [
     relativeID: 2,
     data: mockBookmarks[1],
     createdAt: '2024-01-16T09:00:00Z',
-    updatedAt: '2024-01-16T09:00:00Z'
   }
 ];
 

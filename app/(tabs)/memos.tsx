@@ -1,25 +1,90 @@
-import { StyleSheet, TextInput, ScrollView, useWindowDimensions } from 'react-native';
+import { StyleSheet, TextInput, useWindowDimensions, ActivityIndicator } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { MemoCard, CollectionItem } from '@/components/MemoCard';
+import { MemoCard } from '@/components/MemoCard';
+import { MemoEditor } from '@/components/MemoEditor';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import MasonryList from '@react-native-seoul/masonry-list';
-
-const testData: CollectionItem[] = [
-  { id: "1", date: "2024-01-20 14:30", content: "这是一个示例内容卡片这是一个示例内容卡片这是一个示例内容卡片这是一个示例内容卡片这是一个示例内容卡片这是一个示例内容卡片" },
-  { id: "2", date: "2024-01-19 09:15", content: "这是另一个示例内容卡片" },
-  { id: "3", date: "2024-01-18 16:45", content: "第三个示例内容卡片" },
-  { id: "4", date: "2024-01-17 11:20", content: "第四个示例内容卡片" },
-  { id: "5", date: "2024-01-16 15:30", content: "第五个示例内容卡片" },
-  { id: "6", date: "2024-01-15 10:10", content: "第六个示例内容卡片第六个示例内容卡片第六个示例内容卡片第六个示例内容卡片第六个示例内容卡片第六个示例内容卡片第六个示例内容卡片" },
-  { id: "7", date: "2024-01-15 10:10", content: "第柒个示例内容卡片第柒个示例内容卡片第柒个示例内容卡片" },
-  { id: "8", date: "2024-01-15 10:10", content: "第八个示例内容卡片第八个示例内容卡片第八个示例内容卡片" },
-]
+import { useApi } from '@/hooks/useApi';
+import { useState, useEffect } from 'react';
+import { Bookmark, Memo, MemoType, Note } from '@/api/types';
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();
   const isWideScreen = width > ScreenAdapt.mediumScreen;
   const isMediumScreen = width > ScreenAdapt.smallScreen;
+  const api = useApi();
+
+  const [memos, setMemos] = useState<Memo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    loadMemos();
+  }, []);
+
+  const loadMemos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.getMemos();
+      if (response.status === 200 && response.data) {
+        setMemos(response.data);
+      } else {
+        setError('获取备忘录失败');
+      }
+    } catch (err) {
+      setError('加载数据时发生错误');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      await loadMemos();
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.searchMemos(searchQuery);
+      if (response.status === 200 && response.data) {
+        setMemos(response.data);
+      } else {
+        setError('搜索失败');
+      }
+    } catch (err) {
+      setError('搜索时发生错误');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateMemo = async (content: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.createMemo({
+        type: MemoType.NOTE, // NOTE type
+        data: {
+          id: -1,
+          content: content,
+          createdAt: '',
+        }
+      });
+      if (response.status === 200) {
+        await loadMemos();
+      } else {
+        setError('创建备忘录失败');
+      }
+    } catch (err) {
+      setError('创建备忘录时发生错误');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -29,28 +94,39 @@ export default function CollectionScreen() {
           style={styles.searchInput}
           placeholder="搜索收藏..."
           placeholderTextColor="#999"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSearch}
         />
       </ThemedView>
 
-      <TextInput
-        style={styles.mainInput}
-        placeholder="输入新的内容..."
-        placeholderTextColor="#999"
-        multiline
-      />
+      <MemoEditor onSubmit={handleCreateMemo} />
+      {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
+      {loading && <ActivityIndicator style={styles.loading} />}
       <MasonryList
-        style={styles.cardContainer}
-        data={testData}
+        data={memos}
         keyExtractor={(item) => item.id}
         numColumns={isMediumScreen ? (isWideScreen ? 3 : 2) : 1}
         contentContainerStyle={styles.cardGrid}
-        renderItem={({ item, i }) => <MemoCard data={item as CollectionItem} />}
+        renderItem={({ item, i }) => {
+            const memo = item as Memo;
+            return <MemoCard type={memo.type} data={memo.data} />
+          }
+        }
       />
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'center'
+  },
+  loading: {
+    marginVertical: 10
+  },
   container: {
     flex: 1,
     padding: 16
@@ -73,16 +149,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#f0f0f0'
   },
-  mainInput: {
-    height: 100,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    backgroundColor: '#f0f0f0'
-  },
-  cardContainer: {
-    flex: 1
-  },
+
   cardGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

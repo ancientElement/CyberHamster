@@ -16,9 +16,8 @@ export interface Memo {
   id: number,          // 唯一标识符
   type: MemoType,      // 备忘录类型
   relativeID: number,  // 关联ID
-  data: Note | BookMark, // 具体内容数据
+  data: Note | Bookmark, // 具体内容数据
   createdAt: string;   // 创建时间
-  updatedAt: string;   // 更新时间
 }
 
 // 笔记内容接口，用于存储文本类型的备忘录
@@ -29,7 +28,8 @@ export interface Note {
 }
 
 // 书签内容接口，用于存储网页链接类型的备忘录
-export interface BookMark {
+export interface Bookmark {
+  id: number;          // 书签ID
   title: string;       // 书签标题
   url: string;         // 书签URL地址
   description: string; // 书签描述信息
@@ -56,7 +56,7 @@ export interface MemoTag {
 // 创建备忘录的请求接口
 export interface CreateMemoRequest {
   type: MemoType;      // 要创建的备忘录类型
-  data: Note | BookMark; // 备忘录具体内容
+  data: Note | Bookmark; // 备忘录具体内容
 }
 
 // 创建标签的请求接口

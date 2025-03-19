@@ -10,31 +10,31 @@ import {
 
 export class ApiService extends IApiService {
   async getMemos(): Promise<ApiResponse<Memo[]>> {
-    return this.get<Memo[]>('/contents');
+    return this.get<Memo[]>('/memos');
   }
 
   async getMemo(id: string): Promise<ApiResponse<Memo>> {
-    return this.get<Memo>(`/contents/${id}`);
+    return this.get<Memo>(`/memos/${id}`);
   }
 
   async createMemo(data: CreateMemoRequest): Promise<ApiResponse<Memo>> {
-    return this.post<Memo>('/contents', data);
+    return this.post<Memo>('/memos', data);
   }
 
   async updateMemo(id: string, data: Partial<CreateMemoRequest>): Promise<ApiResponse<Memo>> {
-    return this.put<Memo>(`/contents/${id}`, data);
+    return this.put<Memo>(`/memos/${id}`, data);
   }
 
   async deleteMemo(id: string): Promise<ApiResponse<void>> {
-    return this.delete<void>(`/contents/${id}`);
+    return this.delete<void>(`/memos/${id}`);
   }
 
   async searchMemos(query: string): Promise<ApiResponse<Memo[]>> {
-    return this.get<Memo[]>(`/contents/search?q=${encodeURIComponent(query)}`);
+    return this.get<Memo[]>(`/memos/search?q=${encodeURIComponent(query)}`);
   }
 
   async getMemosByType(type: MemoType): Promise<ApiResponse<Memo[]>> {
-    return this.get<Memo[]>(`/contents/type/${type}`);
+    return this.get<Memo[]>(`/memos/type/${type}`);
   }
 
   // Tag APIs
@@ -63,19 +63,19 @@ export class ApiService extends IApiService {
   }
 
   async getTagMemos(id: string): Promise<ApiResponse<Tag[]>> {
-    return this.get<Tag[]>(`/tags/${id}/contents`);
+    return this.get<Tag[]>(`/tags/${id}/memos`);
   }
 
   // Relation APIs
-  async addTagToMemo(contentId: string, tagId: string): Promise<ApiResponse<void>> {
-    return this.post<void>(`/contents/${contentId}/tags/${tagId}`, {});
+  async addTagToMemo(memoId: string, tagId: string): Promise<ApiResponse<void>> {
+    return this.post<void>(`/memos/${memoId}/tags/${tagId}`, {});
   }
 
-  async removeTagFromMemo(contentId: string, tagId: string): Promise<ApiResponse<void>> {
-    return this.delete<void>(`/contents/${contentId}/tags/${tagId}`);
+  async removeTagFromMemo(memoId: string, tagId: string): Promise<ApiResponse<void>> {
+    return this.delete<void>(`/memos/${memoId}/tags/${tagId}`);
   }
 
-  async getMemoTags(contentId: string): Promise<ApiResponse<Tag[]>> {
-    return this.get<Tag[]>(`/contents/${contentId}/tags`);
+  async getMemoTags(memoId: string): Promise<ApiResponse<Tag[]>> {
+    return this.get<Tag[]>(`/memos/${memoId}/tags`);
   }
 }

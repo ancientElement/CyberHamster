@@ -3,20 +3,19 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 interface NavigationCardProps {
-  id: string;
   icon: string;
   title: string;
 
   url: string;
 }
 
-export function NavigationCard({ id, icon, title, url }: NavigationCardProps) {
+export function NavigationCard({ icon, title, url }: NavigationCardProps) {
   const handlePress = () => {
     Linking.openURL(url);
   };
 
   return (
-    <TouchableOpacity key={id} style={styles.gridItem} onPress={handlePress}>
+    <TouchableOpacity style={styles.gridItem} onPress={handlePress}>
       <ThemedView style={styles.itemContent}>
         <Image source={{ uri: icon }} style={styles.icon} />
         <ThemedText type="defaultSemiBold" style={styles.title}>

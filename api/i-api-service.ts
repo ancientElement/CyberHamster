@@ -5,7 +5,8 @@ import {
   MemoType,
   CreateMemoRequest,
   Tag,
-  CreateTagRequest
+  CreateTagRequest,
+  Bookmark
 } from './types';
 
 export abstract class IApiService extends BaseApi {
@@ -28,7 +29,7 @@ export abstract class IApiService extends BaseApi {
   abstract getTagMemos(id: string): Promise<ApiResponse<Tag[]>>;
 
   // Relation APIs
-  abstract addTagToMemo(contentId: string, tagId: string): Promise<ApiResponse<void>>;
-  abstract removeTagFromMemo(contentId: string, tagId: string): Promise<ApiResponse<void>>;
-  abstract getMemoTags(contentId: string): Promise<ApiResponse<Tag[]>>;
+  abstract addTagToMemo(memoId: string, tagId: string): Promise<ApiResponse<void>>;
+  abstract removeTagFromMemo(memoId: string, tagId: string): Promise<ApiResponse<void>>;
+  abstract getMemoTags(memoId: string): Promise<ApiResponse<Tag[]>>;
 }

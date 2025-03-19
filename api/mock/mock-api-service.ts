@@ -6,11 +6,11 @@ import {
   CreateMemoRequest,
   Tag,
   CreateTagRequest,
-  BookMark,
+  Bookmark,
   Note,
   MemoTag
 } from '../types';
-import { mockMemos, mockTags, mockMemoTags } from './mock-data';
+import { mockMemos, mockTags, mockMemoTags, mockNotes, mockBookmarks } from './mock-data';
 
 // 模拟网络延迟
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -24,12 +24,14 @@ const createResponse = <T>(data: T, status: number = 200, message?: string): Api
 
 export class MockApiService extends IApiService {
   private nextMemoId = mockMemos.length + 1;
+  private nextNoteId = mockNotes.length + 1;
+  private nextBookmarkId = mockBookmarks.length + 1;
   private nextTagId = mockTags.length + 1;
   private nextMemoTagId = mockMemoTags.length + 1;
 
   async getMemos(): Promise<ApiResponse<Memo[]>> {
     await delay(300);
-    return createResponse(mockMemos);
+    return createResponse(mockMemos.reverse());
   }
 
   async getMemo(id: string): Promise<ApiResponse<Memo>> {
@@ -43,16 +45,37 @@ export class MockApiService extends IApiService {
 
   async createMemo(data: CreateMemoRequest): Promise<ApiResponse<Memo>> {
     await delay(300);
+    const timestamp = new Date().toISOString();
+    const contentId = this.nextMemoId;
+
+    // 根据类型创建对应的内容数据
+    const contentData = data.type === MemoType.NOTE
+      ? {
+          id: this.nextNoteId++,
+          content: (data.data as Note).content,
+          createdAt: timestamp
+        } as Note
+      : {
+          id: this.nextBookmarkId++,
+          title: (data.data as Bookmark).title,
+          url: (data.data as Bookmark).url,
+          description: (data.data as Bookmark).description,
+          icon: (data.data as Bookmark).icon || 'https://github.com/favicon.ico',
+          createdAt: timestamp
+        } as Bookmark;
+
     const newMemo: Memo = {
       id: this.nextMemoId++,
       type: data.type,
-      relativeID: this.nextMemoId,
-      data: data.data,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      relativeID: contentId,
+      data: contentData,
+      createdAt: timestamp,
     };
     mockMemos.push(newMemo);
-    return createResponse(newMemo, 201);
+    data.type === MemoType.NOTE
+      ? mockNotes.push(contentData as Note)
+      : mockBookmarks.push(contentData as Bookmark);
+    return createResponse(newMemo, 200);
   }
 
   async updateMemo(id: string, data: Partial<CreateMemoRequest>): Promise<ApiResponse<Memo>> {
@@ -94,7 +117,7 @@ export class MockApiService extends IApiService {
         const bookmark = memo.data as Note;
         return bookmark.content.toLowerCase().includes(query.toLowerCase());
       } else {
-        const bookmark = memo.data as BookMark;
+        const bookmark = memo.data as Bookmark;
         return (
           bookmark.title.toLowerCase().includes(query.toLowerCase()) ||
           bookmark.description.toLowerCase().includes(query.toLowerCase())
@@ -133,7 +156,7 @@ export class MockApiService extends IApiService {
       createdAt: new Date().toISOString()
     };
     mockTags.push(newTag);
-    return createResponse(newTag, 201);
+    return createResponse(newTag, 200);
   }
 
   async updateTag(id: string, data: Partial<CreateTagRequest>): Promise<ApiResponse<Tag>> {
@@ -203,7 +226,7 @@ export class MockApiService extends IApiService {
       createdAt: new Date().toISOString()
     };
     mockMemoTags.push(newMemoTag);
-    return createResponse(undefined, 201);
+    return createResponse(undefined, 200);
   }
 
   async removeTagFromMemo(contentId: string, tagId: string): Promise<ApiResponse<void>> {

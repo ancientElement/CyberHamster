@@ -1,8 +1,9 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Ionicons } from '@expo/vector-icons';
 import { Note } from '@/api/types';
+import { TextRenderer } from './TextRenderer';
+import { IconSymbol } from './ui/IconSymbol';
 
 type Props = {
   data: Note,
@@ -15,10 +16,10 @@ export function NoteCard({ data }: Props) {
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
         <TouchableOpacity onPress={() => {}} style={styles.editButton}>
-          <Ionicons name="pencil" size={16} color="#666" />
+          <IconSymbol name="pencil.line" size={16} color="#666" />
         </TouchableOpacity>
       </ThemedView>
-      <ThemedText>{content}</ThemedText>
+      <TextRenderer text={content}></TextRenderer>
     </ThemedView>
   );
 }

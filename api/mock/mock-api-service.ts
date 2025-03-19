@@ -23,15 +23,15 @@ const createResponse = <T>(data: T, status: number = 200, message?: string): Api
 });
 
 export class MockApiService extends IApiService {
-  private nextMemoId = mockMemos.length + 1;
-  private nextNoteId = mockNotes.length + 1;
-  private nextBookmarkId = mockBookmarks.length + 1;
-  private nextTagId = mockTags.length + 1;
-  private nextMemoTagId = mockMemoTags.length + 1;
+  private nextMemoId = mockMemos.length;
+  private nextNoteId = mockNotes.length;
+  private nextBookmarkId = mockBookmarks.length;
+  private nextTagId = mockTags.length;
+  private nextMemoTagId = mockMemoTags.length;
 
   async getMemos(): Promise<ApiResponse<Memo[]>> {
     await delay(300);
-    return createResponse(mockMemos.reverse());
+    return createResponse([...mockMemos].reverse());
   }
 
   async getMemo(id: string): Promise<ApiResponse<Memo>> {

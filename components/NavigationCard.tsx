@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { ExternalLink } from './ExternalLink';
 
 interface NavigationCardProps {
   icon: string;
@@ -10,19 +11,15 @@ interface NavigationCardProps {
 }
 
 export function NavigationCard({ icon, title, url }: NavigationCardProps) {
-  const handlePress = () => {
-    Linking.openURL(url);
-  };
-
   return (
-    <TouchableOpacity style={styles.gridItem} onPress={handlePress}>
+    <ExternalLink style={styles.gridItem} href={url}>
       <ThemedView style={styles.itemContent}>
         <Image source={{ uri: icon }} style={styles.icon} />
         <ThemedText type="defaultSemiBold" style={styles.title}>
           {title}
         </ThemedText>
       </ThemedView>
-    </TouchableOpacity>
+    </ExternalLink>
   );
 }
 

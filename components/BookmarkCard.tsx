@@ -1,8 +1,9 @@
-import { StyleSheet, TouchableOpacity, Image, Linking } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Ionicons } from '@expo/vector-icons';
 import { Bookmark } from '@/api/types';
+import { ExternalLink } from './ExternalLink';
+import { IconSymbol } from './ui/IconSymbol';
 
 type Props = {
   data: Bookmark,
@@ -15,7 +16,7 @@ export function BookmarkCard({ data }: Props) {
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
         <TouchableOpacity onPress={() => {}} style={styles.editButton}>
-          <Ionicons name="pencil" size={16} color="#666" />
+          <IconSymbol name="pencil.line" size={16} color="#666" />
         </TouchableOpacity>
       </ThemedView>
       <ThemedView style={styles.bookmarkContent}>
@@ -26,9 +27,9 @@ export function BookmarkCard({ data }: Props) {
           />
           <ThemedView style={styles.titleContainer}>
             <ThemedText style={styles.title}>{title}</ThemedText>
-            <TouchableOpacity onPress={() => Linking.openURL(url)}>
+            <ExternalLink href={url}>
               <ThemedText style={styles.url}>{url}</ThemedText>
-            </TouchableOpacity>
+            </ExternalLink>
           </ThemedView>
         </ThemedView>
         <ThemedText style={styles.description}>{description}</ThemedText>

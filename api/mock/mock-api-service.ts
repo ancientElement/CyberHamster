@@ -16,7 +16,7 @@ import { mockMemos, mockTags, mockMemoTags, mockNotes, mockBookmarks } from './m
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // 生成API响应
-const createResponse = <T>(data: T, status: number = 200, message?: string): ApiResponse<T> => ({
+const createResponse = <T>(data?: T, status: number = 200, message?: string): ApiResponse<T> => ({
   data,
   status,
   message

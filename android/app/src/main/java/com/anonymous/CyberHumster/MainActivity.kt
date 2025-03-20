@@ -1,4 +1,4 @@
-package com.anonymous.ProjectHumster_3
+package com.anonymous.CyberHumster
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

@@ -25,8 +25,8 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.anonymous.ProjectHumster_3"/>
-        <data android:scheme="exp+projecthumster3"/>
+        <data android:scheme="com.anonymous.CyberHumster"/>
+        <data android:scheme="exp+cyberhumster"/>
       </intent-filter>
     </activity>
   </application>

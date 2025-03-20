@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "ProjectHumster_3",
-    "slug": "ProjectHumster_3",
+    "name": "CyberHumster",
+    "slug": "CyberHumster",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.ProjectHumster_3"
+      "package": "com.anonymous.CyberHumster"
     },
     "web": {
       "bundler": "metro",

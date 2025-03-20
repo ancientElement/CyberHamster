@@ -1,4 +1,4 @@
-package com.anonymous.ProjectHumster_3
+package com.anonymous.CyberHumster
 
 import android.app.Application
 import android.content.res.Configuration

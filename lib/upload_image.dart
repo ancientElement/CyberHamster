@@ -56,9 +56,9 @@ Future<List<PlatformFile>?> pickUpImages() async {
   }
 }
 
-Future<List<String>?> uploadImage(List<PlatformFile> platformFiles) async {
+Future<List<String>> uploadImage(List<PlatformFile> platformFiles) async {
   try {
-    List<String>? fileNames = [];
+    List<String> fileNames = [];
     int i = 0;
     for (final platformFile in platformFiles) {
       if (platformFile.path == null) continue;
@@ -90,7 +90,7 @@ Future<List<String>?> uploadImage(List<PlatformFile> platformFiles) async {
     return fileNames;
   } catch (e) {
     print('file save field 文件保存失败: $e');
-    return null;
+    return [];
   }
 }
 

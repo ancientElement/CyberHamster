@@ -1,5 +1,5 @@
-import 'package:test_build/memos_database.dart';
-import 'package:test_build/show_card.dart';
+import 'package:project_hamster/memos_database.dart';
+import 'package:project_hamster/show_card.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {

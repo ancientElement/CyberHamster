@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:test_build/home.dart';
+import 'package:project_hamster/home.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:test_build/upload_image.dart';
+import 'package:project_hamster/upload_image.dart';
 
 void main() {
   try {

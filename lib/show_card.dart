@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
-import 'package:test_build/ch_text_edior_controller.dart';
-import 'package:test_build/lite_func_icons.dart';
-import 'package:test_build/memos_database.dart';
+import 'package:project_hamster/ch_text_edior_controller.dart';
+import 'package:project_hamster/lite_func_icons.dart';
+import 'package:project_hamster/memos_database.dart';
 import 'package:flutter/material.dart';
-import 'package:test_build/upload_image.dart';
+import 'package:project_hamster/upload_image.dart';
 
 class ShowCard extends StatefulWidget {
   final bool canSwitch;
@@ -34,6 +34,7 @@ class _ShowCardState extends State<ShowCard> {
   List<String> imageNames = [];
   bool initialized = false;
   Memo? memo;
+  bool selectingImages = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +107,7 @@ class _ShowCardState extends State<ShowCard> {
                   itemBuilder: (context, index) {
                     late String path;
                     if (index < imageNames.length) {
-                      path = join(sysAppDocDir.path, imageNames[index]);
+                      path = imageNames[index];
                     }
                     return Container(
                       decoration: BoxDecoration(
@@ -212,9 +213,18 @@ class _ShowCardState extends State<ShowCard> {
   }
 
   void onClickPicupImage() {
-    pickUpImages().then((value) {
-      if (value == null) return;
-      setState(() {});
+    if (selectingImages) {
+      return;
+    }
+    selectingImages = true;
+    pickUpImages().then((value1) {
+      if (value1 == null) return;
+      setState(() {
+        for (final platformFile in value1) {
+          imageNames.add(platformFile.path!);
+        }
+      });
+      selectingImages = false;
     });
   }
 }

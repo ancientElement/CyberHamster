@@ -1,6 +1,6 @@
 import { IApiService } from "../i-api-service";
 import { ApiResponse, Memo, CreateMemoRequest, MemoType, Tag, CreateTagRequest, Note, Bookmark } from "../types";
-import * as initSqlJs from 'sql.js';
+import initSqlJs from "sql.js";
 
 export class LocalApiService extends IApiService {
 
@@ -54,11 +54,16 @@ export class LocalApiService extends IApiService {
   }
 
   private async initDatabase() {
-    const SQL = await initSqlJs({
-      locateFile: (file: string) => 'F:\\WorkPlace\\CURSOR\\ProjectHumster_3\\testdb\\mydatabase.db'
-    });
+    try {
+      const SQL = await initSqlJs({
+        locateFile: (file: string) => `node_modules\\sql.js\\dist\\${file}`
+      });
 
-    this.db = new SQL.Database();
+      this.db = new SQL.Database();
+    } catch (error) {
+      console.error('数据库初始化失败:', error);
+      throw new Error('数据库初始化失败，请检查WebAssembly配置');
+    }
 
     // 创建memos表
     this.db.run(`

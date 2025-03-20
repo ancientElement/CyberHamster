@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "CyberHumster",
-    "slug": "CyberHumster",
+    "name": "CyberHamster",
+    "slug": "CyberHamster",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,8 +15,7 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.anonymous.CyberHumster"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -33,19 +32,10 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ],
-      "expo-sqlite"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "201e7a82-55ea-48b2-9a79-62bfe972756e"
-      }
     }
   }
 }

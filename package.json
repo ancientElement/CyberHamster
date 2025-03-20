@@ -1,12 +1,12 @@
 {
-  "name": "cyberhumster",
+  "name": "cyberhamster",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"
@@ -19,17 +19,14 @@
     "@react-native-seoul/masonry-list": "^1.4.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
-    "@types/sql.js": "^1.4.9",
-    "expo": "^52.0.39",
+    "expo": "~52.0.39",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",
-    "expo-dev-client": "~5.0.14",
     "expo-font": "~13.0.4",
     "expo-haptics": "~14.0.1",
     "expo-linking": "~7.0.5",
-    "expo-router": "~4.0.18",
+    "expo-router": "~4.0.19",
     "expo-splash-screen": "~0.29.22",
-    "expo-sqlite": "~15.1.2",
     "expo-status-bar": "~2.0.1",
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.8",
@@ -43,8 +40,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-super-grid": "^6.0.1",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5",
-    "sql.js": "^1.13.0"
+    "react-native-webview": "13.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

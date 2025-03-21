@@ -69,7 +69,7 @@ export default function TabLayout() {
           options={{
             title: tab.title,
             tabBarIcon:
-            ({ focused }) => {
+            ({ focused }: { focused: boolean }) => {
               return <IconSymbol size={28} name={tab.icon} color={ focused ? tabBarActiveColor.tabIconSelected : tabBarActiveColor.tabIconDefault }
               />},
           }}

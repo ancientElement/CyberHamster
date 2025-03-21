@@ -3,248 +3,183 @@ import {
   ApiResponse,
   Memo,
   MemoType,
-  CreateMemoRequest,
-  Tag,
-  CreateTagRequest,
-  Bookmark,
-  Note,
-  MemoTag
+  CreateMemoDto,
+  UpdateMemoDto,
 } from '../types';
-import { mockMemos, mockTags, mockMemoTags, mockNotes, mockBookmarks } from './mock-data';
 
-// 模拟网络延迟
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// 模拟数据存储
+class MockDatabase {
+  private memos: Map<number, Memo> = new Map();
+  private currentId = 1;
 
-// 生成API响应
-const createResponse = <T>(data?: T, status: number = 200, message?: string): ApiResponse<T> => ({
-  data,
-  status,
-  message
-});
+  constructor() {
+    this.initializeData();
+  }
+
+  private initializeData() {
+    // 添加笔记类型的备忘录
+    const note1: Memo = {
+      id: this.currentId++,
+      type: MemoType.NOTE,
+      createdAt: new Date().toISOString(),
+      noteContent: "今天学习了React Native的基础知识，包括组件、状态管理和导航。需要继续深入学习动画和性能优化。"
+    };
+    this.memos.set(note1.id, note1);
+
+    const note2: Memo = {
+      id: this.currentId++,
+      type: MemoType.NOTE,
+      createdAt: new Date().toISOString(),
+      noteContent: "完成了项目的首页设计，使用了新的UI组件库。下一步需要实现数据持久化功能。"
+    };
+    this.memos.set(note2.id, note2);
+
+    // 添加书签类型的备忘录
+    const bookmark1: Memo = {
+      id: this.currentId++,
+      type: MemoType.BOOKMARK,
+      createdAt: new Date().toISOString(),
+      bookmarkTitle: "React Native官方文档",
+      bookmarkUrl: "https://reactnative.dev/docs/getting-started",
+      bookmarkDescription: "React Native的官方文档，包含完整的API参考和指南。",
+      bookmarkIcon: "data:image/svg+xml,<svg>...</svg>"
+    };
+    this.memos.set(bookmark1.id, bookmark1);
+
+    const bookmark2: Memo = {
+      id: this.currentId++,
+      type: MemoType.BOOKMARK,
+      createdAt: new Date().toISOString(),
+      bookmarkTitle: "TypeScript手册",
+      bookmarkUrl: "https://www.typescriptlang.org/docs/",
+      bookmarkDescription: "TypeScript官方文档，提供了完整的语言特性说明和最佳实践。",
+      bookmarkIcon: "data:image/svg+xml,<svg>...</svg>"
+    };
+    this.memos.set(bookmark2.id, bookmark2);
+  }
+
+  addMemo(memo: CreateMemoDto): Memo {
+    const newMemo: Memo = {
+      ...memo.data,
+      id: this.currentId++,
+      createdAt: new Date().toISOString(),
+    };
+    this.memos.set(newMemo.id, newMemo);
+    return newMemo;
+  }
+
+  getMemo(id: number): Memo | undefined {
+    return this.memos.get(id);
+  }
+
+  updateMemo(id: number, data: Partial<Memo>): Memo | undefined {
+    const memo = this.memos.get(id);
+    if (memo) {
+      const updatedMemo = { ...memo, ...data };
+      this.memos.set(id, updatedMemo);
+      return updatedMemo;
+    }
+    return undefined;
+  }
+
+  deleteMemo(id: number): boolean {
+    return this.memos.delete(id);
+  }
+
+  getAllMemos(): Memo[] {
+    return Array.from(this.memos.values());
+  }
+}
 
 export class MockApiService extends IApiService {
-  private nextMemoId = mockMemos.length;
-  private nextNoteId = mockNotes.length;
-  private nextBookmarkId = mockBookmarks.length;
-  private nextTagId = mockTags.length;
-  private nextMemoTagId = mockMemoTags.length;
+  private db = new MockDatabase();
+
+  // 模拟网络延迟
+  private async delay(ms: number = 200): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // 构造成功响应
+  private success<T>(data: T): ApiResponse<T> {
+    return {
+      status: 200,
+      data,
+      message: '操作成功',
+    };
+  }
+
+  // 构造错误响应
+  private error(message: string): ApiResponse<any> {
+    return {
+      status: 400,
+      message,
+      error: new Error(message),
+    };
+  }
 
   async getMemos(): Promise<ApiResponse<Memo[]>> {
-    await delay(300);
-    return createResponse([...mockMemos].reverse());
+    await this.delay();
+    const res = this.db.getAllMemos().map(memo=>memo);
+    return this.success(res.reverse());
   }
 
   async getMemo(id: string): Promise<ApiResponse<Memo>> {
-    await delay(200);
-    const memo = mockMemos.find(m => m.id === Number(id));
+    await this.delay();
+    const memo = this.db.getMemo(Number(id));
     if (!memo) {
-      return createResponse({} as Memo, 404, '备忘录不存在');
+      return this.error('备忘录不存在');
     }
-    return createResponse(memo);
+    return this.success(memo);
   }
 
-  async createMemo(data: CreateMemoRequest): Promise<ApiResponse<Memo>> {
-    await delay(300);
-    const timestamp = new Date().toISOString();
-    const contentId = this.nextMemoId;
-
-    // 根据类型创建对应的内容数据
-    const contentData = data.type === MemoType.NOTE
-      ? {
-          id: this.nextNoteId++,
-          content: (data.data as Note).content,
-          createdAt: timestamp
-        } as Note
-      : {
-          id: this.nextBookmarkId++,
-          title: (data.data as Bookmark).title,
-          url: (data.data as Bookmark).url,
-          description: (data.data as Bookmark).description,
-          icon: (data.data as Bookmark).icon || 'https://github.com/favicon.ico',
-          createdAt: timestamp
-        } as Bookmark;
-
-    const newMemo: Memo = {
-      id: this.nextMemoId++,
-      type: data.type,
-      relativeID: contentId,
-      data: contentData,
-      createdAt: timestamp,
-    };
-    mockMemos.push(newMemo);
-    data.type === MemoType.NOTE
-      ? mockNotes.push(contentData as Note)
-      : mockBookmarks.push(contentData as Bookmark);
-    return createResponse(newMemo, 200);
+  async createMemo(request: CreateMemoDto): Promise<ApiResponse<Memo>> {
+    await this.delay();
+    try {
+      const newMemo = this.db.addMemo(request);
+      return this.success(newMemo);
+    } catch (error) {
+      return this.error('创建备忘录失败');
+    }
   }
 
-  async updateMemo(id: string, data: Partial<CreateMemoRequest>): Promise<ApiResponse<Memo>> {
-    await delay(300);
-    const memo = mockMemos.find(m => m.id === Number(id));
-    if (!memo) {
-      return createResponse({} as Memo, 404, '备忘录不存在');
+  async updateMemo(id: string, request: UpdateMemoDto): Promise<ApiResponse<Memo>> {
+    await this.delay();
+    const updatedMemo = this.db.updateMemo(Number(id), request.data);
+    if (!updatedMemo) {
+      return this.error('更新备忘录失败');
     }
-    Object.assign(memo, {
-      type: data.type ?? memo.type,
-      data: data.data ?? memo.data,
-      updatedAt: new Date().toISOString()
-    });
-    return createResponse(memo);
+    return this.success(updatedMemo);
   }
 
   async deleteMemo(id: string): Promise<ApiResponse<void>> {
-    await delay(200);
-    const index = mockMemos.findIndex(m => m.id === Number(id));
-    if (index === -1) {
-      return createResponse(undefined, 404, '备忘录不存在');
+    await this.delay();
+    const success = this.db.deleteMemo(Number(id));
+    if (!success) {
+      return this.error('删除备忘录失败');
     }
-    mockMemos.splice(index, 1);
-    // 删除相关的标签关联
-    const memoTagIndexes = mockMemoTags.filter(mt => mt.memoId === Number(id));
-    memoTagIndexes.forEach(mt => {
-      const index = mockMemoTags.findIndex(item => item.id === mt.id);
-      if (index !== -1) {
-        mockMemoTags.splice(index, 1);
-      }
-    });
-    return createResponse(undefined);
+    return this.success(undefined);
   }
 
   async searchMemos(query: string): Promise<ApiResponse<Memo[]>> {
-    await delay(300);
-    const results = mockMemos.filter(memo => {
+    await this.delay();
+    const allMemos = this.db.getAllMemos();
+    const results = allMemos.filter(memo => {
       if (memo.type === MemoType.NOTE) {
-        const bookmark = memo.data as Note;
-        return bookmark.content.toLowerCase().includes(query.toLowerCase());
+        return memo.noteContent?.toLowerCase().includes(query.toLowerCase());
       } else {
-        const bookmark = memo.data as Bookmark;
         return (
-          bookmark.title.toLowerCase().includes(query.toLowerCase()) ||
-          bookmark.description.toLowerCase().includes(query.toLowerCase())
+          memo.bookmarkTitle?.toLowerCase().includes(query.toLowerCase()) ||
+          memo.bookmarkDescription?.toLowerCase().includes(query.toLowerCase())
         );
       }
     });
-    return createResponse(results);
+    return this.success(results);
   }
 
   async getMemosByType(type: MemoType): Promise<ApiResponse<Memo[]>> {
-    await delay(200);
-    const memos = mockMemos.filter(m => m.type === type);
-    return createResponse(memos);
-  }
-
-  async getTags(): Promise<ApiResponse<Tag[]>> {
-    await delay(200);
-    return createResponse(mockTags);
-  }
-
-  async getTag(id: string): Promise<ApiResponse<Tag>> {
-    await delay(200);
-    const tag = mockTags.find(t => t.id === Number(id));
-    if (!tag) {
-      return createResponse({} as Tag, 404, '标签不存在');
-    }
-    return createResponse(tag);
-  }
-
-  async createTag(data: CreateTagRequest): Promise<ApiResponse<Tag>> {
-    await delay(300);
-    const newTag: Tag = {
-      id: this.nextTagId++,
-      path: data.path,
-      parentId: data.parentId,
-      createdAt: new Date().toISOString()
-    };
-    mockTags.push(newTag);
-    return createResponse(newTag, 200);
-  }
-
-  async updateTag(id: string, data: Partial<CreateTagRequest>): Promise<ApiResponse<Tag>> {
-    await delay(300);
-    const tag = mockTags.find(t => t.id === Number(id));
-    if (!tag) {
-      return createResponse({} as Tag, 404, '标签不存在');
-    }
-    Object.assign(tag, {
-      path: data.path ?? tag.path,
-      parentId: data.parentId ?? tag.parentId
-    });
-    return createResponse(tag);
-  }
-
-  async deleteTag(id: string): Promise<ApiResponse<void>> {
-    await delay(200);
-    const index = mockTags.findIndex(t => t.id === Number(id));
-    if (index === -1) {
-      return createResponse(undefined, 404, '标签不存在');
-    }
-    mockTags.splice(index, 1);
-    // 删除相关的标签关联
-    const memoTagIndexes = mockMemoTags.filter(mt => mt.tagId === Number(id));
-    memoTagIndexes.forEach(mt => {
-      const index = mockMemoTags.findIndex(item => item.id === mt.id);
-      if (index !== -1) {
-        mockMemoTags.splice(index, 1);
-      }
-    });
-    return createResponse(undefined);
-  }
-
-  async getChildTags(id: string): Promise<ApiResponse<Tag[]>> {
-    await delay(200);
-    const childTags = mockTags.filter(t => t.parentId === Number(id));
-    return createResponse(childTags);
-  }
-
-  async getTagMemos(id: string): Promise<ApiResponse<Tag[]>> {
-    await delay(300);
-    const memoTags = mockMemoTags.filter(mt => mt.tagId === Number(id));
-    const tags = memoTags.map(mt => {
-      const memo = mockMemos.find(m => m.id === mt.memoId);
-      return memo;
-    }).filter(Boolean);
-    return createResponse(tags as any);
-  }
-
-  async addTagToMemo(contentId: string, tagId: string): Promise<ApiResponse<void>> {
-    await delay(200);
-    const memo = mockMemos.find(m => m.id === Number(contentId));
-    const tag = mockTags.find(t => t.id === Number(tagId));
-    if (!memo || !tag) {
-      return createResponse(undefined, 404, '备忘录或标签不存在');
-    }
-    const existingRelation = mockMemoTags.find(
-      mt => mt.memoId === Number(contentId) && mt.tagId === Number(tagId)
-    );
-    if (existingRelation) {
-      return createResponse(undefined, 400, '关联已存在');
-    }
-    const newMemoTag: MemoTag = {
-      id: this.nextMemoTagId++,
-      memoId: Number(contentId),
-      tagId: Number(tagId),
-      createdAt: new Date().toISOString()
-    };
-    mockMemoTags.push(newMemoTag);
-    return createResponse(undefined, 200);
-  }
-
-  async removeTagFromMemo(contentId: string, tagId: string): Promise<ApiResponse<void>> {
-    await delay(200);
-    const index = mockMemoTags.findIndex(
-      mt => mt.memoId === Number(contentId) && mt.tagId === Number(tagId)
-    );
-    if (index === -1) {
-      return createResponse(undefined, 404, '关联不存在');
-    }
-    mockMemoTags.splice(index, 1);
-    return createResponse(undefined);
-  }
-
-  async getMemoTags(contentId: string): Promise<ApiResponse<Tag[]>> {
-    await delay(200);
-    const memoTags = mockMemoTags.filter(mt => mt.memoId === Number(contentId));
-    const tags = memoTags.map(mt => mockTags.find(t => t.id === mt.tagId)).filter(Boolean);
-    return createResponse(tags as Tag[]);
+    await this.delay();
+    const allMemos = this.db.getAllMemos();
+    const results = allMemos.filter(memo => memo.type === type);
+    return this.success(results);
   }
 }

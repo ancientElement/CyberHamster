@@ -4,9 +4,8 @@ import { ThemedView } from '@/components/ThemedView';
 import { ExternalLink } from './ExternalLink';
 
 interface NavigationCardProps {
-  icon: string;
+  icon: string|undefined;
   title: string;
-
   url: string;
 }
 
@@ -14,7 +13,7 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
   return (
     <ExternalLink style={styles.gridItem} href={url}>
       <ThemedView style={styles.itemContent}>
-        <Image source={{ uri: icon }} style={styles.icon} />
+        {icon && <Image source={{ uri: icon }} style={styles.icon} />}
         <ThemedText type="defaultSemiBold" style={styles.title}>
           {title}
         </ThemedText>

@@ -7,7 +7,7 @@ import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
-import { Bookmark, Memo, MemoType, Note } from '@/api/types';
+import { Memo, MemoType } from '@/api/types';
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();
@@ -67,11 +67,9 @@ export default function CollectionScreen() {
       setLoading(true);
       setError(null);
       const response = await api.createMemo({
-        type: MemoType.NOTE, // NOTE type
-        data: {
-          id: -1,
-          content: content,
-          createdAt: '',
+        data:{
+          type: MemoType.NOTE,
+          noteContent: content
         }
       });
       if (response.status === 200) {
@@ -109,9 +107,9 @@ export default function CollectionScreen() {
         numColumns={isMediumScreen ? (isWideScreen ? 3 : 2) : 1}
         contentContainerStyle={styles.cardGrid}
         renderItem={({ item, i }) => {
-            const memo = item as Memo;
-            return <MemoCard type={memo.type} data={memo.data} />
-          }
+          const memo = item as Memo;
+          return <MemoCard data={memo} />
+        }
         }
       />
     </ThemedView>

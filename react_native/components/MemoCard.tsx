@@ -1,19 +1,18 @@
-import { Bookmark, MemoType, Note } from '@/api/types';
+import { bookmarkProps, Memo, MemoType, noteProps } from '@/api/types';
 import { NoteCard } from './NoteCard';
 import { BookmarkCard } from './BookmarkCard';
 
 type Props = {
-  type: MemoType,
-  data: Note | Bookmark,
+  data: Memo,
 };
 
-export function MemoCard({ type, data }: Props) {
-  if (type === MemoType.NOTE) {
-    return <NoteCard data={data as Note} />;
+export function MemoCard({ data }: Props) {
+  if (data.type === MemoType.NOTE) {
+    return <NoteCard {...(noteProps(data))} />;
   }
 
-  if (type === MemoType.BOOKMARK) {
-    return <BookmarkCard data={data as Bookmark} />;
+  if (data.type === MemoType.BOOKMARK) {
+    return <BookmarkCard {...(bookmarkProps(data))} />;
   }
 
   return null;

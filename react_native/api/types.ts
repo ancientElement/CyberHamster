@@ -12,30 +12,39 @@ export enum MemoType {
   NOTE = 2,            // 笔记类型
 }
 
+export function noteProps(memo: Memo) {
+  return {
+    id: memo.id,                  // 唯一标识符
+    type: memo.type,              // 备忘录类型
+    createdAt: memo.createdAt,    // 创建时间
+    content: memo.noteContent!,
+  };
+}
+
+export function bookmarkProps(memo: Memo) {
+  return {
+    id: memo.id,                  // 唯一标识符
+    type: memo.type,              // 备忘录类型
+    createdAt: memo.createdAt,    // 创建时间
+    title: memo.bookmarkTitle!,
+    url: memo.bookmarkUrl!,
+    description: memo.bookmarkDescription,
+    icon: memo.bookmarkIcon,
+  };
+}
+
 // 备忘录基础信息接口，包含共同的元数据
 export interface Memo {
   id: number,          // 唯一标识符
   type: MemoType,      // 备忘录类型
-  relativeID: number,  // 关联ID
-  data: Note | Bookmark, // 具体内容数据
   createdAt: string;   // 创建时间
-}
-
-// 笔记内容接口，用于存储文本类型的备忘录
-export interface Note {
-  id: number;          // 笔记ID
-  content: string;     // 笔记内容
-  createdAt: string;   // 创建时间
-}
-
-// 书签内容接口，用于存储网页链接类型的备忘录
-export interface Bookmark {
-  id: number;          // 书签ID
-  title: string;       // 书签标题
-  url: string;         // 书签URL地址
-  description: string; // 书签描述信息
-  icon: string;        // 书签图标，base64编码的图片数据
-  createdAt: string;   // 创建时间
+  //------------------
+  noteContent?: string;     // 笔记内容
+  //------------------
+  bookmarkTitle?: string;       // 书签标题
+  bookmarkUrl?: string;         // 书签URL地址
+  bookmarkDescription?: string; // 书签描述信息
+  bookmarkIcon?: string;        // 书签图标，base64编码的图片数据
 }
 
 // 标签接口，用于组织和分类备忘录
@@ -55,13 +64,27 @@ export interface MemoTag {
 }
 
 // 创建备忘录的请求接口
-export interface CreateMemoRequest {
-  type: MemoType;      // 要创建的备忘录类型
-  data: Note | Bookmark; // 备忘录具体内容
+export interface CreateMemoDto {
+  data: {
+    type: MemoType,
+    noteContent: string
+  } | {
+    type: MemoType,
+    bookmarkTitle: string,       // 书签标题
+    bookmarkUrl: string,         // 书签URL地址
+    bookmarkDescription?: string, // 书签描述信息
+    bookmarkIcon?: string,        // 书签图标，base64编码的图片数据
+  }; // 备忘录具体内容
 }
 
-// 创建标签的请求接口
-export interface CreateTagRequest {
-  path: string;        // 标签路径
-  parentId?: number;   // 父标签ID，可选
+// 更新备忘录的请求接口
+export interface UpdateMemoDto {
+  data: {
+    noteContent: string
+  } | {
+    bookmarkTitle?: string,       // 书签标题
+    bookmarkUrl?: string,         // 书签URL地址
+    bookmarkDescription?: string, // 书签描述信息
+    bookmarkIcon?: string,        // 书签图标，base64编码的图片数据
+  }; // 备忘录具体内容
 }

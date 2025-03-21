@@ -6,7 +6,7 @@ import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Bookmark, Memo, MemoType } from '@/api/types';
+import { bookmarkProps, Memo, MemoType } from '@/api/types';
 
 export default function NavigationScreen() {
   const { width } = useWindowDimensions();
@@ -48,12 +48,7 @@ export default function NavigationScreen() {
         style={styles.grid}
         data={bookmarks}
         renderItem={({ item }) => {
-          const bookmark = item.data as Bookmark;
-          return <NavigationCard
-          icon={bookmark.icon}
-          title={bookmark.title}
-          url={bookmark.url}
-        />
+          return <NavigationCard {...bookmarkProps(item)}/>
         }}
       />
     </ThemedView>

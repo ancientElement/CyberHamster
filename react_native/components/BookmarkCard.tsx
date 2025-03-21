@@ -1,30 +1,27 @@
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Bookmark } from '@/api/types';
 import { ExternalLink } from './ExternalLink';
 import { IconSymbol } from './ui/IconSymbol';
 
-type Props = {
-  data: Bookmark,
-};
-
-export function BookmarkCard({ data }: Props) {
-  const { createdAt, title, url, description, icon } = data;
+export function BookmarkCard({ createdAt, title, url, description, icon }: {
+  createdAt: string;
+  title: string;
+  url: string;
+  description: string | undefined;
+  icon: string | undefined;
+}) {
   return (
     <ThemedView style={styles.card}>
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
-        <TouchableOpacity onPress={() => {}} style={styles.editButton}>
+        <TouchableOpacity onPress={() => { }} style={styles.editButton}>
           <IconSymbol name="pencil.line" size={16} color="#666" />
         </TouchableOpacity>
       </ThemedView>
       <ThemedView style={styles.bookmarkContent}>
         <ThemedView style={styles.titleRow}>
-          <Image
-            source={{ uri: icon }}
-            style={styles.icon}
-          />
+          {icon &&<Image source={{ uri: icon }} style={styles.icon} />}
           <ThemedView style={styles.titleContainer}>
             <ThemedText style={styles.title}>{title}</ThemedText>
             <ExternalLink href={url}>

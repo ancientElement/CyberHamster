@@ -1,16 +1,12 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { Note } from '@/api/types';
 import { TextRenderer } from './TextRenderer';
 import { IconSymbol } from './ui/IconSymbol';
 
-type Props = {
-  data: Note,
-};
 
-export function NoteCard({ data }: Props) {
-  const { createdAt, content } = data;
+export function NoteCard({ createdAt, content } : {
+  createdAt: string,content: string}) {
   return (
     <ThemedView style={styles.card}>
       <ThemedView style={styles.cardHeader}>

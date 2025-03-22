@@ -7,7 +7,7 @@ export class MemosService {
   constructor(private readonly databaseService: DatabaseService) { }
 
   async getMemos(): Promise<Memo[]> {
-    const sql = 'SELECT * FROM memos';
+    const sql = 'SELECT * FROM memos ORDER BY createdAt DESC';
     return this.databaseService.all(sql);
   }
 

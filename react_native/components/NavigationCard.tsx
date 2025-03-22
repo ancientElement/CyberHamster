@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Linking, Image } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { ExternalLink } from './ExternalLink';

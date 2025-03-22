@@ -1,12 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
 import { DatabaseAdaptor } from 'src/database-adaptor';
 
-export interface DatabaseAdaptorOwner {
-  db: DatabaseAdaptor;
-}
-
-@Injectable()
 export class MemoApiServiceAdaptor {
   private db: DatabaseAdaptor
 

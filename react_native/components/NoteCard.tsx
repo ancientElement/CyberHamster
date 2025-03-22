@@ -1,18 +1,19 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
 import { useState } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { TextRenderer } from './TextRenderer';
 import { IconSymbol } from './ui/IconSymbol';
-import { CustomModal } from './CustomModal';
+import { SimpleCenterCardModal } from './SimpleCenterCardModal';
+import { ConfirmCardModal } from './ConfirmCardModal';
 
 export function NoteCard({ createdAt, content, onDelete }: {
   createdAt: string,
   content: string,
-  onDelete?: () => void
+  onDelete: () => void
 }) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
+  const { width } = useWindowDimensions();
   return (
     <ThemedView style={styles.card}>
       <ThemedView style={styles.cardHeader}>
@@ -30,39 +31,14 @@ export function NoteCard({ createdAt, content, onDelete }: {
         </ThemedView>
       </ThemedView>
       <TextRenderer text={content}></TextRenderer>
-
-      {/* 使用 CustomModal 作为删除确认框 */}
-      <CustomModal
+      <ConfirmCardModal
         visible={deleteModalVisible}
-        onClose={() => setDeleteModalVisible(false)}
-        title="确认删除"
-      >
-        <View style={styles.modalContent}>
-          <ThemedText style={styles.modalMessage}>
-            您确定要删除这条笔记吗？此操作无法撤销。
-          </ThemedText>
-
-          <View style={styles.modalButtons}>
-            <TouchableOpacity
-              style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setDeleteModalVisible(false)}
-            >
-              <ThemedText style={styles.buttonText}>取消</ThemedText>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.modalButton, styles.deleteButton]}
-              onPress={() => {
-                if (onDelete) {
-                  onDelete();
-                }
-                setDeleteModalVisible(false);
-              }}
-            >
-              <ThemedText style={styles.deleteButtonText}>删除</ThemedText>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </CustomModal>
+        message={'确定要删除这条笔记吗？\n此操作无法撤销'}
+        cancelText='取消'
+        confirmText='删除'
+        onClose={() => { setDeleteModalVisible(false) }}
+        onConfirm={onDelete}>
+      </ConfirmCardModal>
     </ThemedView>
   );
 }
@@ -97,12 +73,13 @@ const styles = StyleSheet.create({
     marginLeft: 8
   },
   modalContent: {
+    padding: 5,
     alignItems: 'center',
-    paddingTop: 10,
   },
   modalMessage: {
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
+    fontSize: 16,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -112,7 +89,7 @@ const styles = StyleSheet.create({
   },
   modalButton: {
     flex: 1,
-    padding: 12,
+    padding: 5,
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -121,9 +98,6 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: '#F56565',
-  },
-  buttonText: {
-    fontWeight: '600',
   },
   deleteButtonText: {
     color: 'white',

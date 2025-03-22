@@ -95,6 +95,7 @@ export default function TabTwoScreen() {
   );
 }
 
+// 移除不需要的模态框相关样式
 const styles = StyleSheet.create({
   headerImage: {
     color: '#808080',

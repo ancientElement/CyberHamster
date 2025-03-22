@@ -40,14 +40,22 @@ export class BaseApi {
 
     try {
       const response = await fetch(url, options);
-      const responseData = await response.json();
+
+      // 检查响应内容类型和长度
+      const contentType = response.headers.get('content-type');
+      let responseData = null;
+
+      if (contentType?.includes('application/json')) {
+        const text = await response.text();
+        responseData = text ? JSON.parse(text) : null;
+      }
 
       if (!response.ok) {
         throw new Error(response.statusText || '请求失败');
       }
 
       const success = response.status === STATUS_CODE.SUCCESS ||
-                      response.status === STATUS_CODE.POST_SUCCESS;
+                     response.status === STATUS_CODE.POST_SUCCESS;
 
       return {
         success,

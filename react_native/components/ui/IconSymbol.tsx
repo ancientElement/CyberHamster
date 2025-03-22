@@ -1,5 +1,6 @@
 // This file is a fallback for using MaterialIcons on Android and web.
 
+import { FontAwesome6 } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SymbolWeight } from 'expo-symbols';
 import React from 'react';
@@ -10,18 +11,20 @@ import { TextStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 const MAPPING = {
   // See MaterialIcons here: https://icons.expo.fyi
   // See SF Symbols in the SF Symbols app on Mac.
-  'house.fill': 'home',
-  'paperplane.fill': 'send',
-  'chevron.left.forwardslash.chevron.right': 'code',
-  'chevron.right': 'chevron-right',
-  'bookmark.fill': 'collections-bookmark',
-  'pencil.line': 'edit-note',
-  'globe': 'public',
-  'trash' :'delete-outline'
+  'house.fill': {name: 'home',lib:'material'},
+  'paperplane.fill': {name:'send',lib:'material'},
+  'chevron.left.forwardslash.chevron.right': {name:'code',lib:'material'},
+  'chevron.right': {name:'chevron-right',lib:'material'},
+  'bookmark.fill': {name:'collections-bookmark',lib:'material'},
+  'pencil.line': {name:'edit',lib:'font-awesome'},
+  'globe': {name:'public',lib:'material'},
+  'trash': {name:'trash-can',lib:'font-awesome'},
 } as Partial<
   Record<
-    import('expo-symbols').SymbolViewProps['name'],
-    React.ComponentProps<typeof MaterialIcons>['name']
+    import('expo-symbols').SymbolViewProps['name'], {
+      name: React.ComponentProps<typeof MaterialIcons>['name'] | React.ComponentProps<typeof FontAwesome6>['name'],
+      lib: 'material' | 'font-awesome'
+    }
   >
 >;
 
@@ -44,5 +47,9 @@ export function IconSymbol({
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  const iconlib = MAPPING[name]?.lib;
+  if (iconlib === 'font-awesome') {
+    return <FontAwesome6 color={color} size={size} name={MAPPING[name]?.name} style={style} />;
+  }
+  return <MaterialIcons color={color} size={size} name={MAPPING[name]?.name} style={style} />;
 }

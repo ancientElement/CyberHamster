@@ -67,7 +67,7 @@ export default function CollectionScreen() {
       setLoading(true);
       setError(null);
       const response = await api.createMemo({
-        data:{
+        data: {
           type: MemoType.NOTE,
           noteContent: content
         }
@@ -101,6 +101,28 @@ export default function CollectionScreen() {
     }
   };
 
+  const handleUpdateMemo = async (id: number, content: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.updateMemo(id, {
+        data: {
+          type: MemoType.NOTE,
+          noteContent: content
+        }
+      });
+      if (response.success) {
+        await loadMemos();
+      } else {
+        setError(`更新备忘录失败${response.message}`);
+      }
+    } catch (err) {
+      setError(`更新备忘录时发生错误${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.header}>
@@ -119,14 +141,18 @@ export default function CollectionScreen() {
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
       <MasonryList
+        onRefresh={loadMemos}
         data={memos}
         keyExtractor={(item) => item.id}
         numColumns={isMediumScreen ? (isWideScreen ? 3 : 2) : 1}
         contentContainerStyle={styles.cardGrid}
         renderItem={({ item, i }) => {
           const memo = item as Memo;
-          return <MemoCard data={memo} onDelete={() => handleDeleteMemo(memo.id)} />
-        }
+          return <MemoCard
+            data={memo}
+            onDelete={() => handleDeleteMemo(memo.id)}
+            onUpdateContext={(content) => handleUpdateMemo(memo.id, content)} />
+          }
         }
       />
     </ThemedView>
@@ -164,7 +190,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: '#f0f0f0'
   },
-
   cardGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

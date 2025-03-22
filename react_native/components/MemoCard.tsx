@@ -5,11 +5,12 @@ import { BookmarkCard } from './BookmarkCard';
 type Props = {
   data: Memo,
   onDelete: () => void
+  onUpdateContext: (content: string) => void
 };
 
-export function MemoCard({ data, onDelete }: Props) {
+export function MemoCard({ data, onDelete, onUpdateContext }: Props) {
   if (data.type === MemoType.NOTE) {
-    return <NoteCard onDelete={onDelete} {...(noteProps(data))} />;
+    return <NoteCard onUpdateContext={onUpdateContext} onDelete={onDelete} {...(noteProps(data))} />;
   }
 
   if (data.type === MemoType.BOOKMARK) {

@@ -5,14 +5,19 @@ import { ThemedText } from '@/components/ThemedText';
 import { TextRenderer } from './TextRenderer';
 import { IconSymbol } from './ui/IconSymbol';
 import { ConfirmCardModal } from './ConfirmCardModal';
+import { SimpleCenterCardModal } from './SimpleCenterCardModal';
+import { MemoEditor } from './MemoEditor';
 
-export function NoteCard({ createdAt, content, onDelete }: {
+export function NoteCard({ createdAt, content, onDelete, onUpdateContext }: {
   createdAt: string,
   content: string,
   onDelete: () => void
+  onUpdateContext: (content: string) => void,
 }) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
   const { width } = useWindowDimensions();
+
   return (
     <ThemedView style={styles.card}>
       <ThemedView style={styles.cardHeader}>
@@ -24,7 +29,9 @@ export function NoteCard({ createdAt, content, onDelete }: {
           >
             <IconSymbol name="trash" size={10} color="#666" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { }} style={styles.iconButton}>
+          <TouchableOpacity
+            onPress={() => { setEditModalVisible(true); }}
+            style={styles.iconButton}>
             <IconSymbol name="pencil.line" size={10} color="#666" />
           </TouchableOpacity>
         </ThemedView>
@@ -38,6 +45,18 @@ export function NoteCard({ createdAt, content, onDelete }: {
         onClose={() => { setDeleteModalVisible(false) }}
         onConfirm={onDelete}>
       </ConfirmCardModal>
+      <SimpleCenterCardModal visible={editModalVisible} onClose={() => { setEditModalVisible(false) }}>
+        <MemoEditor
+          style={[
+            { width: Math.min(width * 0.8, 300) }
+          ]}
+          onSubmit={(content) => {
+            onUpdateContext(content);
+            setEditModalVisible(false);
+          }}
+          initText={content}>
+        </MemoEditor>
+      </SimpleCenterCardModal>
     </ThemedView>
   );
 }

@@ -16,7 +16,8 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'bookmark.fill': 'collections-bookmark',
   'pencil.line': 'edit-note',
-  'globe': 'public'
+  'globe': 'public',
+  'trash' :'delete-outline'
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],

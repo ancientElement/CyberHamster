@@ -84,6 +84,23 @@ export default function CollectionScreen() {
     }
   };
 
+  const handleDeleteMemo = async (id: number) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.deleteMemo(id);
+      if (response.success) {
+        await loadMemos();
+      } else {
+        setError(`删除备忘录失败${response.message}`);
+      }
+    } catch (err) {
+      setError(`删除备忘录时发生错误${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
       <ThemedView style={styles.header}>
@@ -108,7 +125,7 @@ export default function CollectionScreen() {
         contentContainerStyle={styles.cardGrid}
         renderItem={({ item, i }) => {
           const memo = item as Memo;
-          return <MemoCard data={memo} />
+          return <MemoCard data={memo} onDelete={() => handleDeleteMemo(memo.id)} />
         }
         }
       />

@@ -1,19 +1,27 @@
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { TextRenderer } from './TextRenderer';
 import { IconSymbol } from './ui/IconSymbol';
 
 
-export function NoteCard({ createdAt, content } : {
-  createdAt: string,content: string}) {
+export function NoteCard({ createdAt, content, onDelete } : {
+  createdAt: string,
+  content: string,
+  onDelete?: () => void
+}) {
   return (
     <ThemedView style={styles.card}>
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
-        <TouchableOpacity onPress={() => {}} style={styles.editButton}>
-          <IconSymbol name="pencil.line" size={16} color="#666" />
-        </TouchableOpacity>
+        <ThemedView style={styles.buttonGroup}>
+          <TouchableOpacity onPress={() => {}} style={styles.iconButton}>
+            <IconSymbol name="trash" size={16} color="#666" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}} style={styles.iconButton}>
+            <IconSymbol name="pencil.line" size={16} color="#666" />
+          </TouchableOpacity>
+        </ThemedView>
       </ThemedView>
       <TextRenderer text={content}></TextRenderer>
     </ThemedView>
@@ -40,7 +48,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666'
   },
-  editButton: {
-    padding: 4
+  buttonGroup: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  iconButton: {
+    padding: 4,
+    marginLeft: 8
   }
 });

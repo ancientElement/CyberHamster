@@ -9,6 +9,7 @@ import { ApiProvider } from '../hooks/useApi';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { MockApiService } from '@/api/mock/mock-api-service';
+import { ApiService } from '@/api/api-service';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -30,7 +31,7 @@ export default function RootLayout() {
   }
 
   return (
-    <ApiProvider api={new MockApiService()} >
+    <ApiProvider api={new ApiService('http://localhost:3000')} >
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

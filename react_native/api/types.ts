@@ -63,28 +63,25 @@ export interface MemoTag {
   createdAt: string;   // 创建时间
 }
 
+export interface NoteUniFields {
+    type: MemoType.NOTE,
+    noteContent: string;
+}
+
+export interface BookmarkUniFields {
+  type: MemoType.BOOKMARK,
+  bookmarkTitle: string;
+  bookmarkUrl: string;
+  bookmarkDescription?: string;
+  bookmarkIcon?: string;
+}
+
 // 创建备忘录的请求接口
 export interface CreateMemoDto {
-  data: {
-    type: MemoType,
-    noteContent: string
-  } | {
-    type: MemoType,
-    bookmarkTitle: string,       // 书签标题
-    bookmarkUrl: string,         // 书签URL地址
-    bookmarkDescription?: string, // 书签描述信息
-    bookmarkIcon?: string,        // 书签图标，base64编码的图片数据
-  }; // 备忘录具体内容
+  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
 }
 
 // 更新备忘录的请求接口
 export interface UpdateMemoDto {
-  data: {
-    noteContent: string
-  } | {
-    bookmarkTitle?: string,       // 书签标题
-    bookmarkUrl?: string,         // 书签URL地址
-    bookmarkDescription?: string, // 书签描述信息
-    bookmarkIcon?: string,        // 书签图标，base64编码的图片数据
-  }; // 备忘录具体内容
+  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
 }

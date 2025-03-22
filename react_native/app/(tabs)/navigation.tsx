@@ -29,10 +29,10 @@ export default function NavigationScreen() {
       if (response.success && response.data) {
         setBookmarks(response.data);
       } else {
-        setError(`搜索时发生错误${response.message}`);
+        setError(`获取数据时发生错误${response.message}`);
       }
     } catch (err) {
-      setError(`搜索时发生错误${err}`);
+      setError(`获取数据时发生错误${err}`);
     } finally {
       setLoading(false);
     }

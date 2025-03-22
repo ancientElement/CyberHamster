@@ -125,7 +125,7 @@ export class MockApiService extends IApiService {
     return this.success(res.reverse());
   }
 
-  async getMemo(id: string): Promise<ApiResponse<Memo>> {
+  async getMemo(id: number): Promise<ApiResponse<Memo>> {
     await this.delay();
     const memo = this.db.getMemo(Number(id));
     if (!memo) {
@@ -144,7 +144,7 @@ export class MockApiService extends IApiService {
     }
   }
 
-  async updateMemo(id: string, request: UpdateMemoDto): Promise<ApiResponse<Memo>> {
+  async updateMemo(id: number, request: UpdateMemoDto): Promise<ApiResponse<Memo>> {
     await this.delay();
     const updatedMemo = this.db.updateMemo(Number(id), request.data);
     if (!updatedMemo) {
@@ -153,7 +153,7 @@ export class MockApiService extends IApiService {
     return this.success(updatedMemo);
   }
 
-  async deleteMemo(id: string): Promise<ApiResponse<void>> {
+  async deleteMemo(id: number): Promise<ApiResponse<void>> {
     await this.delay();
     const success = this.db.deleteMemo(Number(id));
     if (!success) {

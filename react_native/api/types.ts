@@ -75,5 +75,5 @@ export interface CreateMemoDto {
 
 // 更新备忘录的请求接口
 export interface UpdateMemoDto {
-  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
+  data: NoteUniFields | Partial<BookmarkUniFields>; // 备忘录具体内容
 }

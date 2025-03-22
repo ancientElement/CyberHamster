@@ -11,7 +11,7 @@ export class ApiService extends IApiService {
     return this.get<Memo[]>('/memos');
   }
 
-  async getMemo(id: string): Promise<ApiResponse<Memo>> {
+  async getMemo(id: number): Promise<ApiResponse<Memo>> {
     return this.get<Memo>(`/memos/${id}`);
   }
 
@@ -19,11 +19,11 @@ export class ApiService extends IApiService {
     return this.post<Memo>('/memos', data);
   }
 
-  async updateMemo(id: string, data: CreateMemoDto): Promise<ApiResponse<Memo>> {
+  async updateMemo(id: number, data: CreateMemoDto): Promise<ApiResponse<Memo>> {
     return this.put<Memo>(`/memos/${id}`, data);
   }
 
-  async deleteMemo(id: string): Promise<ApiResponse<void>> {
+  async deleteMemo(id: number): Promise<ApiResponse<void>> {
     return this.delete<void>(`/memos/${id}`);
   }
 

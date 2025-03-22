@@ -1,6 +1,4 @@
-import { Children } from 'react';
-import { StyleSheet, View, Modal, Text, Pressable, TouchableOpacity } from 'react-native';
-import { ThemedText } from './ThemedText';
+import { StyleSheet, View, Modal, TouchableOpacity } from 'react-native';
 
 interface SimpleModalProps {
   visible: boolean;

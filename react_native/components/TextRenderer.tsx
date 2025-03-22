@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ExternalLink } from './ExternalLink';
 import { ThemedText } from './ThemedText';
 

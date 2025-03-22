@@ -8,7 +8,6 @@ import 'react-native-reanimated';
 import { ApiProvider } from '../hooks/useApi';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { MockApiService } from '@/api/mock/mock-api-service';
 import { ApiService } from '@/api/api-service';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.

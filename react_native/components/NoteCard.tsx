@@ -1,10 +1,9 @@
-import { StyleSheet, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { TextRenderer } from './TextRenderer';
 import { IconSymbol } from './ui/IconSymbol';
-import { SimpleCenterCardModal } from './SimpleCenterCardModal';
 import { ConfirmCardModal } from './ConfirmCardModal';
 
 export function NoteCard({ createdAt, content, onDelete }: {
@@ -43,7 +42,6 @@ export function NoteCard({ createdAt, content, onDelete }: {
   );
 }
 
-// 在现有的 styles 中添加以下样式
 const styles = StyleSheet.create({
   card: {
     padding: 16,

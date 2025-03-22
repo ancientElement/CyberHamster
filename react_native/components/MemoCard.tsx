@@ -4,7 +4,7 @@ import { BookmarkCard } from './BookmarkCard';
 
 type Props = {
   data: Memo,
-  onDelete?: () => void
+  onDelete: () => void
 };
 
 export function MemoCard({ data, onDelete }: Props) {

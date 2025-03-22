@@ -1,6 +1,6 @@
+import { ApiResponse } from '../base-api';
 import { IApiService } from '../i-api-service';
 import {
-  ApiResponse,
   Memo,
   MemoType,
   CreateMemoDto,
@@ -102,16 +102,18 @@ export class MockApiService extends IApiService {
   // 构造成功响应
   private success<T>(data: T): ApiResponse<T> {
     return {
-      status: 200,
+      success: true,
       data,
       message: '操作成功',
+      status: 200,
     };
   }
 
   // 构造错误响应
   private error(message: string): ApiResponse<any> {
     return {
-      status: 400,
+      success: true,
+      status: 200,
       message,
       error: new Error(message),
     };

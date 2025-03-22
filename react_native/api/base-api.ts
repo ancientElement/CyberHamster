@@ -1,4 +1,18 @@
-import { ApiResponse } from './types';
+export type SUCCESS = boolean;
+
+export enum STATUS_CODE {
+  SUCCESS = 200,
+  POST_SUCCESS = 201,
+}
+
+// API通用响应格式，用于统一处理服务器返回的数据
+export interface ApiResponse<T = any> {
+  data?: T;            // 响应数据，可选
+  message?: string;    // 响应消息，可选
+  success: SUCCESS;    // 请求是否成功
+  status: number;      // 响应状态码
+  error?: any;         // 错误信息，可选
+}
 
 export class BaseApi {
   private baseUrl: string;
@@ -26,13 +40,21 @@ export class BaseApi {
 
     try {
       const response = await fetch(url, options);
-      const result = await response.json();
+      const responseData = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || '请求失败');
+        throw new Error(response.statusText || '请求失败');
       }
 
-      return result;
+      const success = response.status === STATUS_CODE.SUCCESS ||
+                      response.status === STATUS_CODE.POST_SUCCESS;
+
+      return {
+        success,
+        message: response.statusText,
+        data: responseData,
+        status: response.status,
+      };
     } catch (error) {
       throw error instanceof Error ? error : new Error('网络请求错误');
     }

@@ -1,6 +1,5 @@
-import { BaseApi } from './base-api';
+import { ApiResponse, BaseApi } from './base-api';
 import {
-  ApiResponse,
   Memo,
   MemoType,
   CreateMemoDto,

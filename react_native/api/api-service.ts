@@ -1,6 +1,6 @@
+import { ApiResponse } from './base-api';
 import { IApiService } from './i-api-service';
 import {
-  ApiResponse,
   Memo,
   MemoType,
   CreateMemoDto,

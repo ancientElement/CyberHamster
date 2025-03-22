@@ -29,13 +29,13 @@ export default function CollectionScreen() {
       setLoading(true);
       setError(null);
       const response = await api.getMemos();
-      if (response.status === 200 && response.data) {
+      if (response.success && response.data) {
         setMemos(response.data);
       } else {
         setError('获取备忘录失败');
       }
     } catch (err) {
-      setError('加载数据时发生错误');
+      setError(`加载数据时发生错误${err}`);
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function CollectionScreen() {
       setLoading(true);
       setError(null);
       const response = await api.searchMemos(searchQuery);
-      if (response.status === 200 && response.data) {
+      if (response.success && response.data) {
         setMemos(response.data);
       } else {
         setError('搜索失败');
@@ -72,7 +72,7 @@ export default function CollectionScreen() {
           noteContent: content
         }
       });
-      if (response.status === 200) {
+      if (response.success) {
         await loadMemos();
       } else {
         setError('创建备忘录失败');

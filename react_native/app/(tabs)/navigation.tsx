@@ -6,7 +6,7 @@ import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { bookmarkProps, Memo, MemoType, SUCECESS } from '@/api/types';
+import { bookmarkProps, Memo, MemoType } from '@/api/types';
 
 export default function NavigationScreen() {
   const { width } = useWindowDimensions();
@@ -26,13 +26,13 @@ export default function NavigationScreen() {
       setLoading(true);
       setError(null);
       const response = await api.getMemosByType(MemoType.BOOKMARK);
-      if (response.success === STATUS.SUCCESS && response.data) {
+      if (response.success && response.data) {
         setBookmarks(response.data);
       } else {
-        setError('获取书签失败');
+        setError(`搜索时发生错误${response.message}`);
       }
     } catch (err) {
-      setError('加载数据时发生错误');
+      setError(`搜索时发生错误${err}`);
     } finally {
       setLoading(false);
     }

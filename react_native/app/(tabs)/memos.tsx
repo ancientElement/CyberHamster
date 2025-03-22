@@ -32,7 +32,7 @@ export default function CollectionScreen() {
       if (response.success && response.data) {
         setMemos(response.data);
       } else {
-        setError('获取备忘录失败');
+        setError(`获取备忘录失败${response.message}`);
       }
     } catch (err) {
       setError(`加载数据时发生错误${err}`);
@@ -53,10 +53,10 @@ export default function CollectionScreen() {
       if (response.success && response.data) {
         setMemos(response.data);
       } else {
-        setError('搜索失败');
+        setError(`搜索失败${response.message}`);
       }
     } catch (err) {
-      setError('搜索时发生错误');
+      setError(`搜索时发生错误${err}`);
     } finally {
       setLoading(false);
     }
@@ -75,10 +75,10 @@ export default function CollectionScreen() {
       if (response.success) {
         await loadMemos();
       } else {
-        setError('创建备忘录失败');
+        setError(`创建备忘录失败${response.message}`);
       }
     } catch (err) {
-      setError('创建备忘录时发生错误');
+      setError(`创建备忘录时发生错误${err}`);
     } finally {
       setLoading(false);
     }

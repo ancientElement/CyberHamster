@@ -2,12 +2,11 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { DATABASE_CONFIG, TABLE_SCHEMAS } from './schemas';
 import { mkdirSync } from 'fs';
 import { dirname } from 'path';
-import { DatabaseAdaptor } from '../database-adaptor';
-import { DatabaseAdaptorOwner } from '../memo-api-service-adaptor';
+import { serviceDatabaseAdaptor } from 'src/database/service-databse-adaptor';
 
 @Injectable()
-export class DatabaseService implements OnModuleInit,DatabaseAdaptorOwner {
-  db: DatabaseAdaptor;
+export class DatabaseService implements OnModuleInit {
+  db: serviceDatabaseAdaptor;
 
   async onModuleInit() {
     await this.initializeDatabase();
@@ -19,7 +18,7 @@ export class DatabaseService implements OnModuleInit,DatabaseAdaptorOwner {
       const dbDir = dirname(DATABASE_CONFIG.DB_PATH);
       mkdirSync(dbDir, { recursive: true });
 
-      this.db = new DatabaseAdaptor(DATABASE_CONFIG.DB_PATH, (err) => {
+      this.db = new serviceDatabaseAdaptor(DATABASE_CONFIG.DB_PATH, (err) => {
         if (err) {
           reject(err);
           return;

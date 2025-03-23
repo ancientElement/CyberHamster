@@ -6,7 +6,7 @@ import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { bookmarkProps, Memo, MemoType } from '@/api/types';
+import { bookmarkProps, Memo, MemoType } from '@/client-server-public/types';
 
 export default function NavigationScreen() {
   const { width } = useWindowDimensions();

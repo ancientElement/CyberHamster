@@ -1,5 +1,5 @@
 import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
-import { DatabaseAdaptor } from 'src/database-adaptor';
+import { DatabaseAdaptor } from 'src/client-server-public/database-adaptor';
 
 export class MemoApiServiceAdaptor {
   private db: DatabaseAdaptor

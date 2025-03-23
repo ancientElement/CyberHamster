@@ -7,7 +7,7 @@ import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
-import { Memo, MemoType } from '@/api/types';
+import { Memo, MemoType } from '@/client-server-public/types';
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();

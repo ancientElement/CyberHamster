@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { MemosService } from './memos.service';
-import { CreateMemoDto, UpdateMemoDto, MemoType } from '../types';
+import { CreateMemoDto, UpdateMemoDto, MemoType } from '../client-server-public/types';
 
 @Controller('memos')
 export class MemosController {

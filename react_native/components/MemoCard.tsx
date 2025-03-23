@@ -1,4 +1,4 @@
-import { bookmarkProps, Memo, MemoType, noteProps } from '@/api/types';
+import { bookmarkProps, Memo, MemoType, noteProps } from '@/client-server-public/types';
 import { NoteCard } from './NoteCard';
 import { BookmarkCard } from './BookmarkCard';
 

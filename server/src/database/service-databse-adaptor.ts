@@ -1,9 +1,11 @@
-import { Database, RunResult } from "sqlite3";
+import { Database } from "sqlite3";
+import { DatabaseAdaptor } from "../client-server-public/database-adaptor";
 
-export class DatabaseAdaptor {
+export class serviceDatabaseAdaptor extends DatabaseAdaptor {
   private db: Database;
 
   constructor(filename: string, callback?: (err: Error | null) => void) {
+    super();
     this.db = new Database(filename,callback);
   }
 
@@ -44,7 +46,7 @@ export class DatabaseAdaptor {
     });
   }
 
-  public run(sql: string, params: any): Promise<RunResult> {
+  public run(sql: string, params: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, function (err) {
         if (err) {

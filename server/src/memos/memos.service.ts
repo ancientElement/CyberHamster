@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { MemoApiServiceAdaptor } from 'src/memo-api-service-adaptor';
+import { MemoApiServiceAdaptor } from 'src/client-server-public/memo-api-service-adaptor';
 
 @Injectable()
 export class MemosService extends MemoApiServiceAdaptor {

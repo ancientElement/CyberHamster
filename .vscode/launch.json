@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "启动所有项目",
+      "configurations": [
+        "启动Web项目",
+        "启动nest项目"
+      ],
+      "stopAll": true
+    }
+  ],
+  "configurations": [
+    {
+      "name": "启动Web项目",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/react_native",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "web"
+      ],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "启动nest项目",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "start"
+      ],
+      "console": "integratedTerminal"
+    }
+  ]
+}

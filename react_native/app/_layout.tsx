@@ -31,7 +31,8 @@ export default function RootLayout() {
 
   return (
     // <ApiProvider api={new ApiService('http://localhost:3000')} >
-    <ApiProvider api={new ApiService('http://10.152.119.107:3000')} >
+    // <ApiProvider api={new ApiService('http://10.152.119.107:3000')} >
+    <ApiProvider api={new ApiService('http://192.168.23.115:3000')} >
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

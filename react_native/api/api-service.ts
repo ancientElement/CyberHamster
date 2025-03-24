@@ -4,7 +4,7 @@ import {
   Memo,
   MemoType,
   CreateMemoDto,
-} from './types';
+} from '../client-server-public/types';
 
 export class ApiService extends IApiService {
   async getMemos(): Promise<ApiResponse<Memo[]>> {

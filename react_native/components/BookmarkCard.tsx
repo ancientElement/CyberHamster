@@ -8,6 +8,7 @@ import { ConfirmCardModal } from './ConfirmCardModal';
 import { SimpleCenterCardModal } from './SimpleCenterCardModal';
 import { EditorMode, MemoEditor } from './MemoEditor';
 import { TextRenderer } from './TextRenderer';
+import { noImage } from '@/constants/NoImagesBase64';
 
 export function BookmarkCard({
   createdAt,
@@ -19,7 +20,7 @@ export function BookmarkCard({
   onUpdateBookmark
 }: {
   createdAt: string;
-  title: string|undefined;
+  title: string | undefined;
   url: string;
   description: string | undefined;
   icon: string | undefined;
@@ -42,15 +43,15 @@ export function BookmarkCard({
       </ThemedView>
       <ThemedView style={styles.bookmarkContent}>
         <ThemedView style={styles.titleRow}>
-          {icon && <Image source={{ uri: icon }} style={styles.icon} />}
+          {<Image source={{ uri: icon ? icon : noImage}} style={styles.icon} />}
           <ThemedView style={styles.titleContainer}>
-            <ThemedText style={styles.title}>{title||'未填写标题'}</ThemedText>
+            <ThemedText style={styles.title}>{title || '未填写标题'}</ThemedText>
             <ExternalLink href={url}>
               <ThemedText style={styles.url}>{url}</ThemedText>
             </ExternalLink>
           </ThemedView>
         </ThemedView>
-        <TextRenderer text={description||'未填写描述'}  style={styles.description}/>
+        <TextRenderer text={description || '未填写描述'} style={styles.description} />
       </ThemedView>
 
       <ConfirmCardModal
@@ -67,12 +68,12 @@ export function BookmarkCard({
           style={[
             { width: Math.min(width * 0.8, 500) }
           ]}
-          onSubmit={(type,context,bookmark) => {
+          onSubmit={(type, context, bookmark) => {
             onUpdateBookmark(bookmark!);
             setEditModalVisible(false);
           }}
           initBookmark={{
-            bookmarkTitle: title||'',
+            bookmarkTitle: title || '',
             bookmarkUrl: url,
             bookmarkDescription: description || '',
             bookmarkIcon: icon

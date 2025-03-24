@@ -91,10 +91,11 @@ export function BookmarkForm({
               placeholderTextColor="#999"
               value={bookmarkIcon}
               onChangeText={onBookmarkIconChange}
+              numberOfLines={1}
             />
             {(
               <Image
-                source={{ uri: bookmarkIcon && bookmarkIcon === '' ? noImage : bookmarkIcon}}
+                source={{ uri: (bookmarkIcon && bookmarkIcon === '' ||!bookmarkIcon ) ? noImage : bookmarkIcon}}
                 style={styles.iconPreview}
                 resizeMode="contain"
               />

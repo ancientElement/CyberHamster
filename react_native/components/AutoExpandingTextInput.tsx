@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextInputProps } from 'react-native';
-import { NoOutlineTextInput } from './NoOutLineTextInput';
+import { NoOutlineTextInput } from './NoOutlineTextInput';
 
 interface AutoExpandingTextInputProps extends TextInputProps {
   maxHeight?: number;

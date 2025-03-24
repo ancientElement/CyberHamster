@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
 import { IconSymbol } from './ui/IconSymbol';
 import { ThemedText } from './ThemedText';
-import { NoOutlineTextInput } from './NoOutLineTextInput';
+import { NoOutlineTextInput } from './NoOutlineTextInput';
 
 // 类型定义
 export enum EditorMode {

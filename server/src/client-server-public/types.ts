@@ -70,7 +70,7 @@ export interface NoteUniFields {
 
 export interface BookmarkUniFields {
   type: MemoType.BOOKMARK,
-  bookmarkTitle: string;
+  bookmarkTitle?: string;
   bookmarkUrl: string;
   bookmarkDescription?: string;
   bookmarkIcon?: string;

@@ -1,34 +1,49 @@
-import { StyleSheet, Image, View, Platform, Text } from 'react-native';
+import { StyleSheet, Image, View, Platform, Text, Pressable } from 'react-native';
+import { useState } from 'react';
 import { ExternalLink } from './ExternalLink';
+import { noImage } from '@/constants/NoImagesBase64';
 
 interface NavigationCardProps {
   icon: string | undefined;
-  title: string;
+  title?: string;
   url: string;
 }
 
+export const defaultWidth = 70;
+
 export function NavigationCard({ icon, title, url }: NavigationCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <ExternalLink style={styles.container} href={url}>
-      <View style={styles.iconContainer}>
-        {icon && <Image source={{ uri: icon }} style={styles.icon} />}
-      </View>
-      <View style={{ width: 58, height: 20, overflow: 'hidden' }}>
-        <Text style={{ textAlign: 'center'}}>
-          {title}
-        </Text>
-      </View>
-    </ExternalLink>
+    <Pressable
+      onHoverIn={() => setIsHovered(true)}
+      onHoverOut={() => setIsHovered(false)}
+    >
+      <ExternalLink style={styles.container} href={url}>
+        <View style={[styles.iconContainer, isHovered && styles.iconContainerHovered]}>
+          <Image
+            source={{ uri: icon || noImage }}
+            style={styles.icon}
+          />
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title} numberOfLines={1}>
+            {title || '未填写标题'}
+          </Text>
+        </View>
+      </ExternalLink>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    width: 58,
-    flex: 1, justifyContent: "center",
+    width: defaultWidth,
+    textAlign: 'center',
   },
   iconContainer: {
+    textAlign: 'center',
     width: 58,
     height: 58,
     borderRadius: 12,
@@ -41,6 +56,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     ...Platform.select({
       web: {
+        transition: '0.3s',
         boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
       },
       ios: {
@@ -51,8 +67,26 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  iconContainerHovered: {
+    ...Platform.select({
+      web: {
+        transform: [{ translateY: -5 }],
+        boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.15)',
+      },
+    }),
+  },
   icon: {
-    width: 32,
-    height: 32,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+  },
+  titleContainer: {
+    width: defaultWidth,
+    height: 20,
+    overflow: 'hidden',
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 12,
   },
 });

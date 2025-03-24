@@ -30,15 +30,15 @@ export class MemoApiServiceAdaptor {
       params = [data.type, createdAt, data.noteContent];
     } else {
       // 添加书签必填字段验证
-      if (!data.bookmarkTitle?.trim() || !data.bookmarkUrl?.trim()) {
-        throw new Error('书签标题和URL不能为空');
+      if (!data.bookmarkUrl?.trim()) {
+        throw new Error('URL不能为空');
       }
 
       sql = 'INSERT INTO memos (type, createdAt, bookmarkTitle, bookmarkUrl, bookmarkDescription, bookmarkIcon) VALUES (?, ?, ?, ?, ?, ?)';
       params = [
         data.type,
         createdAt,
-        data.bookmarkTitle.trim(),
+        data.bookmarkTitle?.trim()||null,
         data.bookmarkUrl.trim(),
         data.bookmarkDescription?.trim() || null,
         data.bookmarkIcon || null

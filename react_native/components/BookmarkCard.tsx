@@ -7,6 +7,7 @@ import { MemoCardToolbox } from './MemoCardToolbox';
 import { ConfirmCardModal } from './ConfirmCardModal';
 import { SimpleCenterCardModal } from './SimpleCenterCardModal';
 import { EditorMode, MemoEditor } from './MemoEditor';
+import { TextRenderer } from './TextRenderer';
 
 export function BookmarkCard({
   createdAt,
@@ -18,7 +19,7 @@ export function BookmarkCard({
   onUpdateBookmark
 }: {
   createdAt: string;
-  title: string;
+  title: string|undefined;
   url: string;
   description: string | undefined;
   icon: string | undefined;
@@ -43,13 +44,13 @@ export function BookmarkCard({
         <ThemedView style={styles.titleRow}>
           {icon && <Image source={{ uri: icon }} style={styles.icon} />}
           <ThemedView style={styles.titleContainer}>
-            <ThemedText style={styles.title}>{title}</ThemedText>
+            <ThemedText style={styles.title}>{title||'未填写标题'}</ThemedText>
             <ExternalLink href={url}>
               <ThemedText style={styles.url}>{url}</ThemedText>
             </ExternalLink>
           </ThemedView>
         </ThemedView>
-        <ThemedText style={styles.description}>{description}</ThemedText>
+        <TextRenderer text={description||'未填写描述'}  style={styles.description}/>
       </ThemedView>
 
       <ConfirmCardModal
@@ -71,7 +72,7 @@ export function BookmarkCard({
             setEditModalVisible(false);
           }}
           initBookmark={{
-            bookmarkTitle: title,
+            bookmarkTitle: title||'',
             bookmarkUrl: url,
             bookmarkDescription: description || ''
           }}

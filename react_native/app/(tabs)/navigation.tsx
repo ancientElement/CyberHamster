@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions, ActivityIndicator, RefreshControl } from 'react-native';
-import { NavigationCard } from '@/components/NavigationCard';
+import { defaultWidth, NavigationCard } from '@/components/NavigationCard';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { FlatGrid } from 'react-native-super-grid';
 import { useApi } from '@/hooks/useApi';
@@ -54,7 +54,7 @@ export default function NavigationScreen() {
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
       <FlatGrid
-        itemDimension={60}
+        itemDimension={defaultWidth}
         spacing={isMediumScreen ? 16 : 12}
         style={styles.grid}
         data={bookmarks}
@@ -77,7 +77,8 @@ export default function NavigationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16
+    padding: 16,
+    marginTop: 10,
   },
   grid: {
     flex: 1,

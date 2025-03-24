@@ -121,9 +121,9 @@ export function MemoEditor({
       if (!bookmarkUrl.trim()) return;
 
       onSubmit(EditorMode.BOOKMARK, undefined, {
-        bookmarkTitle: bookmarkTitle.trim() || '无标题',
+        bookmarkTitle: bookmarkTitle.trim(),
         bookmarkUrl: bookmarkUrl.trim(),
-        bookmarkDescription: bookmarkDescription.trim() || '未输入描述'
+        bookmarkDescription: bookmarkDescription.trim()
       });
     } else {
       if (!newContent.trim()) return;

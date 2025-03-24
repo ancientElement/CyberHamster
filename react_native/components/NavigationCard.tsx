@@ -1,5 +1,4 @@
-import { StyleSheet, Image, View, Platform } from 'react-native';
-import { ThemedText } from '@/components/ThemedText';
+import { StyleSheet, Image, View, Platform, Text } from 'react-native';
 import { ExternalLink } from './ExternalLink';
 
 interface NavigationCardProps {
@@ -14,9 +13,11 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
       <View style={styles.iconContainer}>
         {icon && <Image source={{ uri: icon }} style={styles.icon} />}
       </View>
-      <ThemedText type="defaultSemiBold"  numberOfLines={1}>
-        {title}
-      </ThemedText>
+      <View style={{ width: 58, height: 20, overflow: 'hidden' }}>
+        <Text style={{ textAlign: 'center'}}>
+          {title}
+        </Text>
+      </View>
     </ExternalLink>
   );
 }
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     width: 58,
-    flex:1,justifyContent: "center",
+    flex: 1, justifyContent: "center",
   },
   iconContainer: {
     width: 58,

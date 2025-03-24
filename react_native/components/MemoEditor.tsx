@@ -118,10 +118,10 @@ export function MemoEditor({
   // 事件处理
   const handleSubmit = () => {
     if (isBookmarkMode) {
-      if (!bookmarkUrl.trim() || !bookmarkTitle.trim()) return;
+      if (!bookmarkUrl.trim()) return;
 
       onSubmit(EditorMode.BOOKMARK, undefined, {
-        bookmarkTitle: bookmarkTitle.trim(),
+        bookmarkTitle: bookmarkTitle.trim() || '无标题',
         bookmarkUrl: bookmarkUrl.trim(),
         bookmarkDescription: bookmarkDescription.trim() || '未输入描述'
       });

@@ -29,13 +29,18 @@ export class MemoApiServiceAdaptor {
       sql = 'INSERT INTO memos (type, createdAt, noteContent) VALUES (?, ?, ?)';
       params = [data.type, createdAt, data.noteContent];
     } else {
+      // 添加书签必填字段验证
+      if (!data.bookmarkTitle?.trim() || !data.bookmarkUrl?.trim()) {
+        throw new Error('书签标题和URL不能为空');
+      }
+
       sql = 'INSERT INTO memos (type, createdAt, bookmarkTitle, bookmarkUrl, bookmarkDescription, bookmarkIcon) VALUES (?, ?, ?, ?, ?, ?)';
       params = [
         data.type,
         createdAt,
-        data.bookmarkTitle,
-        data.bookmarkUrl,
-        data.bookmarkDescription || null,
+        data.bookmarkTitle.trim(),
+        data.bookmarkUrl.trim(),
+        data.bookmarkDescription?.trim() || null,
         data.bookmarkIcon || null
       ];
     }

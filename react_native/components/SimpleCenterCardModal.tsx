@@ -1,4 +1,4 @@
-import { StyleSheet, View, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
 interface SimpleModalProps {
   visible: boolean;

@@ -1,4 +1,4 @@
-import { StyleSheet, useWindowDimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, useWindowDimensions, ActivityIndicator, RefreshControl } from 'react-native';
 import { NavigationCard } from '@/components/NavigationCard';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { FlatGrid } from 'react-native-super-grid';
@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { bookmarkProps, Memo, MemoType } from '@/client-server-public/types';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function NavigationScreen() {
   const { width } = useWindowDimensions();
@@ -16,10 +17,20 @@ export default function NavigationScreen() {
   const [bookmarks, setBookmarks] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadBookmarks();
+    setRefreshing(false);
+  };
+
+  const isFocused = useIsFocused();
   useEffect(() => {
-    loadBookmarks();
-  }, []);
+    if (isFocused) {
+      loadBookmarks();
+    }
+  }, [isFocused]);
 
   const loadBookmarks = async () => {
     try {
@@ -50,6 +61,14 @@ export default function NavigationScreen() {
         renderItem={({ item }) => {
           return <NavigationCard {...bookmarkProps(item)} />
         }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#0a7ea4']}
+            tintColor="#0a7ea4"
+          />
+        }
       />
     </ThemedView>
   );

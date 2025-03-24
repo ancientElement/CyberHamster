@@ -64,7 +64,7 @@ export function BookmarkCard({
       <SimpleCenterCardModal visible={editModalVisible} onClose={() => { setEditModalVisible(false) }}>
         <MemoEditor
           style={[
-            { width: Math.min(width * 0.8, 300) }
+            { width: Math.min(width * 0.8, 500) }
           ]}
           onSubmit={(type,context,bookmark) => {
             onUpdateBookmark(bookmark!);

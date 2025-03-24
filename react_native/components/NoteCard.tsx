@@ -42,7 +42,7 @@ export function NoteCard({ createdAt, content, onDelete, onUpdateContext }: {
         onClose={() => { setEditModalVisible(false) }}>
         <MemoEditor
           style={[
-            { width: Math.min(width * 0.8, 300) }
+            { width: Math.min(width * 0.8, 500) }
           ]}
           onSubmit={(type,content) => {
             onUpdateContext(content!);

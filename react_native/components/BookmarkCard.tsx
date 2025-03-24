@@ -24,7 +24,7 @@ export function BookmarkCard({
   description: string | undefined;
   icon: string | undefined;
   onDelete: () => void;
-  onUpdateBookmark: (bookmark: { bookmarkTitle: string, bookmarkUrl: string, bookmarkDescription: string }) => void;
+  onUpdateBookmark: (bookmark: { bookmarkTitle: string, bookmarkUrl: string, bookmarkDescription: string, bookmarkIcon?: string }) => void;
 }) {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
@@ -74,7 +74,8 @@ export function BookmarkCard({
           initBookmark={{
             bookmarkTitle: title||'',
             bookmarkUrl: url,
-            bookmarkDescription: description || ''
+            bookmarkDescription: description || '',
+            bookmarkIcon: icon
           }}
           initMode={EditorMode.BOOKMARK}
           always

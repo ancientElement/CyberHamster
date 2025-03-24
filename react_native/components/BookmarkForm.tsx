@@ -1,25 +1,30 @@
-import { View, TouchableOpacity, Animated, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Animated, StyleSheet, Image } from 'react-native';
 import { useState } from 'react';
 import { IconSymbol } from './ui/IconSymbol';
 import { ThemedText } from './ThemedText';
 import { NoOutlineTextInput } from './NoOutlineTextInput';
+import { noImage } from '@/constants/NoImagesBase64';
 
 interface BookmarkFormProps {
   title: string;
   url: string;
   description: string;
+  bookmarkIcon?: string;
   onTitleChange: (text: string) => void;
   onUrlChange: (text: string) => void;
   onDescriptionChange: (text: string) => void;
+  onBookmarkIconChange?: (text: string) => void;
 }
 
 export function BookmarkForm({
   title,
   url,
   description,
+  bookmarkIcon,
   onTitleChange,
   onUrlChange,
-  onDescriptionChange
+  onDescriptionChange,
+  onBookmarkIconChange
 }: BookmarkFormProps) {
   const [expanded, setExpanded] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];
@@ -78,6 +83,25 @@ export function BookmarkForm({
           />
         </View>
         <View style={styles.formField}>
+          <ThemedText style={styles.fieldLabel}>图标</ThemedText>
+          <View style={styles.iconInputContainer}>
+            <NoOutlineTextInput
+              style={[styles.textInput, styles.iconInput]}
+              placeholder="输入图标URL"
+              placeholderTextColor="#999"
+              value={bookmarkIcon}
+              onChangeText={onBookmarkIconChange}
+            />
+            {(
+              <Image
+                source={{ uri: bookmarkIcon && bookmarkIcon === '' ? noImage : bookmarkIcon}}
+                style={styles.iconPreview}
+                resizeMode="contain"
+              />
+            )}
+          </View>
+        </View>
+        <View style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>描述</ThemedText>
           <NoOutlineTextInput
             style={[styles.textInput, styles.descriptionInput]}
@@ -94,6 +118,20 @@ export function BookmarkForm({
 }
 
 const styles = StyleSheet.create({
+  iconInputContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  iconInput: {
+    flex: 1,
+  },
+  iconPreview: {
+    width: 24,
+    height: 24,
+    borderRadius: 4,
+  },
   bookmarkForm: {
     width: '100%',
   },

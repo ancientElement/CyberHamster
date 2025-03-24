@@ -1,4 +1,4 @@
-import { StyleSheet, View, TouchableOpacity, StyleProp, ViewStyle, Platform } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, StyleProp, ViewStyle, Platform, Alert, ToastAndroid } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
@@ -15,6 +15,7 @@ interface BookmarkData {
   bookmarkTitle: string;
   bookmarkUrl: string;
   bookmarkDescription: string;
+  bookmarkIcon?: string;
 }
 
 interface MemoEditorProps {
@@ -43,6 +44,7 @@ export function MemoEditor({
   const [bookmarkTitle, setBookmarkTitle] = useState(initBookmark?.bookmarkTitle || '');
   const [bookmarkUrl, setBookmarkUrl] = useState(initBookmark?.bookmarkUrl || '');
   const [bookmarkDescription, setBookmarkDescription] = useState(initBookmark?.bookmarkDescription || '');
+  const [bookmarkIcon, setBookmarkIcon] = useState(initBookmark?.bookmarkIcon || '');
 
   // 辅助函数
   const isBookmarkMode = editorMode === EditorMode.BOOKMARK;
@@ -52,26 +54,81 @@ export function MemoEditor({
       setBookmarkTitle('');
       setBookmarkUrl('');
       setBookmarkDescription('');
+      setBookmarkIcon('');
     } else {
       setNewContent('');
     }
   };
 
   // 事件处理
+  const showMessage = (message: string) => {
+    if (Platform.OS === 'web') {
+      window.alert(message);
+    } else if (Platform.OS === 'android') {
+      ToastAndroid.show(message, ToastAndroid.SHORT);
+    }else {
+      Alert.alert('提示', message);
+    }
+  };
+
+  const isValidUrl = (url: string) => {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   const handleSubmit = () => {
     if (isBookmarkMode) {
-      if (!bookmarkUrl.trim()) return;
+      const trimmedUrl = bookmarkUrl.trim();
+
+      if(trimmedUrl.trim()==='') {
+        showMessage('网址不能为空');
+      }
+
+      if (!isValidUrl(trimmedUrl)) {
+        showMessage('请输入有效的网址');
+        return;
+      }
+
+      if (initBookmark) {
+        const hasBookmarkChanges =
+          bookmarkTitle.trim() !== (initBookmark?.bookmarkTitle) ||
+          trimmedUrl !== (initBookmark?.bookmarkUrl) ||
+          bookmarkDescription.trim() !== (initBookmark?.bookmarkDescription) ||
+          bookmarkIcon.trim() !== (initBookmark?.bookmarkIcon);
+
+        if (!hasBookmarkChanges) {
+          showMessage('内容没有变化');
+          return;
+        }
+      }
 
       onSubmit(EditorMode.BOOKMARK, undefined, {
         bookmarkTitle: bookmarkTitle.trim(),
-        bookmarkUrl: bookmarkUrl.trim(),
+        bookmarkUrl: trimmedUrl,
         bookmarkDescription: bookmarkDescription.trim(),
+        bookmarkIcon: bookmarkIcon.trim()
       });
+      clearForm();
     } else {
-      if (!newContent.trim()) return;
-      onSubmit(EditorMode.NOTE, newContent, undefined);
+      const trimmedContent = newContent.trim();
+
+      if (trimmedContent.trim() === '') {
+        showMessage('内容不能为空');
+        return;
+      }
+
+      if (initText && trimmedContent.trim() === initText) {
+        showMessage('内容没有变化');
+        return;
+      }
+
+      onSubmit(EditorMode.NOTE, trimmedContent, undefined);
+      clearForm();
     }
-    clearForm();
   };
 
   const toggleMode = () => {
@@ -90,9 +147,11 @@ export function MemoEditor({
             title={bookmarkTitle}
             url={bookmarkUrl}
             description={bookmarkDescription}
+            bookmarkIcon={bookmarkIcon}
             onTitleChange={setBookmarkTitle}
             onUrlChange={setBookmarkUrl}
             onDescriptionChange={setBookmarkDescription}
+            onBookmarkIconChange={setBookmarkIcon}
           />
         ) : (
           <AutoExpandingTextInput

@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
 import { IconSymbol } from './ui/IconSymbol';
-import { ThemedText } from './ThemedText';
-import { NoOutlineTextInput } from './NoOutlineTextInput';
+import { BookmarkForm } from './BookmarkForm';
 
 // 类型定义
 export enum EditorMode {
@@ -26,63 +25,6 @@ interface MemoEditorProps {
   style?: StyleProp<ViewStyle>;
   always: boolean;
   initMode: EditorMode;
-}
-
-// 子组件：书签表单
-function BookmarkForm({
-  title,
-  url,
-  description,
-  onTitleChange,
-  onUrlChange,
-  onDescriptionChange
-}: {
-  title: string;
-  url: string;
-  description: string;
-  onTitleChange: (text: string) => void;
-  onUrlChange: (text: string) => void;
-  onDescriptionChange: (text: string) => void;
-}) {
-  return (
-    <View style={styles.bookmarkForm}>
-      <View style={styles.formField}>
-        <ThemedText style={styles.fieldLabel}>标题</ThemedText>
-        <NoOutlineTextInput
-          style={styles.textInput}
-          placeholder="输入书签标题"
-          placeholderTextColor="#999"
-          value={title}
-          onChangeText={onTitleChange}
-        />
-      </View>
-
-      <View style={styles.formField}>
-        <ThemedText style={styles.fieldLabel}>网址</ThemedText>
-        <NoOutlineTextInput
-          style={styles.textInput}
-          placeholder="输入网址"
-          placeholderTextColor="#999"
-          value={url}
-          onChangeText={onUrlChange}
-          autoCapitalize="none"
-          keyboardType="url"
-        />
-      </View>
-
-      <View style={styles.formField}>
-        <ThemedText style={styles.fieldLabel}>描述</ThemedText>
-        <NoOutlineTextInput
-          style={[styles.textInput, styles.descriptionInput]}
-          placeholder="输入描述"
-          placeholderTextColor="#999"
-          value={description}
-          onChangeText={onDescriptionChange}
-          multiline
-        />
-      </View>
-    </View>
-  );
 }
 
 // 主组件
@@ -123,7 +65,7 @@ export function MemoEditor({
       onSubmit(EditorMode.BOOKMARK, undefined, {
         bookmarkTitle: bookmarkTitle.trim(),
         bookmarkUrl: bookmarkUrl.trim(),
-        bookmarkDescription: bookmarkDescription.trim()
+        bookmarkDescription: bookmarkDescription.trim(),
       });
     } else {
       if (!newContent.trim()) return;
@@ -224,29 +166,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     marginBottom: 8,
   },
-  bookmarkForm: {
-    width: '100%',
-    marginBottom: 8,
-  },
-  formField: {
-    marginBottom: 8,
-  },
-  fieldLabel: {
-    fontSize: 14,
-    marginBottom: 4,
-    fontWeight: '500',
-  },
-  textInput: {
-    width: '100%',
-    borderRadius: 8,
-    padding: 12,
-    backgroundColor: '#f0f0f0',
-    fontSize: 14,
-  },
-  descriptionInput: {
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -266,5 +185,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#0a7ea4',
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
 });

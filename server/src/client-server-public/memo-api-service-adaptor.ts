@@ -1,5 +1,7 @@
 import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
 import { DatabaseAdaptor } from 'src/client-server-public/database-adaptor';
+import fetch from 'node-fetch';
+import * as cheerio from 'cheerio';
 
 export class MemoApiServiceAdaptor {
   private db: DatabaseAdaptor
@@ -18,6 +20,25 @@ export class MemoApiServiceAdaptor {
     return this.db.get<Memo>(sql, [id]);
   }
 
+  private async getWebPageInfo(url: string) {
+    try {
+      const response = await fetch(url);
+      const html = await response.text();
+      const $ = cheerio.load(html);
+
+      return {
+        title: $('title').text().trim() || $('meta[property="og:title"]').attr('content') || '',
+        description: $('meta[name="description"]').attr('content') ||
+          $('meta[property="og:description"]').attr('content') || '',
+        icon: $('link[rel="icon"]').attr('href') ||
+          $('link[rel="shortcut icon"]').attr('href') || null
+      };
+    } catch (error) {
+      console.error('获取网页信息失败:', error);
+      return { title: '', description: '', icon: null };
+    }
+  }
+
   async createMemo(createMemoDto: CreateMemoDto): Promise<Memo> {
     const { data } = createMemoDto;
     const createdAt = new Date().toISOString();
@@ -29,19 +50,21 @@ export class MemoApiServiceAdaptor {
       sql = 'INSERT INTO memos (type, createdAt, noteContent) VALUES (?, ?, ?)';
       params = [data.type, createdAt, data.noteContent];
     } else {
-      // 添加书签必填字段验证
       if (!data.bookmarkUrl?.trim()) {
         throw new Error('URL不能为空');
       }
+
+      const url = data.bookmarkUrl.trim();
+      const webInfo = await this.getWebPageInfo(url);
 
       sql = 'INSERT INTO memos (type, createdAt, bookmarkTitle, bookmarkUrl, bookmarkDescription, bookmarkIcon) VALUES (?, ?, ?, ?, ?, ?)';
       params = [
         data.type,
         createdAt,
-        data.bookmarkTitle?.trim()||null,
-        data.bookmarkUrl.trim(),
-        data.bookmarkDescription?.trim() || null,
-        data.bookmarkIcon || null
+        data.bookmarkTitle?.trim() || webInfo.title || null,
+        url,
+        data.bookmarkDescription?.trim() || webInfo.description || null,
+        data.bookmarkIcon || webInfo.icon || null
       ];
     }
 
@@ -91,7 +114,7 @@ export class MemoApiServiceAdaptor {
 
     const searchParam = `%${query}%`;
     const params = [searchParam, searchParam, searchParam, searchParam];
-    return this.db.all<Memo>(sql,params);
+    return this.db.all<Memo>(sql, params);
   }
 
   async getMemosByType(type: MemoType): Promise<Memo[]> {

@@ -23,6 +23,8 @@ const MAPPING = {
   'checkmark': {name:'check',lib:'font-awesome'},
   'link': {name:'link',lib:'font-awesome'},
   'bookmark': {name:'book-bookmark',lib:'font-awesome'},
+  'chevron.up': {name:'chevron-up',lib:'font-awesome'},
+  'chevron.down': {name:'chevron-down',lib:'font-awesome'},
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'], {

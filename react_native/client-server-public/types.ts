@@ -70,7 +70,7 @@ export interface BookmarkUniFields {
 
 // 创建备忘录的请求接口
 export interface CreateMemoDto {
-  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
+  data: NoteUniFields | Partial<BookmarkUniFields>; // 备忘录具体内容
 }
 
 // 更新备忘录的请求接口

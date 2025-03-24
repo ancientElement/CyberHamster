@@ -19,6 +19,10 @@ const MAPPING = {
   'pencil.line': {name:'edit',lib:'font-awesome'},
   'globe': {name:'public',lib:'material'},
   'trash': {name:'trash-can',lib:'font-awesome'},
+  'text.document': {name:'copy',lib:'font-awesome'},
+  'checkmark': {name:'check',lib:'font-awesome'},
+  'link': {name:'link',lib:'font-awesome'},
+  'bookmark': {name:'book-bookmark',lib:'font-awesome'},
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'], {

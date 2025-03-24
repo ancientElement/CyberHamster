@@ -1,50 +1,57 @@
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, View, Platform } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { ExternalLink } from './ExternalLink';
 
 interface NavigationCardProps {
-  icon: string|undefined;
+  icon: string | undefined;
   title: string;
   url: string;
 }
 
 export function NavigationCard({ icon, title, url }: NavigationCardProps) {
   return (
-    <ExternalLink style={styles.gridItem} href={url}>
-      <ThemedView style={styles.itemContent}>
+    <ExternalLink style={styles.container} href={url}>
+      <View style={styles.iconContainer}>
         {icon && <Image source={{ uri: icon }} style={styles.icon} />}
-        <ThemedText type="defaultSemiBold" style={styles.title}>
-          {title}
-        </ThemedText>
-      </ThemedView>
+      </View>
+      <ThemedText type="defaultSemiBold"  numberOfLines={1}>
+        {title}
+      </ThemedText>
     </ExternalLink>
   );
 }
 
 const styles = StyleSheet.create({
-  gridItem: {
-    padding: 6,
-  },
-  itemContent: {
-    padding: 16,
-    borderRadius: 12,
+  container: {
     alignItems: 'center',
+    width: 58,
+    flex:1,justifyContent: "center",
+  },
+  iconContainer: {
+    width: 58,
+    height: 58,
+    borderRadius: 12,
+    backgroundColor: '#fff',
     justifyContent: 'center',
-    height: 120,
+    alignItems: 'center',
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    elevation: 2,
+    ...Platform.select({
+      web: {
+        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+      },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+    }),
   },
   icon: {
     width: 32,
     height: 32,
-    marginBottom: 8,
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 12,
-    textAlign: 'center',
-    opacity: 0.8,
   },
 });

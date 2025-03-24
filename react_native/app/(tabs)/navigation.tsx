@@ -43,12 +43,12 @@ export default function NavigationScreen() {
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
       <FlatGrid
-        itemDimension={isMediumScreen ? 200 : 120}
+        itemDimension={60}
         spacing={isMediumScreen ? 16 : 12}
         style={styles.grid}
         data={bookmarks}
         renderItem={({ item }) => {
-          return <NavigationCard {...bookmarkProps(item)}/>
+          return <NavigationCard {...bookmarkProps(item)} />
         }}
       />
     </ThemedView>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     padding: 16
   },
   grid: {
-    flex: 1
+    flex: 1,
   },
   errorText: {
     color: 'red',

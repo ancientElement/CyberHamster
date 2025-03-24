@@ -44,8 +44,13 @@ export function ConfirmCardModal({ visible: visible, message, cancelText, confir
 }
 const styles = StyleSheet.create({
   modalContent: {
-    padding: 5,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
     alignItems: 'center',
+    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+    elevation: 5,
+    position: 'relative',
   },
   modalMessage: {
     textAlign: 'center',

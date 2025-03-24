@@ -4,7 +4,7 @@ import {
   MemoType,
   CreateMemoDto,
   UpdateMemoDto,
-} from './types';
+} from '../client-server-public/types';
 
 export abstract class IApiService extends BaseApi {
   // Memo APIs

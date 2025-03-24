@@ -1,12 +1,12 @@
-import { StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { useState } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { TextRenderer } from './TextRenderer';
-import { IconSymbol } from './ui/IconSymbol';
 import { ConfirmCardModal } from './ConfirmCardModal';
 import { SimpleCenterCardModal } from './SimpleCenterCardModal';
-import { MemoEditor } from './MemoEditor';
+import { EditorMode, MemoEditor } from './MemoEditor';
+import { MemoCardToolbox } from './MemoCardToolbox';
 
 export function NoteCard({ createdAt, content, onDelete, onUpdateContext }: {
   createdAt: string,
@@ -19,22 +19,14 @@ export function NoteCard({ createdAt, content, onDelete, onUpdateContext }: {
   const { width } = useWindowDimensions();
 
   return (
-    <ThemedView style={styles.card}>
+    <>
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
-        <ThemedView style={styles.buttonGroup}>
-          <TouchableOpacity
-            onPress={() => setDeleteModalVisible(true)}
-            style={styles.iconButton}
-          >
-            <IconSymbol name="trash" size={10} color="#666" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => { setEditModalVisible(true); }}
-            style={styles.iconButton}>
-            <IconSymbol name="pencil.line" size={10} color="#666" />
-          </TouchableOpacity>
-        </ThemedView>
+        <MemoCardToolbox
+          copyContet={content}
+          onEdit={() => setEditModalVisible(true)}
+          onDelete={() => setDeleteModalVisible(true)}
+        />
       </ThemedView>
       <TextRenderer text={content}></TextRenderer>
       <ConfirmCardModal
@@ -45,32 +37,28 @@ export function NoteCard({ createdAt, content, onDelete, onUpdateContext }: {
         onClose={() => { setDeleteModalVisible(false) }}
         onConfirm={onDelete}>
       </ConfirmCardModal>
-      <SimpleCenterCardModal visible={editModalVisible} onClose={() => { setEditModalVisible(false) }}>
+      <SimpleCenterCardModal
+        visible={editModalVisible}
+        onClose={() => { setEditModalVisible(false) }}>
         <MemoEditor
           style={[
             { width: Math.min(width * 0.8, 300) }
           ]}
-          onSubmit={(content) => {
-            onUpdateContext(content);
+          onSubmit={(type,content) => {
+            onUpdateContext(content!);
             setEditModalVisible(false);
           }}
-          initText={content}>
+          initText={content}
+          initMode={EditorMode.NOTE}
+          always
+        >
         </MemoEditor>
       </SimpleCenterCardModal>
-    </ThemedView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    padding: 16,
-    margin: 5,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    elevation: 2
-  },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -80,14 +68,6 @@ const styles = StyleSheet.create({
   cardDate: {
     fontSize: 12,
     color: '#666'
-  },
-  buttonGroup: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  iconButton: {
-    padding: 4,
-    marginLeft: 8
   },
   modalContent: {
     padding: 5,

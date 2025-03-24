@@ -2,12 +2,12 @@ import { StyleSheet, TextInput, useWindowDimensions, ActivityIndicator } from 'r
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { MemoCard } from '@/components/MemoCard';
-import { MemoEditor } from '@/components/MemoEditor';
+import { EditorMode, MemoEditor } from '@/components/MemoEditor';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
-import { Memo, MemoType } from '@/client-server-public/types';
+import { CreateMemoDto, Memo, MemoType } from '@/client-server-public/types';
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();
@@ -62,16 +62,11 @@ export default function CollectionScreen() {
     }
   };
 
-  const handleCreateMemo = async (content: string) => {
+  const handleCreateMemo = async (memo: CreateMemoDto) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.createMemo({
-        data: {
-          type: MemoType.NOTE,
-          noteContent: content
-        }
-      });
+      const response = await api.createMemo(memo);
       if (response.success) {
         await loadMemos();
       } else {
@@ -101,16 +96,11 @@ export default function CollectionScreen() {
     }
   };
 
-  const handleUpdateMemo = async (id: number, content: string) => {
+  const handleUpdateMemo = async (id: number, memo: CreateMemoDto) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.updateMemo(id, {
-        data: {
-          type: MemoType.NOTE,
-          noteContent: content
-        }
-      });
+      const response = await api.updateMemo(id, memo);
       if (response.success) {
         await loadMemos();
       } else {
@@ -137,7 +127,21 @@ export default function CollectionScreen() {
         />
       </ThemedView>
 
-      <MemoEditor onSubmit={handleCreateMemo} />
+      <MemoEditor
+        initMode={EditorMode.NOTE}
+        always={false}
+        onSubmit={(type, content, bookmark) => {
+          handleCreateMemo({
+            data: type === EditorMode.NOTE ? {
+              type: MemoType.NOTE,
+              noteContent: content!
+            } : {
+              type: MemoType.BOOKMARK,
+              ...bookmark,
+            }
+          });
+        }}
+      />
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
       <MasonryList
@@ -151,8 +155,16 @@ export default function CollectionScreen() {
           return <MemoCard
             data={memo}
             onDelete={() => handleDeleteMemo(memo.id)}
-            onUpdateContext={(content) => handleUpdateMemo(memo.id, content)} />
-          }
+            onUpdate={(type, content, bookmark) => handleUpdateMemo(memo.id, {
+              data: type == EditorMode.NOTE ? {
+                type: MemoType.NOTE,
+                noteContent: content!
+              } : {
+                type: MemoType.BOOKMARK,
+                ...bookmark
+              }
+            })} />
+        }
         }
       />
     </ThemedView>

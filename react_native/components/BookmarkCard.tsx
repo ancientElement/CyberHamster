@@ -1,27 +1,47 @@
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Image, useWindowDimensions } from 'react-native';
+import { useState } from 'react';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ExternalLink } from './ExternalLink';
-import { IconSymbol } from './ui/IconSymbol';
+import { MemoCardToolbox } from './MemoCardToolbox';
+import { ConfirmCardModal } from './ConfirmCardModal';
+import { SimpleCenterCardModal } from './SimpleCenterCardModal';
+import { EditorMode, MemoEditor } from './MemoEditor';
 
-export function BookmarkCard({ createdAt, title, url, description, icon }: {
+export function BookmarkCard({
+  createdAt,
+  title,
+  url,
+  description,
+  icon,
+  onDelete,
+  onUpdateBookmark
+}: {
   createdAt: string;
   title: string;
   url: string;
   description: string | undefined;
   icon: string | undefined;
+  onDelete: () => void;
+  onUpdateBookmark: (bookmark: { bookmarkTitle: string, bookmarkUrl: string, bookmarkDescription: string }) => void;
 }) {
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const { width } = useWindowDimensions();
+
   return (
-    <ThemedView style={styles.card}>
+    <>
       <ThemedView style={styles.cardHeader}>
         <ThemedText style={styles.cardDate}>{createdAt}</ThemedText>
-        <TouchableOpacity onPress={() => { }} style={styles.editButton}>
-          <IconSymbol name="pencil.line" size={16} color="#666" />
-        </TouchableOpacity>
+        <MemoCardToolbox
+          copyContet={url}
+          onEdit={() => setEditModalVisible(true)}
+          onDelete={() => setDeleteModalVisible(true)}
+        />
       </ThemedView>
       <ThemedView style={styles.bookmarkContent}>
         <ThemedView style={styles.titleRow}>
-          {icon &&<Image source={{ uri: icon }} style={styles.icon} />}
+          {icon && <Image source={{ uri: icon }} style={styles.icon} />}
           <ThemedView style={styles.titleContainer}>
             <ThemedText style={styles.title}>{title}</ThemedText>
             <ExternalLink href={url}>
@@ -31,20 +51,39 @@ export function BookmarkCard({ createdAt, title, url, description, icon }: {
         </ThemedView>
         <ThemedText style={styles.description}>{description}</ThemedText>
       </ThemedView>
-    </ThemedView>
+
+      <ConfirmCardModal
+        visible={deleteModalVisible}
+        message={'确定要删除这个书签吗？\n此操作无法撤销'}
+        cancelText='取消'
+        confirmText='删除'
+        onClose={() => { setDeleteModalVisible(false) }}
+        onConfirm={onDelete}>
+      </ConfirmCardModal>
+
+      <SimpleCenterCardModal visible={editModalVisible} onClose={() => { setEditModalVisible(false) }}>
+        <MemoEditor
+          style={[
+            { width: Math.min(width * 0.8, 300) }
+          ]}
+          onSubmit={(type,context,bookmark) => {
+            onUpdateBookmark(bookmark!);
+            setEditModalVisible(false);
+          }}
+          initBookmark={{
+            bookmarkTitle: title,
+            bookmarkUrl: url,
+            bookmarkDescription: description || ''
+          }}
+          initMode={EditorMode.BOOKMARK}
+          always
+        />
+      </SimpleCenterCardModal>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    padding: 16,
-    margin: 5,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-    elevation: 2
-  },
   cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

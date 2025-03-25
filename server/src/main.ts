@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 
+import { AuthController } from './auth/auth.controller';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
@@ -9,6 +11,15 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
   });
+
   await app.listen(process.env.PORT ?? 3000);
+
+  const authController = app.get(AuthController);
+  if (process.argv.includes('--register')) {
+    const username = process.argv[process.argv.indexOf('--register') + 1];
+    const password = process.argv[process.argv.indexOf('--register') + 2];
+    await authController.register({ username, password });
+  }
 }
+
 bootstrap();

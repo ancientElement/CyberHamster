@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
         paddingTop: 30
       }
     }),
+    paddingHorizontal: 16
   },
   grid: {
     flex: 1,

@@ -187,10 +187,9 @@ const styles = StyleSheet.create({
         paddingTop: 30
       },
       android: {
-        paddingTop: 0
+        paddingTop: 30
       }
     }),
-    padding: 16
   },
   header: {
     flexDirection: 'row',

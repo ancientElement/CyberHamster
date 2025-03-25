@@ -1,9 +1,7 @@
-import { getBrowser, getCurrentTabInfo, getBrowserMetadata } from './browser.js';
+import { getBrowser, getCurrentTabInfo, getBrowserMetadata } from '../src/browser.js';
 import { ApiService } from '../src/api.js';
-
 const browser = getBrowser();
-
-const api = new ApiService();
+let api;
 
 async function getPageIcon() {
   try {
@@ -96,7 +94,7 @@ async function saveBookmark(metadata) {
     } else {
       saveStatus.textContent = '收藏失败';
       saveStatus.classList.add('error');
-      console.error('Failed to save bookmark:',res);
+      console.error('Failed to save bookmark:', res);
     }
   } catch (error) {
     console.error('Failed to save bookmark:', error);
@@ -109,12 +107,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('title').value = metadata.title;
   document.getElementById('url').value = metadata.url;
   document.getElementById('description').value = metadata.description;
-
   // 设置图标预览
   if (metadata.icon) {
     document.getElementById('icon-preview').src = metadata.icon;
   }
 
-  // 自动保存书签
-  await saveBookmark(metadata);
+  const DEFAULT_API_URL = 'http://localhost:3000';
+  // 默认API地址
+  // 从storage中获取API地址
+  let apiUrl = DEFAULT_API_URL;
+  let apiToken;
+  browser.storage.sync.get(['apiUrl'], (result) => {
+    if (result.apiUrl) {
+      apiUrl = result.apiUrl;
+    }
+    browser.storage.sync.get(['apiToken'], (result1) => {
+      if (result1.apiToken) {
+        apiToken = result1.apiToken;
+      }
+      api = new ApiService(apiUrl, apiToken);
+      // 自动保存书签
+      saveBookmark(metadata);
+    });
+  });
 });

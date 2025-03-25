@@ -1,4 +1,4 @@
-import { StyleSheet, useWindowDimensions, ActivityIndicator, RefreshControl } from 'react-native';
+import { StyleSheet, useWindowDimensions, ActivityIndicator, RefreshControl, Platform } from 'react-native';
 import { defaultWidth, NavigationCard } from '@/components/NavigationCard';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { FlatGrid } from 'react-native-super-grid';
@@ -77,8 +77,14 @@ export default function NavigationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    marginTop: 10,
+    ...Platform.select({
+      ios: {
+        paddingTop: 30
+      },
+      android: {
+        paddingTop: 30
+      }
+    }),
   },
   grid: {
     flex: 1,

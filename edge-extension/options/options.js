@@ -1,12 +1,17 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const apiUrlInput = document.getElementById('apiUrl');
+  const apiTokenInput = document.getElementById('apiToken');
   const saveButton = document.getElementById('saveButton');
   const statusDiv = document.getElementById('status');
 
   // 加载已保存的设置
-  chrome.storage.sync.get(['apiUrl'], (result) => {
+  chrome.storage.sync.get(['apiUrl', 'apiToken'], (result) => {
     if (result.apiUrl) {
       apiUrlInput.value = result.apiUrl;
+    }
+    if (result.apiToken) {
+      apiTokenInput.value = result.apiToken;
     }
   });
 
@@ -26,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    chrome.storage.sync.set({ apiUrl }, () => {
+    chrome.storage.sync.set({ apiUrl, apiToken: apiTokenInput.value.trim() }, () => {
       showStatus('Settings saved successfully!', true);
     });
   });

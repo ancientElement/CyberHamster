@@ -1,5 +1,4 @@
-import { Image, StyleSheet, Platform, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { Image, StyleSheet, Platform } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';

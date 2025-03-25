@@ -1,9 +1,10 @@
-import { StyleSheet, View, TouchableOpacity, StyleProp, ViewStyle, Platform, Alert, ToastAndroid } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, StyleProp, ViewStyle, Platform } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
 import { IconSymbol } from './ui/IconSymbol';
 import { BookmarkForm } from './BookmarkForm';
+import { AlertHelper } from './AlertHelper';
 
 // 类型定义
 export enum EditorMode {
@@ -60,17 +61,6 @@ export function MemoEditor({
     }
   };
 
-  // 事件处理
-  const showMessage = (message: string) => {
-    if (Platform.OS === 'web') {
-      window.alert(message);
-    } else if (Platform.OS === 'android') {
-      ToastAndroid.show(message, ToastAndroid.SHORT);
-    }else {
-      Alert.alert('提示', message);
-    }
-  };
-
   const isValidUrl = (url: string) => {
     try {
       new URL(url);
@@ -85,11 +75,11 @@ export function MemoEditor({
       const trimmedUrl = bookmarkUrl.trim();
 
       if(trimmedUrl.trim()==='') {
-        showMessage('网址不能为空');
+        AlertHelper('网址不能为空');
       }
 
       if (!isValidUrl(trimmedUrl)) {
-        showMessage('请输入有效的网址');
+        AlertHelper('请输入有效的网址');
         return;
       }
 
@@ -101,7 +91,7 @@ export function MemoEditor({
           bookmarkIcon.trim() !== (initBookmark?.bookmarkIcon);
 
         if (!hasBookmarkChanges) {
-          showMessage('内容没有变化');
+          AlertHelper('内容没有变化');
           return;
         }
       }
@@ -117,12 +107,12 @@ export function MemoEditor({
       const trimmedContent = newContent.trim();
 
       if (trimmedContent.trim() === '') {
-        showMessage('内容不能为空');
+        AlertHelper('内容不能为空');
         return;
       }
 
       if (initText && trimmedContent.trim() === initText) {
-        showMessage('内容没有变化');
+        AlertHelper('内容没有变化');
         return;
       }
 

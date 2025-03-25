@@ -1,3 +1,5 @@
+import { StorageKey, useStorage } from "@/hooks/useStorage";
+
 export type SUCCESS = boolean;
 
 export enum STATUS_CODE {
@@ -16,9 +18,11 @@ export interface ApiResponse<T = any> {
 
 export class BaseApi {
   private baseUrl: string;
+  private getToken:  () => Promise<string | null>;
 
-  constructor(baseUrl: string = '/api') {
+  constructor(baseUrl: string = '/api', getToken: () => Promise<string | null>) {
     this.baseUrl = baseUrl;
+    this.getToken = getToken;
   }
 
   protected async request<T>(
@@ -31,6 +35,7 @@ export class BaseApi {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await this.getToken()}`,
       },
     };
 
@@ -55,7 +60,7 @@ export class BaseApi {
       }
 
       const success = response.status === STATUS_CODE.SUCCESS ||
-                     response.status === STATUS_CODE.POST_SUCCESS;
+        response.status === STATUS_CODE.POST_SUCCESS;
 
       return {
         success,

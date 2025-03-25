@@ -6,6 +6,10 @@ import {
 } from '../client-server-public/types';
 
 export interface IApiService {
+  // Auth APIs
+  login(username: string, password: string): Promise<ApiResponse<{ access_token: string}>>;
+  register(username: string, password: string): Promise<ApiResponse<void>>;
+
   // Memo APIs
   getMemos(): Promise<ApiResponse<Memo[]>>;
   getMemo(id: number): Promise<ApiResponse<Memo>>;

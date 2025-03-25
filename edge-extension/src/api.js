@@ -1,26 +1,21 @@
-const DEFAULT_API_URL = 'http://localhost:3000';
-
 class BaseApi {
-  constructor() {
-    // 默认API地址
-    // 从storage中获取API地址
-    let apiUrl = DEFAULT_API_URL;
-    chrome.storage.sync.get(['apiUrl'], (result) => {
-      if (result.apiUrl) {
-        apiUrl = result.apiUrl;
-      }
-    });
-
-    this.baseUrl = apiUrl;
+  constructor(baseUrl,apiToken) {
+    this.baseUrl = baseUrl;
+    this.apiToken = apiToken;
   }
 
   async request(method, path, data) {
     const url = `${this.baseUrl}${path}`;
+    let headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.apiToken}`
+    };
+
+    console.log(headers);
+
     const options = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
     };
 
     if (data) {

@@ -7,6 +7,14 @@ import {
 } from '../client-server-public/types';
 
 export class ApiService extends BaseApi implements IApiService {
+  login(username: string, password: string): Promise<ApiResponse<{ access_token: string; }>> {
+    return this.post('/auth/login', { username, password });
+  }
+
+  register(username: string, password: string): Promise<ApiResponse<void>> {
+    throw new Error('Method not implemented.');
+  }
+
   async getMemos(): Promise<ApiResponse<Memo[]>> {
     return this.get<Memo[]>('/memos');
   }

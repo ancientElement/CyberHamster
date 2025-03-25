@@ -11,10 +11,20 @@ export const DATABASE_TABLES = {
   MEMOS: 'memos',
   TAGS: 'tags',
   MEMO_TAGS: 'memo_tags',
+  USERS: 'users',
 };
 
 // 数据库表结构SQL语句
 export const TABLE_SCHEMAS = {
+  // 用户表
+  USERS: `
+    CREATE TABLE IF NOT EXISTS ${DATABASE_TABLES.USERS} (
+      id       INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT,
+      password TEXT,
+      creatAt  TEXT
+    )`,
+
   // 备忘录表 - 使用JSON存储不同类型的备忘录数据
   MEMOS: `
     CREATE TABLE IF NOT EXISTS ${DATABASE_TABLES.MEMOS} (

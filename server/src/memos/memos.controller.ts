@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { MemosService } from './memos.service';
 import { CreateMemoDto, UpdateMemoDto, MemoType } from '../client-server-public/types';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('memos')
+@UseGuards(AuthGuard('cyberhamster-jwt'))
 export class MemosController {
   constructor(private readonly memosService: MemosService) {}
 

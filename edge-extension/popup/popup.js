@@ -2,7 +2,8 @@ import { getBrowser, getCurrentTabInfo, getBrowserMetadata } from './browser.js'
 import { ApiService } from '../src/api.js';
 
 const browser = getBrowser();
-const api = new ApiService('http://10.152.119.107:3000');
+
+const api = new ApiService();
 
 async function getPageIcon() {
   try {

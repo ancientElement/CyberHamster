@@ -31,5 +31,7 @@
   "host_permissions": [
     "http://*/*",
     "https://*/*"
-  ]
+  ],
+
+  "options_page": "options/index.html"
 }

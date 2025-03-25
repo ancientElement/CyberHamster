@@ -1,11 +1,8 @@
 import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
-import { DatabaseAdaptor } from 'src/client-server-public/database-adaptor';
-const fetch = (...args: Parameters<typeof import('node-fetch').default>) =>
-  import('node-fetch').then(({ default: fetch }) => fetch(...args));
-import * as cheerio from 'cheerio';
+import { DatabaseAdaptor } from './database-adaptor';
 
 export class MemoApiServiceAdaptor {
-  private db: DatabaseAdaptor
+  private db!: DatabaseAdaptor
 
   setDd(db: DatabaseAdaptor) {
     this.db = db;
@@ -21,60 +18,6 @@ export class MemoApiServiceAdaptor {
     return this.db.get<Memo>(sql, [id]);
   }
 
-  private async getWebPageInfo(url: string) {
-    try {
-      const response = await fetch(url);
-      const html = await response.text();
-      const $ = cheerio.load(html);
-
-      let iconUrl = $('link[rel="icon"]').attr('href') || $('link[rel="shortcut icon"]').attr('href');
-      let iconBase64;
-
-      if (iconUrl) {
-        try {
-          // 处理相对路径
-          if (!iconUrl.startsWith('http')) {
-            const baseUrl = new URL(url);
-            iconUrl = iconUrl.startsWith('/')
-              ? `${baseUrl.protocol}//${baseUrl.host}${iconUrl}`
-              : `${baseUrl.protocol}//${baseUrl.host}/${iconUrl}`;
-          }
-
-          const iconResponse = await fetch(iconUrl);
-          let iconBuffer = await iconResponse.buffer();
-          let contentType = iconResponse.headers.get('content-type') || 'image/x-icon';
-          // 检查是否为常用图片类型
-          const validImageTypes = [
-            'image/x-icon',
-            'image/vnd.microsoft.icon',
-            'image/png',
-            'image/jpeg',
-            'image/gif',
-            'image/webp'
-          ];
-
-          if (!validImageTypes.includes(contentType)) {
-            iconBase64 = undefined;
-          } else {
-              iconBase64 = `data:${contentType};base64,${iconBuffer.toString('base64')}`;
-          }
-        } catch (iconError) {
-          console.error('获取图标失败:', iconError);
-        }
-      }
-
-      return {
-        title: $('title').text().trim() || $('meta[property="og:title"]').attr('content') || '',
-        description: $('meta[name="description"]').attr('content') ||
-          $('meta[property="og:description"]').attr('content') || '',
-        icon: iconBase64
-      };
-    } catch (error) {
-      console.error('获取网页信息失败:', error);
-      return { title: '', description: '', icon: null };
-    }
-  }
-
   async createMemo(createMemoDto: CreateMemoDto): Promise<Memo> {
     const { data } = createMemoDto;
     const createdAt = new Date().toISOString();
@@ -86,21 +29,14 @@ export class MemoApiServiceAdaptor {
       sql = 'INSERT INTO memos (type, createdAt, noteContent) VALUES (?, ?, ?)';
       params = [data.type, createdAt, data.noteContent];
     } else {
-      if (!data.bookmarkUrl?.trim()) {
-        throw new Error('URL不能为空');
-      }
-
-      const url = data.bookmarkUrl.trim();
-      const webInfo = await this.getWebPageInfo(url);
-
       sql = 'INSERT INTO memos (type, createdAt, bookmarkTitle, bookmarkUrl, bookmarkDescription, bookmarkIcon) VALUES (?, ?, ?, ?, ?, ?)';
       params = [
         data.type,
         createdAt,
-        data.bookmarkTitle?.trim() || webInfo.title || null,
-        url,
-        data.bookmarkDescription?.trim() || webInfo.description || null,
-        data.bookmarkIcon || webInfo.icon || null
+        data.bookmarkTitle,
+        data.bookmarkUrl,
+        data.bookmarkDescription || null,
+        data.bookmarkIcon || null
       ];
     }
 
@@ -150,7 +86,7 @@ export class MemoApiServiceAdaptor {
 
     const searchParam = `%${query}%`;
     const params = [searchParam, searchParam, searchParam, searchParam];
-    return this.db.all<Memo>(sql, params);
+    return this.db.all<Memo>(sql,params);
   }
 
   async getMemosByType(type: MemoType): Promise<Memo[]> {

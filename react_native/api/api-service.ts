@@ -1,4 +1,4 @@
-import { ApiResponse } from './base-api';
+import { ApiResponse, BaseApi } from './base-api';
 import { IApiService } from './i-api-service';
 import {
   Memo,
@@ -6,7 +6,7 @@ import {
   CreateMemoDto,
 } from '../client-server-public/types';
 
-export class ApiService extends IApiService {
+export class ApiService extends BaseApi implements IApiService {
   async getMemos(): Promise<ApiResponse<Memo[]>> {
     return this.get<Memo[]>('/memos');
   }

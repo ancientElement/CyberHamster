@@ -1,11 +1,3 @@
-// API通用响应格式，用于统一处理服务器返回的数据
-export interface ApiResponse<T = any> {
-  data?: T;            // 响应数据，可选
-  message?: string;     // 响应消息，可选
-  status: number;       // 响应状态码
-  error?: any;           // 错误信息，可选
-}
-
 // 内容类型枚举，用于区分不同类型的备忘录
 export enum MemoType {
   BOOKMARK = 1,         // 书签类型
@@ -78,10 +70,10 @@ export interface BookmarkUniFields {
 
 // 创建备忘录的请求接口
 export interface CreateMemoDto {
-  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
+  data: NoteUniFields | Partial<BookmarkUniFields>; // 备忘录具体内容
 }
 
 // 更新备忘录的请求接口
 export interface UpdateMemoDto {
-  data: NoteUniFields | BookmarkUniFields; // 备忘录具体内容
+  data: NoteUniFields | Partial<BookmarkUniFields>; // 备忘录具体内容
 }

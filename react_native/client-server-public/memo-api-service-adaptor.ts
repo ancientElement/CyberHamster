@@ -1,8 +1,8 @@
-import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from '../types';
-import { DatabaseAdaptor } from 'src/client-server-public/database-adaptor';
+import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
+import { DatabaseAdaptor } from './database-adaptor';
 
 export class MemoApiServiceAdaptor {
-  private db: DatabaseAdaptor
+  private db!: DatabaseAdaptor
 
   setDd(db: DatabaseAdaptor) {
     this.db = db;

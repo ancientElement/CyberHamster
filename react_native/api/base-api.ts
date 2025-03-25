@@ -43,7 +43,7 @@ export class BaseApi {
 
       // 检查响应内容类型和长度
       const contentType = response.headers.get('content-type');
-      let responseData = null;
+      let responseData;
 
       if (contentType?.includes('application/json')) {
         const text = await response.text();

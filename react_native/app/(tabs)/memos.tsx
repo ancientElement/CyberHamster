@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, useWindowDimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, TextInput, useWindowDimensions, ActivityIndicator, Platform } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { MemoCard } from '@/components/MemoCard';
@@ -182,7 +182,14 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: 10,
+    ...Platform.select({
+      ios: {
+        paddingTop: 30
+      },
+      android: {
+        paddingTop: 0
+      }
+    }),
     padding: 16
   },
   header: {

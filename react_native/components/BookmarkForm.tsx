@@ -49,7 +49,8 @@ export function BookmarkForm({
           onChangeText={onUrlChange}
           autoCapitalize="none"
           keyboardType="url"
-        />
+          numberOfLines={1}
+          />
         <TouchableOpacity
           style={styles.expandButton}
           onPress={toggleExpand}
@@ -79,6 +80,7 @@ export function BookmarkForm({
             placeholder="输入书签标题"
             placeholderTextColor="#999"
             value={title}
+            numberOfLines={1}
             onChangeText={onTitleChange}
           />
         </View>
@@ -95,7 +97,7 @@ export function BookmarkForm({
             />
             {(
               <Image
-                source={{ uri: (bookmarkIcon && bookmarkIcon === '' ||!bookmarkIcon ) ? noImage : bookmarkIcon}}
+                source={{ uri: (bookmarkIcon && bookmarkIcon === '' || !bookmarkIcon) ? noImage : bookmarkIcon }}
                 style={styles.iconPreview}
                 resizeMode="contain"
               />
@@ -110,6 +112,7 @@ export function BookmarkForm({
             placeholderTextColor="#999"
             value={description}
             onChangeText={onDescriptionChange}
+            numberOfLines={3}
             multiline
           />
         </View>

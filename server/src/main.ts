@@ -3,6 +3,8 @@ import { AppModule } from './app/app.module';
 
 import { AuthController } from './auth/auth.controller';
 
+export let secretKey = 'your-secret-key';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
@@ -12,6 +14,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+  secretKey = process.env.SECRETKEY ?? secretKey;
   await app.listen(process.env.PORT ?? 3000);
 
   const authController = app.get(AuthController);

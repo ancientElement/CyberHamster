@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { secretKey } from 'src/main';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy,'cyberhamster-jwt') {
@@ -8,7 +9,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'cyberhamster-jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: 'your-secret-key', // 在生产环境中应该使用环境变量
+      secretOrKey: secretKey, // 在生产环境中应该使用环境变量
     });
   }
 

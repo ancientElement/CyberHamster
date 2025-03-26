@@ -33,7 +33,7 @@ export default function RootLayout() {
   return (
     // <ApiProvider api={new ApiService('http://192.168.23.115:3000')} >
     // <ApiProvider api={new ApiService('http://10.152.119.107:3000')} >
-    <ApiProvider api={new ApiService('http://localhost:3000',
+    <ApiProvider api={new ApiService('http://47.101.61.188:8552',
       async () => await useStorage().getItem(StorageKey.USER_TOKEN))}
     >
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

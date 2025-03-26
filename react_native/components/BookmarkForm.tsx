@@ -1,5 +1,7 @@
 import { View, TouchableOpacity, Animated, StyleSheet, Image } from 'react-native';
 import { useState } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import { AlertHelper } from './AlertHelper';
 import { IconSymbol } from './ui/IconSymbol';
 import { ThemedText } from './ThemedText';
 import { NoOutlineTextInput } from './NoOutlineTextInput';
@@ -50,7 +52,7 @@ export function BookmarkForm({
           autoCapitalize="none"
           keyboardType="url"
           numberOfLines={1}
-          />
+        />
         <TouchableOpacity
           style={styles.expandButton}
           onPress={toggleExpand}
@@ -87,21 +89,17 @@ export function BookmarkForm({
         <View style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>图标</ThemedText>
           <View style={styles.iconInputContainer}>
-            <NoOutlineTextInput
-              style={[styles.textInput, styles.iconInput]}
-              placeholder="输入图标URL"
-              placeholderTextColor="#999"
-              value={bookmarkIcon}
-              onChangeText={onBookmarkIconChange}
-              numberOfLines={1}
+            <TouchableOpacity
+              style={styles.iconSelectButton}
+              onPress={onSelectImage(onBookmarkIconChange)}
+            >
+              <IconSymbol name="doc.text.image" size={16} color="#666" />
+            </TouchableOpacity>
+            <Image
+              source={{ uri: (bookmarkIcon && bookmarkIcon === '' || !bookmarkIcon) ? noImage : bookmarkIcon }}
+              style={styles.iconPreview}
+              resizeMode="contain"
             />
-            {(
-              <Image
-                source={{ uri: (bookmarkIcon && bookmarkIcon === '' || !bookmarkIcon) ? noImage : bookmarkIcon }}
-                style={styles.iconPreview}
-                resizeMode="contain"
-              />
-            )}
           </View>
         </View>
         <View style={styles.formField}>
@@ -130,6 +128,17 @@ const styles = StyleSheet.create({
   },
   iconInput: {
     flex: 1,
+  },
+  iconSelectButton: {
+    flex: 1,
+    height: 32,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    gap: 8,
+    paddingHorizontal: 12,
   },
   iconPreview: {
     width: 24,
@@ -187,3 +196,35 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
 });
+
+function onSelectImage(onBookmarkIconChange: ((text: string) => void) | undefined) {
+  return async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+        base64: true,
+        exif: false,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const selectedImage = result.assets[0];
+        const base64Data = selectedImage.uri;
+        const sizeInBytes = (base64Data.length * 3) / 4;
+        const sizeInKB = sizeInBytes / 1024;
+
+        if (sizeInKB > 15) {
+          AlertHelper('图片大小超过15KB，请选择更小的图片');
+          return;
+        }
+
+        onBookmarkIconChange?.(`data:image/png;base64,${base64Data}`);
+      }
+    } catch (error) {
+      AlertHelper('选择图片失败');
+      console.error(error);
+    }
+  };
+}

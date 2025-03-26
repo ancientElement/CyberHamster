@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, useWindowDimensions, ActivityIndicator, Platform } from 'react-native';
+import { StyleSheet, useWindowDimensions, ActivityIndicator, Platform, Animated } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { MemoCard } from '@/components/MemoCard';
@@ -8,6 +8,8 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
 import { CreateMemoDto, Memo, MemoType } from '@/client-server-public/types';
+import { HeaderBar } from '@/components/HeaderBar';
+
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();
@@ -19,6 +21,7 @@ export default function CollectionScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const rotateAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     loadMemos();
@@ -115,17 +118,20 @@ export default function CollectionScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={styles.header}>
-        <ThemedText type="title" style={styles.brand}>CyberHamster</ThemedText>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="搜索收藏..."
-          placeholderTextColor="#999"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSearch}
-        />
-      </ThemedView>
+      <HeaderBar
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onSearch={handleSearch}
+        onRefresh={() => {
+          Animated.timing(rotateAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: Platform.OS !== 'web'
+          }).start(() => rotateAnim.setValue(0));
+          loadMemos();
+        }}
+        rotateAnim={rotateAnim}
+      />
 
       <MemoEditor
         initMode={EditorMode.NOTE}
@@ -192,24 +198,7 @@ const styles = StyleSheet.create({
     }),
     paddingHorizontal: 16
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: 20
-  },
-  brand: {
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  searchInput: {
-    flex: 1,
-    marginLeft: 16,
-    height: 36,
-    borderRadius: 18,
-    paddingHorizontal: 16,
-    backgroundColor: '#f0f0f0'
-  },
+
   cardGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

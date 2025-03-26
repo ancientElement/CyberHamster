@@ -1,6 +1,6 @@
 // This file is a fallback for using MaterialIcons on Android and web.
 
-import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SymbolWeight } from 'expo-symbols';
 import React from 'react';
@@ -16,21 +16,23 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': {name:'code',lib:'material'},
   'chevron.right': {name:'chevron-right',lib:'material'},
   'bookmark.fill': {name:'collections-bookmark',lib:'material'},
-  'pencil.line': {name:'edit',lib:'font-awesome'},
+  'pencil.line': {name:'edit',lib:'font-awesome6'},
   'globe': {name:'public',lib:'material'},
-  'trash': {name:'trash-can',lib:'font-awesome'},
-  'text.document': {name:'copy',lib:'font-awesome'},
-  'checkmark': {name:'check',lib:'font-awesome'},
-  'link': {name:'link',lib:'font-awesome'},
-  'bookmark': {name:'book-bookmark',lib:'font-awesome'},
-  'chevron.up': {name:'chevron-up',lib:'font-awesome'},
-  'chevron.down': {name:'chevron-down',lib:'font-awesome'},
+  'trash': {name:'trash-can',lib:'font-awesome6'},
+  'text.document': {name:'copy',lib:'font-awesome6'},
+  'checkmark': {name:'check',lib:'font-awesome6'},
+  'link': {name:'link',lib:'font-awesome6'},
+  'bookmark': {name:'book-bookmark',lib:'font-awesome6'},
+  'chevron.up': {name:'chevron-up',lib:'font-awesome6'},
+  'chevron.down': {name:'chevron-down',lib:'font-awesome6'},
   'house': {name:'people',lib:'material'},
+  'car.side.air.fresh': {name:'refresh',lib:'font-awesome'},
+  'doc.text.image': {name:'file-image-o',lib:'font-awesome'},
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'], {
       name: React.ComponentProps<typeof MaterialIcons>['name'] | React.ComponentProps<typeof FontAwesome6>['name'],
-      lib: 'material' | 'font-awesome'
+      lib: 'material' | 'font-awesome' | 'font-awesome6'
     }
   >
 >;
@@ -55,8 +57,10 @@ export function IconSymbol({
   weight?: SymbolWeight;
 }) {
   const iconlib = MAPPING[name]?.lib;
-  if (iconlib === 'font-awesome') {
+  if (iconlib === 'font-awesome6') {
     return <FontAwesome6 color={color} size={size} name={MAPPING[name]?.name} style={style} />;
+  } else if (iconlib === 'font-awesome') {
+    return <FontAwesome color={color} size={size} name={MAPPING[name]?.name} style={style} />;
   }
   return <MaterialIcons color={color} size={size} name={MAPPING[name]?.name} style={style} />;
 }

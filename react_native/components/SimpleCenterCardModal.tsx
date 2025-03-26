@@ -13,6 +13,7 @@ export function SimpleCenterCardModal({ visible, onClose, children }: SimpleModa
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
+      hardwareAccelerated
     >
       <TouchableOpacity
         style={styles.overlay}

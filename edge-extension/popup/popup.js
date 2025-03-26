@@ -37,11 +37,34 @@ async function getPageIcon() {
         // 检查内容类型是否为图片
         if (!blob.type.startsWith('image/')) continue;
 
-        return new Promise((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.readAsDataURL(blob);
+        // 创建一个临时的 canvas 元素用于压缩图片
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const img = new Image();
+
+        await new Promise((resolve, reject) => {
+          img.onload = () => {
+            // 设置压缩后的尺寸，最大宽度为 128px
+            const maxWidth = 64;
+            const ratio = maxWidth / img.width;
+            const width = maxWidth;
+            const height = img.height * ratio;
+
+            canvas.width = width;
+            canvas.height = height;
+
+            // 绘制并压缩图片
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // 转换为 base64，使用PNG格式以保持透明度
+            const compressedDataUrl = canvas.toDataURL('image/png');
+            resolve(compressedDataUrl);
+          };
+          img.onerror = reject;
+          img.src = URL.createObjectURL(blob);
         });
+
+        return canvas.toDataURL('image/png');
       } catch (error) {
         console.log(`尝试加载图标 ${iconUrl} 失败:`, error);
         // 继续尝试下一个 URL

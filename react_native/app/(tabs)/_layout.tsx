@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Platform, useWindowDimensions } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -46,8 +46,13 @@ const tabConfigs: TabConfig[] = [
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { width } = useWindowDimensions();
-  const mediumScreen = width >  ScreenAdapt.smallScreen;
+  const [mediumScreen, setMediumScreen] = useState(false);
   const tabBarActiveColor = Colors[colorScheme ?? 'light'];
+
+  useEffect(() => {
+    setMediumScreen(width > ScreenAdapt.smallScreen);
+  }, [width]);
+
   return (
     <Tabs
       screenOptions={{

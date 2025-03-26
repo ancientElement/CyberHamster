@@ -220,7 +220,7 @@ function onSelectImage(onBookmarkIconChange: ((text: string) => void) | undefine
           return;
         }
 
-        onBookmarkIconChange?.(`data:image/png;base64,${base64Data}`);
+        onBookmarkIconChange?.(base64Data);
       }
     } catch (error) {
       AlertHelper('选择图片失败');

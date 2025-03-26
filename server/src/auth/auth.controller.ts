@@ -9,10 +9,13 @@ export class AuthController {
   @Post('login')
   async login(@Body() body: { username: string; password: string }) {
     const user = await this.databaseService.db.get<{ id:number,username: string, password: string }>('SELECT * FROM users WHERE username = ?', [body.username]);
-    if (user && await this.authService.comparePassword(body.password, user.password)) {
-      return this.authService.generateToken(user.id, user.username);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
-    throw new UnauthorizedException('Invalid credentials');
+    if (!await this.authService.comparePassword(body.password, user.password)) {
+      throw new UnauthorizedException('Incorrect password');
+    }
+    return this.authService.generateToken(user.id, user.username);
   }
 
   // @Post('register')

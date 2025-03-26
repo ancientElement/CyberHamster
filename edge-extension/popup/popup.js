@@ -76,6 +76,7 @@ async function getPageMetadata() {
 // }
 
 async function saveBookmark(metadata) {
+  const saveStatus = document.getElementById('saveStatus');
   try {
     const res = await api.createMemo({
       data: {
@@ -88,15 +89,16 @@ async function saveBookmark(metadata) {
     });
 
     if (res.success) {
-      const saveStatus = document.getElementById('saveStatus');
       saveStatus.textContent = '收藏成功';
       saveStatus.classList.add('show');
     } else {
-      saveStatus.textContent = '收藏失败';
+      saveStatus.textContent = `收藏失败${res}`;
       saveStatus.classList.add('error');
       console.error('Failed to save bookmark:', res);
     }
   } catch (error) {
+    saveStatus.textContent = `收藏失败${error}`;
+    saveStatus.classList.add('error');
     console.error('Failed to save bookmark:', error);
   }
 }

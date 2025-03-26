@@ -35,7 +35,12 @@ const tabConfigs: TabConfig[] = [
     name: 'navigation',
     title: 'Navigation',
     icon: 'globe',
-  }
+  },
+  {
+    name: 'login',
+    title: 'Login',
+    icon: 'house',
+  },
 ];
 
 export default function TabLayout() {

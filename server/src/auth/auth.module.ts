@@ -4,13 +4,12 @@ import { AuthService } from 'src/auth/auth.service';
 import { AuthController } from 'src/auth/auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { DatabaseModule } from 'src/database/database.module';
-import { secretKey } from 'src/main';
 
 @Module({
   imports: [
     DatabaseModule,
     JwtModule.register({
-      secret: secretKey, // 在生产环境中应该使用环境变量
+      secret: process.argv[process.argv.indexOf('--secretKey') + 1], // 在生产环境中应该使用环境变量
       signOptions: { expiresIn: '1d' },
     }),
   ],

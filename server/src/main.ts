@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { AuthController } from './auth/auth.controller';
 
-export let secretKey = 'your-secret-key';
-
 async function bootstrap() {
   if (process.argv.includes('--secretKey')) {
     const _secretKey = process.argv[process.argv.indexOf('--secretKey') + 1];
-    secretKey = _secretKey;
+    console.log('secretKey:', _secretKey);
+  } else {
+    console.error('secretKey is not set, please set it with --secretKey <secretKey>');
+    return;
   }
 
   const app = await NestFactory.create(AppModule);

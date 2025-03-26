@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { DatabaseService } from 'src/database/database.service';
 
@@ -17,6 +17,10 @@ export class AuthController {
 
   // @Post('register')
   async register(@Body() body: { username: string; password: string }) {
+    const existingUser = await this.databaseService.db.get('SELECT * FROM users WHERE username = ?', [body.username]);
+    if (existingUser) {
+      throw new ConflictException('Username already exists');
+    }
     const hashedPassword = await this.authService.hashPassword(body.password);
     await this.databaseService.db.run('INSERT INTO users (username, password) VALUES (?, ?)', [body.username, hashedPassword]);
     return { message: 'User registered successfully' };

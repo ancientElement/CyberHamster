@@ -18,10 +18,15 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 3000);
 
   const authController = app.get(AuthController);
-  if (process.argv.includes('--register')) {
-    const username = process.argv[process.argv.indexOf('--register') + 1];
-    const password = process.argv[process.argv.indexOf('--register') + 2];
-    await authController.register({ username, password });
+  if (process.env.REGISTERNAME && process.env.REGISTERPASSWORD) {
+    const username = process.env.REGISTERNAME;
+    const password = process.env.REGISTERPASSWORD;
+    try {
+      await authController.register({ username, password });
+      console.log(`User ${username} registered successfully.`);
+    } catch (error) {
+      console.error(`Failed to register user ${username}:`, error);
+    }
   }
 }
 

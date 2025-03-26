@@ -15,7 +15,7 @@ export class AuthController {
     throw new UnauthorizedException('Invalid credentials');
   }
 
-  @Post('register')
+  // @Post('register')
   async register(@Body() body: { username: string; password: string }) {
     const hashedPassword = await this.authService.hashPassword(body.password);
     await this.databaseService.db.run('INSERT INTO users (username, password) VALUES (?, ?)', [body.username, hashedPassword]);

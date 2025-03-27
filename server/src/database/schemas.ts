@@ -1,7 +1,5 @@
 // 数据库配置常量
 export const DATABASE_CONFIG = {
-  // SQLite数据库文件路径
-  DB_PATH: './data/cyberhamster.db',
   // 数据库版本
   VERSION: '1.0.0',
 };

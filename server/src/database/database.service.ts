@@ -3,10 +3,14 @@ import { DATABASE_CONFIG, TABLE_SCHEMAS } from './schemas';
 import { mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { serviceDatabaseAdaptor } from 'src/database/service-databse-adaptor';
+import { ConfigService } from '@nestjs/config';
+import { DB_PATH } from 'src/const';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
   db: serviceDatabaseAdaptor;
+
+  constructor(private readonly configService: ConfigService) {}
 
   async onModuleInit() {
     await this.initializeDatabase();
@@ -15,10 +19,11 @@ export class DatabaseService implements OnModuleInit {
   private async initializeDatabase(): Promise<void> {
     return new Promise((resolve, reject) => {
       // 确保数据库目录存在
-      const dbDir = dirname(DATABASE_CONFIG.DB_PATH);
+      const db_path = this.configService.get<string>(DB_PATH,'./data/cyberhamster.db');
+      const dbDir = dirname(db_path);
       mkdirSync(dbDir, { recursive: true });
 
-      this.db = new serviceDatabaseAdaptor(DATABASE_CONFIG.DB_PATH, (err) => {
+      this.db = new serviceDatabaseAdaptor(db_path, (err) => {
         if (err) {
           reject(err);
           return;

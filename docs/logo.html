@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberHamster Logo</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .bookmark-container {
+      background-color: white;
+      width: 180px;
+      height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      padding: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .bookmark {
+      position: relative;
+      width: 120px;
+      height: 160px;
+      background-color: #0078D4;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 10px 25px rgba(0, 120, 212, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+      /* 改为 visible 让 ::before 可见 */
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+      z-index: 2;
+    }
+
+    .bookmark::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 120, 212, 0.7);
+      border-radius: 12px 12px 0 0;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+      z-index: -1;
+      transform: translateZ(-1px);
+      /* 使用 3D 变换创建层叠上下文 */
+    }
+
+    .bookmark::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background-color: transparent;
+      clip-path: polygon(0 100%, 50% 60%, 100% 100%);
+    }
+
+    .bookmark {
+      position: relative;
+      width: 120px;
+      height: 160px;
+      background-color: #0078D4;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 10px 25px rgba(0, 120, 212, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+    }
+
+    .letters {
+      color: white;
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
+
+    .logo-title {
+      font-size: 24px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .logo-variants {
+      display: flex;
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .variant {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .variant-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .bookmark.dark {
+      background-color: #2C2C2C;
+      box-shadow: 0 10px 25px rgba(44, 44, 44, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.dark::after {
+      background-color: #2C2C2C;
+    }
+
+    .bookmark.light {
+      background-color: #f0f0f0;
+      box-shadow: 0 10px 25px rgba(240, 240, 240, 0.5), 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .bookmark.light::after {
+      background-color: #f0f0f0;
+    }
+
+    .bookmark.light .letters {
+      color: #0078D4;
+    }
+
+    .bookmark.gradient {
+      background: linear-gradient(135deg, #0078D4, #83c0f2);
+      box-shadow: 0 10px 25px rgba(0, 120, 212, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.gradient::after {
+      background: linear-gradient(135deg, #0078D4, #83c0f2);
+    }
+
+    /* 新增: 紫色主题 */
+    .bookmark.purple {
+      background-color: #c3aff1;
+      box-shadow: 0 10px 25px rgba(107, 70, 193, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.purple::before {
+      background-color: rgba(107, 70, 193, 0.7);
+    }
+
+    .bookmark.purple .letters {
+      color: white;
+    }
+
+    /* 新增: 绿色主题 */
+    .bookmark.green {
+      background-color: #b4ffa3;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.green::before {
+      background-color: rgba(16, 185, 129, 0.7);
+    }
+
+    .bookmark.green .letters {
+      color: white;
+    }
+
+    /* 新增: 橙色主题 */
+    .bookmark.orange {
+      background-color: #F59E0B;
+      box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.orange::before {
+      background-color: rgba(245, 158, 11, 0.7);
+    }
+
+    .bookmark.orange .letters {
+      color: white;
+    }
+
+    /* 默认蓝色主题 */
+    .bookmark {
+      background-color: #1E88E5;
+      box-shadow: 0 10px 25px rgba(30, 136, 229, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark::before {
+      background-color: #0D47A1;
+    }
+
+    /* 深色主题 */
+    .bookmark.dark {
+      background-color: #424242;
+      box-shadow: 0 10px 25px rgba(66, 66, 66, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.dark::before {
+      background-color: #212121;
+    }
+
+    /* 浅色主题 */
+    .bookmark.light {
+      background-color: #E3F2FD;
+      box-shadow: 0 10px 25px rgba(227, 242, 253, 0.5), 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .bookmark.light::before {
+      background-color: #BBDEFB;
+    }
+
+    .bookmark.light .letters {
+      color: #1565C0;
+    }
+
+    /* 渐变主题 */
+    .bookmark.gradient {
+      background: linear-gradient(135deg, #42A5F5, #64B5F6);
+      box-shadow: 0 10px 25px rgba(66, 165, 245, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.gradient::before {
+      background: linear-gradient(135deg, #1976D2, #2196F3);
+    }
+
+    /* 紫色主题 */
+    .bookmark.purple {
+      background-color: #7E57C2;
+      box-shadow: 0 10px 25px rgba(126, 87, 194, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.purple::before {
+      background-color: #4527A0;
+    }
+
+    /* 绿色主题 */
+    .bookmark.green {
+      background-color: #4CAF50;
+      box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.green::before {
+      background-color: #2E7D32;
+    }
+
+    /* 橙色主题 */
+    .bookmark.orange {
+      background-color: #FF9800;
+      box-shadow: 0 10px 25px rgba(255, 152, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .bookmark.orange::before {
+      background-color: #E65100;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="logo-container">
+    <div class="bookmark-container">
+      <div class="bookmark">
+        <div class="letters">CH</div>
+      </div>
+    </div>
+    <div class="logo-title">CyberHamster</div>
+
+    <div class="logo-variants">
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark dark">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">深色版</div>
+      </div>
+
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark light">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">浅色版</div>
+      </div>
+
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark gradient">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">渐变版</div>
+      </div>
+
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark purple">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">紫色版</div>
+      </div>
+
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark green">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">绿色版</div>
+      </div>
+
+      <div class="variant">
+        <div class="bookmark-container">
+          <div class="bookmark orange">
+            <div class="letters">CH</div>
+          </div>
+        </div>
+        <div class="variant-label">橙色版</div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

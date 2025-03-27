@@ -45,7 +45,7 @@ async function getPageIcon() {
         await new Promise((resolve, reject) => {
           img.onload = () => {
             // 设置压缩后的尺寸，最大宽度为 128px
-            const maxWidth = 64;
+            const maxWidth = 32;
             const ratio = maxWidth / img.width;
             const width = maxWidth;
             const height = img.height * ratio;

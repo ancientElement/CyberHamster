@@ -25,7 +25,7 @@ import { JWT_SECRET_KEY } from 'src/const';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, JwtBlacklistService],
+  providers: [AuthService, JwtBlacklistService, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

@@ -1,39 +1,33 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { JwtBlacklistService } from './jwt-blacklist.service';
 import { ConfigService } from '@nestjs/config';
 import { JWT_SECRET_KEY } from 'src/const';
+import { DatabaseService } from 'src/database/database.service';
 
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'cyberhamster-jwt') {
-  private readonly allowedAlgorithms = ['RS256'];
-
+  private readonly allowedAlgorithms = ['HS256'];
   constructor(
     private readonly jwtBlacklistService: JwtBlacklistService,
     private readonly configService: ConfigService,
+    private readonly databaseService: DatabaseService,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>(JWT_SECRET_KEY)!,
-      algorithms: ['HS256'], // 只允许使用HS256算法
+      algorithms: ['HS256'],
     });
   }
 
-  async validate(payload: any, token: string) {
-    // 检查token是否在黑名单中
-    if (this.jwtBlacklistService.isBlacklisted(token)) {
-      throw new UnauthorizedException('Token已被吊销');
+  async validate(payload: any) {
+    const user = await this.databaseService.db.get<{ id: number, username: string, password: string }>('SELECT * FROM users WHERE id = ?', [payload.sub]);
+    if (!user) {
+      throw new UnauthorizedException('token invalid');
     }
-
-    // 检查算法是否在白名单中
-    const decodedToken = JSON.parse(Buffer.from(token.split('.')[0], 'base64').toString());
-    if (!this.allowedAlgorithms.includes(decodedToken.alg)) {
-      throw new UnauthorizedException('不支持的签名算法');
-    }
-
     return { userId: payload.sub, username: payload.username };
   }
 }

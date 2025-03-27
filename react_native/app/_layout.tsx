@@ -10,6 +10,7 @@ import { ApiProvider } from '../hooks/useApi';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ApiService } from '@/api/api-service';
 import { StorageKey, useStorage } from '@/hooks/useStorage';
+import { getApiConfig } from '@/config/env';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,9 +32,7 @@ export default function RootLayout() {
   }
 
   return (
-    // <ApiProvider api={new ApiService('http://192.168.23.115:3000')} >
-    // <ApiProvider api={new ApiService('http://10.152.119.107:3000')} >
-    <ApiProvider api={new ApiService('http://47.101.61.188:8552',
+    <ApiProvider api={new ApiService(getApiConfig().baseUrl,
       async () => await useStorage().getItem(StorageKey.USER_TOKEN))}
     >
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

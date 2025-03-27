@@ -17,7 +17,7 @@ export class AuthController implements OnModuleInit {
     const password = this.configService.get(REGISTER_PASSWORD);
     if (username && password) {
       try {
-        await this.register({ username, password });
+        await this._register({ username, password });
         console.log(`User ${username} registered successfully.`);
       } catch (error) {
         console.error(`Failed to register user ${username}:`, error);
@@ -40,11 +40,15 @@ export class AuthController implements OnModuleInit {
   @Post('register')
   async register(@Body() body: { username: string; password: string }) {
     if (!this.configService.get<boolean>(ALLOW_REGISTER, false)) {
-      return { message: 'Server not allowed to register' };
+      throw new UnauthorizedException('Server not allowed to register');
     }
+    await this._register(body);
+  }
+
+  private async _register(body: { username: string; password: string }) {
     const existingUser = await this.databaseService.db.get('SELECT * FROM users WHERE username = ?', [body.username]);
     if (existingUser) {
-      return { message: 'Username is already used' };
+      throw new ConflictException('Username is already used');
     }
     const hashedPassword = await this.authService.hashPassword(body.password);
     await this.databaseService.db.run('INSERT INTO users (username, password) VALUES (?, ?)', [body.username, hashedPassword]);

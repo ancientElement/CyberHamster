@@ -2,7 +2,9 @@ import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } fro
 import { MemosService } from './memos.service';
 import { CreateMemoDto, UpdateMemoDto, MemoType } from '../client-server-public/types';
 import { AuthGuard } from '@nestjs/passport';
+import { Throttle } from '@nestjs/throttler';
 
+@Throttle({ default: { limit: 60, ttl: 60000 } })
 @Controller('memos')
 @UseGuards(AuthGuard('cyberhamster-jwt'))
 export class MemosController {

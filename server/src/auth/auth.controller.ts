@@ -39,7 +39,7 @@ export class AuthController implements OnModuleInit {
 
   @Post('register')
   async register(@Body() body: { username: string; password: string }) {
-    if (this.configService.get<boolean>(ALLOW_REGISTER, false)) {
+    if (!this.configService.get<boolean>(ALLOW_REGISTER, false)) {
       return { message: 'Server not allowed to register' };
     }
     const existingUser = await this.databaseService.db.get('SELECT * FROM users WHERE username = ?', [body.username]);

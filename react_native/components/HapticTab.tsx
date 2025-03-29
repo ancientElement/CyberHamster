@@ -4,7 +4,6 @@ import * as Haptics from 'expo-haptics';
 import { Platform } from 'react-native';
 
 export function HapticTab(props: BottomTabBarButtonProps) {
-  console.log(props);
   const { style, onPressIn, children, accessibilityState, ...otherProps } = props;
   return (
     <PlatformPressable

@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Platform, useWindowDimensions } from 'react-native';
+import { Platform, useWindowDimensions, Text } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
@@ -8,6 +8,8 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 
 type TabConfig = {
   name: string;
@@ -56,10 +58,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: tabBarActiveColor.tint,
         headerShown: false,
         tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
         tabBarPosition: mediumScreen ? 'left' : 'bottom',
         tabBarStyle: Platform.select({
           ios: {
@@ -67,24 +67,39 @@ export default function TabLayout() {
             position: 'absolute',
           },
           default: {
-            minWidth: mediumScreen ? 100 : undefined,
+            minWidth: mediumScreen ? 200 : undefined,
+            backgroundColor: Colors[colorScheme ?? 'light'].background,
           },
         }),
       }}>
       {tabConfigs.map((tab) => {
         return (
-        <Tabs.Screen
-          key={tab.name}
-          name={tab.name}
-          options={{
-            title: tab.title,
-            tabBarIcon:
-            ({ focused }: { focused: boolean }) => {
-              return <IconSymbol size={28} name={tab.icon} color={ focused ? tabBarActiveColor.tabIconSelected : tabBarActiveColor.tabIconDefault }
-              />},
-          }}
-        />
-      )})}
+          <Tabs.Screen
+            key={tab.name}
+            name={tab.name}
+            options={{
+              title: tab.title,
+              tabBarIcon:
+                ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
+                  return <IconSymbol size={28} name={tab.icon} color={focused ? tabBarActiveColor.background : tabBarActiveColor.tabIconDefault}
+                  />
+                },
+              tabBarLabel: ({ focused, color }: { focused: boolean, color: string }) => {
+                return <Text style={
+                  [
+                    {
+                      color: focused ? tabBarActiveColor.background : tabBarActiveColor.tabIconDefault,
+                      fontSize: mediumScreen ? 14 : 10,
+                      marginLeft: mediumScreen ? 10 : 0,
+                      fontWeight: 'bold',
+                    },
+                  ]
+                }>{tab.title}</Text>
+              }
+            }}
+          />
+        )
+      })}
     </Tabs>
   );
 }

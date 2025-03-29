@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     marginVertical: 10
   },
   container: {
+    backgroundColor: '#fff',
     flex: 1,
     ...Platform.select({
       ios: {

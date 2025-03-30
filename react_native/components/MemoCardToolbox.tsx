@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useState, useRef, useCallback } from 'react';
 import { IconSymbol } from './ui/IconSymbol';
 import * as Clipboard from 'expo-clipboard';

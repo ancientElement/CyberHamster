@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   },
   emptyLine: {
     width: '100%',
-    height: 20, // 空行高度
+    height: 20, // 空行高度,
   },
   lineBreak: {
     width: '100%',

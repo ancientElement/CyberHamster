@@ -1,7 +1,8 @@
-import { View, StyleSheet, useWindowDimensions } from "react-native";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import { SimpleCenterCardModal } from "./SimpleCenterCardModal";
 import { ThemedText } from "./ThemedText";
 import { NoOutlineTouchableOpacity } from "./NoOutlineTouchableOpacity";
+import { ThemedView } from "./ThemedView";
 
 interface Props {
   visible: boolean;
@@ -19,11 +20,11 @@ export function ConfirmCardModal({ visible: visible, message, cancelText, confir
     visible={visible}
     onClose={onClose}
   >
-    <View style={[styles.modalContent, { width: Math.min(width * 0.8, 300) }]}>
+    <ThemedView style={[styles.modalContent, { width: Math.min(width * 0.8, 300) }]}>
       <ThemedText style={styles.modalMessage}>
         {message}
       </ThemedText>
-      <View style={styles.modalButtons}>
+      <ThemedView style={styles.modalButtons}>
         <NoOutlineTouchableOpacity
           style={[styles.modalButton, styles.cancelButton]}
           onPress={onClose}
@@ -39,8 +40,8 @@ export function ConfirmCardModal({ visible: visible, message, cancelText, confir
         >
           <ThemedText style={styles.deleteButtonText}>{confirmText}</ThemedText>
         </NoOutlineTouchableOpacity>
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   </SimpleCenterCardModal>;
 }
 const styles = StyleSheet.create({

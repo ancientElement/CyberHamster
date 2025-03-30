@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
+import { NoOutlineTextInput } from './NoOutlineTextInput';
 
 interface HeaderBarProps {
   searchQuery: string;
@@ -15,21 +16,23 @@ interface HeaderBarProps {
 export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim }: HeaderBarProps) {
   return (
     <ThemedView style={styles.header}>
-      <ThemedText type='title' style={styles.brand}>松果</ThemedText>
-      <Animated.View style={[{
-        transform: [{
-          rotate: rotateAnim.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['0deg', '360deg']
-          })
-        }],
-        transformOrigin: 'center'
-      }]}>
-        <NoOutlineTouchableOpacity onPress={onRefresh}>
-          <IconSymbol name="car.side.air.fresh" weight='light' size={20} color="#000" />
-        </NoOutlineTouchableOpacity>
-      </Animated.View>
-      <TextInput
+      <ThemedView style={styles.leftContainer}>
+        <ThemedText type='title' style={styles.brand}>松果</ThemedText>
+        <Animated.View style={[styles.refreshButton, {
+          transform: [{
+            rotate: rotateAnim.interpolate({
+              inputRange: [0, 1],
+              outputRange: ['0deg', '360deg']
+            })
+          }],
+        }]}>
+          <NoOutlineTouchableOpacity onPress={onRefresh}>
+            <IconSymbol name="car.side.air.fresh" weight='light' size={20} color="#000" />
+          </NoOutlineTouchableOpacity>
+        </Animated.View>
+      </ThemedView>
+
+      <NoOutlineTextInput
         style={styles.searchInput}
         placeholder="搜索收藏..."
         placeholderTextColor="#999"
@@ -47,17 +50,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 20,
-    gap: 5
+    backgroundColor: '#f2f2f2',
+  },
+  leftContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: 'f2f2f2'
   },
   brand: {
     fontSize: 15,
   },
+  refreshButton: {
+    marginLeft: 5,
+  },
   searchInput: {
-    flex: 1,
-    marginLeft: 16,
     height: 36,
     borderRadius: 18,
     paddingHorizontal: 16,
-    backgroundColor: '#f0f0f0'
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
+    width: 150,
+    fontSize: 14,
   }
 });

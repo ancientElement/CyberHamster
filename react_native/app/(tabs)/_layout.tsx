@@ -1,6 +1,6 @@
 import { Tabs, usePathname } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Platform, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
@@ -88,7 +88,7 @@ export default function TabLayout() {
         tabBarPosition: mediumScreen ? 'left' : 'bottom',
         tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
         tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
-        tabBarStyle: {minWidth: 200},
+        tabBarStyle: styles.tabBarStyle,
       }}>
       {tabConfigs.map((tab) => {
         // 检查当前路径是否匹配此标签
@@ -113,3 +113,9 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBarStyle: {
+    minWidth: 150,
+  },
+});

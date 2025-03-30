@@ -1,8 +1,9 @@
-import { StyleSheet, Image, View, Platform, Pressable } from 'react-native';
+import { StyleSheet, Image, Platform, Pressable } from 'react-native';
 import { useState } from 'react';
 import { ExternalLink } from './ExternalLink';
 import { noImage } from '@/constants/NoImagesBase64';
 import { ThemedText } from './ThemedText';
+import { ThemedView } from './ThemedView';
 
 interface NavigationCardProps {
   icon: string | undefined;
@@ -21,17 +22,17 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
       onHoverOut={() => setIsHovered(false)}
     >
       <ExternalLink style={styles.container} href={url}>
-        <View style={[styles.iconContainer, isHovered && styles.iconContainerHovered]}>
+        <ThemedView style={[styles.iconContainer, isHovered && styles.iconContainerHovered]}>
           <Image
             source={{ uri: icon || noImage }}
             style={styles.icon}
           />
-        </View>
-        <View style={styles.titleContainer}>
+        </ThemedView>
+        <ThemedView style={styles.titleContainer}>
           <ThemedText style={styles.title} numberOfLines={1}>
             {title || '未填写标题'}
           </ThemedText>
-        </View>
+        </ThemedView>
       </ExternalLink>
     </Pressable>
   );

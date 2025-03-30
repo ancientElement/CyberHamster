@@ -1,4 +1,4 @@
-import { View, Animated, StyleSheet, Image } from 'react-native';
+import { Animated, StyleSheet, Image } from 'react-native';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { AlertHelper } from './AlertHelper';
@@ -7,6 +7,7 @@ import { ThemedText } from './ThemedText';
 import { NoOutlineTextInput } from './NoOutlineTextInput';
 import { noImage } from '@/constants/NoImagesBase64';
 import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
+import { ThemedView } from './ThemedView';
 
 interface BookmarkFormProps {
   title: string;
@@ -42,8 +43,8 @@ export function BookmarkForm({
   };
 
   return (
-    <View style={styles.bookmarkForm}>
-      <View style={styles.urlContainer}>
+    <ThemedView style={styles.bookmarkForm}>
+      <ThemedView style={styles.urlContainer}>
         <NoOutlineTextInput
           style={styles.urlInput}
           placeholder="输入网址"
@@ -64,7 +65,7 @@ export function BookmarkForm({
             color="#666"
           />
         </NoOutlineTouchableOpacity>
-      </View>
+      </ThemedView>
 
       <Animated.View style={[
         styles.expandableContent,
@@ -76,7 +77,7 @@ export function BookmarkForm({
           }),
         }
       ]}>
-        <View style={styles.formField}>
+        <ThemedView style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>标题</ThemedText>
           <NoOutlineTextInput
             style={styles.textInput}
@@ -86,10 +87,10 @@ export function BookmarkForm({
             numberOfLines={1}
             onChangeText={onTitleChange}
           />
-        </View>
-        <View style={styles.formField}>
+        </ThemedView>
+        <ThemedView style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>图标</ThemedText>
-          <View style={styles.iconInputContainer}>
+          <ThemedView style={styles.iconInputContainer}>
             <NoOutlineTouchableOpacity
               style={styles.iconSelectButton}
               onPress={onSelectImage(onBookmarkIconChange)}
@@ -101,9 +102,9 @@ export function BookmarkForm({
               style={styles.iconPreview}
               resizeMode="contain"
             />
-          </View>
-        </View>
-        <View style={styles.formField}>
+          </ThemedView>
+        </ThemedView>
+        <ThemedView style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>描述</ThemedText>
           <NoOutlineTextInput
             style={[styles.textInput, styles.descriptionInput]}
@@ -114,9 +115,9 @@ export function BookmarkForm({
             numberOfLines={3}
             multiline
           />
-        </View>
+        </ThemedView>
       </Animated.View>
-    </View>
+    </ThemedView>
   );
 }
 

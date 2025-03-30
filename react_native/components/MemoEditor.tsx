@@ -1,4 +1,4 @@
-import { StyleSheet, View, StyleProp, ViewStyle, Platform } from 'react-native';
+import { StyleSheet, StyleProp, ViewStyle, Platform } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
@@ -6,6 +6,7 @@ import { IconSymbol } from './ui/IconSymbol';
 import { BookmarkForm } from './BookmarkForm';
 import { AlertHelper } from './AlertHelper';
 import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
+import { ThemedView } from './ThemedView';
 
 // 类型定义
 export enum EditorMode {
@@ -131,8 +132,8 @@ export function MemoEditor({
 
   // 渲染
   return (
-    <View style={[styles.container, styles.cardShadow, style]}>
-      <View style={styles.inputContainer}>
+    <ThemedView style={[styles.container, styles.cardShadow, style]}>
+      <ThemedView style={styles.inputContainer}>
         {isBookmarkMode ? (
           <BookmarkForm
             title={bookmarkTitle}
@@ -155,7 +156,7 @@ export function MemoEditor({
           />
         )}
 
-        <View style={styles.buttonContainer}>
+        <ThemedView style={styles.buttonContainer}>
           <NoOutlineTouchableOpacity
             style={styles.modeButton}
             onPress={toggleMode}
@@ -174,9 +175,9 @@ export function MemoEditor({
           >
             <Ionicons name="send" size={14} color="white" />
           </NoOutlineTouchableOpacity>
-        </View>
-      </View>
-    </View>
+        </ThemedView>
+      </ThemedView>
+    </ThemedView>
   );
 }
 

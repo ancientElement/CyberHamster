@@ -115,6 +115,9 @@ export default function TabLayout() {
                 title: tab.title,
                 tabBarIcon: () => renderTabIcon(tab, isActive),
                 tabBarLabel: () => renderTabLabel(tab, isActive),
+                tabBarItemStyle: {
+                  backgroundColor: isActive ? '#e6f7fc' : 'transparent',
+                },
               }}
             />
           )

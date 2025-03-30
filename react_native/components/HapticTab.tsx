@@ -20,7 +20,6 @@ export function HapticTab(props: BottomTabBarButtonProps) {
       style={[
         Platform.OS === 'web' ? { outlineStyle: 'none' } as any : null,
         {
-          backgroundColor: accessibilityState?.selected ? '#e6f7fc' : 'transparent',
           borderRadius: mediumScreen ? 10 : 0,
         },
         {

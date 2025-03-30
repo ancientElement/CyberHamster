@@ -28,9 +28,11 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
             style={styles.icon}
           />
         </ThemedView>
+        <ThemedView style={styles.titleContainer}>
           <ThemedText style={styles.title} numberOfLines={1}>
             {title || '未填写标题'}
           </ThemedText>
+        </ThemedView>
       </ExternalLink>
     </Pressable>
   );
@@ -80,10 +82,12 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 12,
   },
-  title: {
+  titleContainer: {
     width: defaultWidth,
     height: 20,
     overflow: 'hidden',
+  },
+  title: {
     textAlign: 'center',
     fontSize: 12,
   },

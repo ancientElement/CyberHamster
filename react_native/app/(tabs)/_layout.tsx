@@ -1,6 +1,6 @@
 import { Tabs, usePathname } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { Platform, StyleSheet, useWindowDimensions } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
@@ -86,8 +86,23 @@ export default function TabLayout() {
           tabBarStyle: {
             minWidth: 150,
             marginVertical: mediumScreen ? 20 : 0,
-            marginLeft: mediumScreen? 8 : 0,
+            marginLeft: mediumScreen ? 8 : 0,
             borderRadius: mediumScreen ? 16 : 0,
+            borderColor: '#e0e0e0',
+            elevation: 2,
+            ...Platform.select({
+              web: {
+                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+                cursor: 'pointer',
+                transition: '0.3s',
+              },
+              ios: {
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.1,
+                shadowRadius: 4,
+              },
+            }),
           },
         }}>
         {tabConfigs.map((tab) => {

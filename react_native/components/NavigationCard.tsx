@@ -1,7 +1,8 @@
-import { StyleSheet, Image, View, Platform, Text, Pressable } from 'react-native';
+import { StyleSheet, Image, View, Platform, Pressable } from 'react-native';
 import { useState } from 'react';
 import { ExternalLink } from './ExternalLink';
 import { noImage } from '@/constants/NoImagesBase64';
+import { ThemedText } from './ThemedText';
 
 interface NavigationCardProps {
   icon: string | undefined;
@@ -27,9 +28,9 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
           />
         </View>
         <View style={styles.titleContainer}>
-          <Text style={styles.title} numberOfLines={1}>
+          <ThemedText style={styles.title} numberOfLines={1}>
             {title || '未填写标题'}
-          </Text>
+          </ThemedText>
         </View>
       </ExternalLink>
     </Pressable>

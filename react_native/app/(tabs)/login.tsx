@@ -3,9 +3,11 @@ import { useApi } from '@/hooks/useApi';
 import { StorageKey, useStorage } from '@/hooks/useStorage';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Platform, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTextInput } from '@/components/NoOutlineTextInput';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
@@ -28,16 +30,16 @@ const LoginScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.card, styles.cardShadow]}>
-        <View style={styles.header}>
+    <ThemedView style={styles.container}>
+      <ThemedView style={[styles.card, styles.cardShadow]}>
+        <ThemedView style={styles.header}>
           <IconSymbol name="person.circle" size={48} color="#0078D4" />
-          <Text style={styles.title}>登录</Text>
-          <Text style={styles.subtitle}>欢迎使用 CyberHamster</Text>
-        </View>
+          <ThemedText style={styles.title}>登录</ThemedText>
+          <ThemedText style={styles.subtitle}>欢迎使用 CyberHamster</ThemedText>
+        </ThemedView>
 
-        <View style={styles.inputContainer}>
-          <View style={styles.inputWrapper}>
+        <ThemedView style={styles.inputContainer}>
+          <ThemedView style={styles.inputWrapper}>
             <IconSymbol name="person" size={20} color="#666" />
             <NoOutlineTextInput
               style={styles.input}
@@ -46,9 +48,9 @@ const LoginScreen = () => {
               onChangeText={setUsername}
               placeholderTextColor="#999"
             />
-          </View>
+          </ThemedView>
 
-          <View style={styles.inputWrapper}>
+          <ThemedView style={styles.inputWrapper}>
             <IconSymbol name="lock" size={20} color="#666" />
             <NoOutlineTextInput
               style={styles.input}
@@ -58,18 +60,18 @@ const LoginScreen = () => {
               onChangeText={setPassword}
               placeholderTextColor="#999"
             />
-          </View>
+          </ThemedView>
 
           <TouchableOpacity
             style={styles.loginButton}
             onPress={handleLogin}
             activeOpacity={0.8}
           >
-            <Text style={styles.loginButtonText}>登录</Text>
+            <ThemedText style={styles.loginButtonText}>登录</ThemedText>
           </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+        </ThemedView>
+      </ThemedView>
+    </ThemedView>
   );
 };
 
@@ -78,7 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#f5f5f5',
     alignItems: 'center', // 修改为 alignItems
   },
   card: {

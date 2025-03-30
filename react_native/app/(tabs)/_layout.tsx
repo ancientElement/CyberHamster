@@ -1,6 +1,6 @@
 import { Tabs, usePathname } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Platform, useWindowDimensions, Text } from 'react-native';
+import { Platform, useWindowDimensions } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
@@ -86,22 +86,18 @@ export default function TabLayout() {
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarPosition: mediumScreen ? 'left' : 'bottom',
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {
-            minWidth: mediumScreen ? 200 : undefined,
-            backgroundColor: Colors[colorScheme ?? 'light'].background,
-          },
-        }),
         tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
         tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
       }}>
       {tabConfigs.map((tab) => {
         // 检查当前路径是否匹配此标签
-        const isActive = pathname.includes(`/${tab.name}`);
+        let isActive = false;
+        if (pathname == '/' && tab.name == 'index') {
+          isActive = true;
+        } else if (pathname.startsWith(`/${tab.name}`)) {
+          isActive = true;
+        }
+
         return (
           <Tabs.Screen
             key={tab.name}

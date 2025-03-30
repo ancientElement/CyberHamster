@@ -8,6 +8,7 @@ import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 
 type TabConfig = {
   name: string;
@@ -81,41 +82,44 @@ export default function TabLayout() {
   };
 
   return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarPosition: mediumScreen ? 'left' : 'bottom',
-        tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
-        tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
-        tabBarStyle: styles.tabBarStyle,
-      }}>
-      {tabConfigs.map((tab) => {
-        // 检查当前路径是否匹配此标签
-        let isActive = false;
-        if (pathname == '/' && tab.name == 'index') {
-          isActive = true;
-        } else if (pathname.startsWith(`/${tab.name}`)) {
-          isActive = true;
-        }
-        return (
-          <Tabs.Screen
-            key={tab.name}
-            name={tab.name}
-            options={{
-              title: tab.title,
-              tabBarIcon: () => renderTabIcon(tab, isActive),
-              tabBarLabel: () => renderTabLabel(tab, isActive),
-            }}
-          />
-        )
-      })}
-    </Tabs>
+    <ThemedView style={[{
+      backgroundColor: 'f2f2f2',
+      height: '100%',
+    }]}>
+      <Tabs
+        screenOptions={{
+          headerShown: false,
+          tabBarButton: HapticTab,
+          tabBarPosition: mediumScreen ? 'left' : 'bottom',
+          tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
+          tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
+          tabBarStyle: {
+            minWidth: 150,
+            margin: mediumScreen ? 10 : 0,
+            borderRadius: mediumScreen ? 16 : 0,
+          },
+        }}>
+        {tabConfigs.map((tab) => {
+          // 检查当前路径是否匹配此标签
+          let isActive = false;
+          if (pathname == '/' && tab.name == 'index') {
+            isActive = true;
+          } else if (pathname.startsWith(`/${tab.name}`)) {
+            isActive = true;
+          }
+          return (
+            <Tabs.Screen
+              key={tab.name}
+              name={tab.name}
+              options={{
+                title: tab.title,
+                tabBarIcon: () => renderTabIcon(tab, isActive),
+                tabBarLabel: () => renderTabLabel(tab, isActive),
+              }}
+            />
+          )
+        })}
+      </Tabs>
+    </ThemedView>
   );
 }
-
-const styles = StyleSheet.create({
-  tabBarStyle: {
-    minWidth: 150,
-  },
-});

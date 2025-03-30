@@ -19,10 +19,13 @@ export function HapticTab(props: BottomTabBarButtonProps) {
       {...otherProps}
       style={[
         Platform.OS === 'web' ? { outlineStyle: 'none' } as any : null,
-        { backgroundColor: 'transparent' },
         {
-          padding: mediumScreen?10:0,
-          flexDirection: mediumScreen?'row':'column',
+          backgroundColor: accessibilityState?.selected ? '#e6f7fc' : 'transparent',
+          borderRadius: mediumScreen ? 10 : 0,
+        },
+        {
+          padding: mediumScreen ? 10 : 0,
+          flexDirection: mediumScreen ? 'row' : 'column',
           alignItems: 'center',
         }
       ]}

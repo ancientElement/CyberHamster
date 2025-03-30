@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     width: defaultWidth,
     height: 20,
     overflow: 'hidden',
+    backgroundColor: 'transparent'
   },
   title: {
     textAlign: 'center',

@@ -71,6 +71,8 @@ export default function TabLayout() {
             backgroundColor: Colors[colorScheme ?? 'light'].background,
           },
         }),
+        tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
+        tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
       }}>
       {tabConfigs.map((tab) => {
         return (
@@ -81,21 +83,9 @@ export default function TabLayout() {
               title: tab.title,
               tabBarIcon:
                 ({ focused, color, size }: { focused: boolean, color: string, size: number }) => {
-                  return <IconSymbol size={28} name={tab.icon} color={focused ? tabBarActiveColor.background : tabBarActiveColor.tabIconDefault}
+                  return <IconSymbol size={28} name={tab.icon} color={focused ? tabBarActiveColor.tabIconSelected : tabBarActiveColor.tabIconDefault}
                   />
                 },
-              tabBarLabel: ({ focused, color }: { focused: boolean, color: string }) => {
-                return <Text style={
-                  [
-                    {
-                      color: focused ? tabBarActiveColor.background : tabBarActiveColor.tabIconDefault,
-                      fontSize: mediumScreen ? 14 : 10,
-                      marginLeft: mediumScreen ? 10 : 0,
-                      fontWeight: 'bold',
-                    },
-                  ]
-                }>{tab.title}</Text>
-              }
             }}
           />
         )

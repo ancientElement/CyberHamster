@@ -11,7 +11,7 @@ export function HapticTab(props: BottomTabBarButtonProps) {
       style={[
         Platform.OS === 'web' ? { outlineStyle: 'none' } as any : null,
         style,
-        { backgroundColor: accessibilityState?.selected ? '#0a7ea4' : 'transparent' },
+        { backgroundColor: 'transparent' },
       ]}
       onPressIn={(ev) => {
         if (process.env.EXPO_OS === 'ios') {

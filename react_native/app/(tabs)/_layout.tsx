@@ -19,16 +19,6 @@ type TabConfig = {
 const tabConfigs: TabConfig[] = [
   {
     name: 'index',
-    title: 'Home',
-    icon: 'house.fill'
-  },
-  {
-    name: 'explore',
-    title: 'Explore',
-    icon: 'paperplane.fill'
-  },
-  {
-    name: 'memos',
     title: 'Collection',
     icon: 'bookmark.fill'
   },
@@ -95,7 +85,8 @@ export default function TabLayout() {
           tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
           tabBarStyle: {
             minWidth: 150,
-            margin: mediumScreen ? 10 : 0,
+            marginVertical: mediumScreen ? 20 : 0,
+            marginLeft: mediumScreen? 8 : 0,
             borderRadius: mediumScreen ? 16 : 0,
           },
         }}>

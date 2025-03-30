@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform, Pressable } from 'react-native';
+import { StyleSheet, View,Image, Platform, Pressable } from 'react-native';
 import { useState } from 'react';
 import { ExternalLink } from './ExternalLink';
 import { noImage } from '@/constants/NoImagesBase64';
@@ -28,11 +28,11 @@ export function NavigationCard({ icon, title, url }: NavigationCardProps) {
             style={styles.icon}
           />
         </ThemedView>
-        <ThemedView style={styles.titleContainer}>
+        <View style={styles.titleContainer}>
           <ThemedText style={styles.title} numberOfLines={1}>
             {title || '未填写标题'}
           </ThemedText>
-        </ThemedView>
+        </View>
       </ExternalLink>
     </Pressable>
   );
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
     width: defaultWidth,
     height: 20,
     overflow: 'hidden',
-    backgroundColor: 'transparent'
   },
   title: {
     textAlign: 'center',

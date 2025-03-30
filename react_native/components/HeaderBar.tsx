@@ -1,5 +1,4 @@
-import { StyleSheet, TextInput, Animated } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
+import { StyleSheet, TextInput, Animated,View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
@@ -15,8 +14,9 @@ interface HeaderBarProps {
 
 export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim }: HeaderBarProps) {
   return (
-    <ThemedView style={styles.header}>
-      <ThemedView style={styles.leftContainer}>
+    <View style={styles.header}>
+      <View style={styles.leftContainer}>
+        <View style={styles.logoBorder}></View>
         <ThemedText type='title' style={styles.brand}>松果</ThemedText>
         <Animated.View style={[styles.refreshButton, {
           transform: [{
@@ -30,7 +30,7 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
             <IconSymbol name="car.side.air.fresh" weight='light' size={20} color="#000" />
           </NoOutlineTouchableOpacity>
         </Animated.View>
-      </ThemedView>
+      </View>
 
       <NoOutlineTextInput
         style={styles.searchInput}
@@ -40,7 +40,7 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
         onChangeText={onSearchChange}
         onSubmitEditing={onSearch}
       />
-    </ThemedView>
+    </View>
   );
 }
 
@@ -50,13 +50,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 20,
-    backgroundColor: '#f2f2f2',
   },
   leftContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    backgroundColor: 'f2f2f2'
+  },
+  logoBorder: {
+    width: 4,
+    height: 20,
+    backgroundColor: '#0a7ea4',
+    borderRadius: 2,
+    marginRight: 8,
   },
   brand: {
     fontSize: 15,
@@ -66,12 +71,17 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 36,
-    borderRadius: 18,
+    borderRadius: 8,
     paddingHorizontal: 16,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: '#cccccc',
     width: 150,
     fontSize: 14,
+    shadowColor: '#888',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   }
 });

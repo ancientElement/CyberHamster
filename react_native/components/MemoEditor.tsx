@@ -1,10 +1,11 @@
-import { StyleSheet, View, TouchableOpacity, StyleProp, ViewStyle, Platform } from 'react-native';
+import { StyleSheet, View, StyleProp, ViewStyle, Platform } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import AutoExpandingTextInput from './AutoExpandingTextInput';
 import { IconSymbol } from './ui/IconSymbol';
 import { BookmarkForm } from './BookmarkForm';
 import { AlertHelper } from './AlertHelper';
+import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 
 // 类型定义
 export enum EditorMode {
@@ -74,7 +75,7 @@ export function MemoEditor({
     if (isBookmarkMode) {
       const trimmedUrl = bookmarkUrl.trim();
 
-      if(trimmedUrl.trim()==='') {
+      if (trimmedUrl.trim() === '') {
         AlertHelper('网址不能为空');
       }
 
@@ -155,7 +156,7 @@ export function MemoEditor({
         )}
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <NoOutlineTouchableOpacity
             style={styles.modeButton}
             onPress={toggleMode}
             activeOpacity={0.7}
@@ -165,14 +166,14 @@ export function MemoEditor({
               size={16}
               color={isBookmarkMode ? "#0a7ea4" : "#f5b642"}
             />
-          </TouchableOpacity>
-          <TouchableOpacity
+          </NoOutlineTouchableOpacity>
+          <NoOutlineTouchableOpacity
             style={styles.submitButton}
             onPress={handleSubmit}
             activeOpacity={0.7}
           >
             <Ionicons name="send" size={14} color="white" />
-          </TouchableOpacity>
+          </NoOutlineTouchableOpacity>
         </View>
       </View>
     </View>

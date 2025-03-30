@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Animated, StyleSheet, Image } from 'react-native';
+import { View, Animated, StyleSheet, Image } from 'react-native';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { AlertHelper } from './AlertHelper';
@@ -6,6 +6,7 @@ import { IconSymbol } from './ui/IconSymbol';
 import { ThemedText } from './ThemedText';
 import { NoOutlineTextInput } from './NoOutlineTextInput';
 import { noImage } from '@/constants/NoImagesBase64';
+import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 
 interface BookmarkFormProps {
   title: string;
@@ -53,7 +54,7 @@ export function BookmarkForm({
           keyboardType="url"
           numberOfLines={1}
         />
-        <TouchableOpacity
+        <NoOutlineTouchableOpacity
           style={styles.expandButton}
           onPress={toggleExpand}
         >
@@ -62,7 +63,7 @@ export function BookmarkForm({
             size={16}
             color="#666"
           />
-        </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
       </View>
 
       <Animated.View style={[
@@ -89,12 +90,12 @@ export function BookmarkForm({
         <View style={styles.formField}>
           <ThemedText style={styles.fieldLabel}>图标</ThemedText>
           <View style={styles.iconInputContainer}>
-            <TouchableOpacity
+            <NoOutlineTouchableOpacity
               style={styles.iconSelectButton}
               onPress={onSelectImage(onBookmarkIconChange)}
             >
               <IconSymbol name="doc.text.image" size={16} color="#666" />
-            </TouchableOpacity>
+            </NoOutlineTouchableOpacity>
             <Image
               source={{ uri: (bookmarkIcon && bookmarkIcon === '' || !bookmarkIcon) ? noImage : bookmarkIcon }}
               style={styles.iconPreview}

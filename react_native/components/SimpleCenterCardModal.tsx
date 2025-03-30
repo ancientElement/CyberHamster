@@ -1,4 +1,5 @@
-import { StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { StyleSheet, Modal } from 'react-native';
+import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 
 interface SimpleModalProps {
   visible: boolean;
@@ -15,19 +16,19 @@ export function SimpleCenterCardModal({ visible, onClose, children }: SimpleModa
       onRequestClose={onClose}
       hardwareAccelerated
     >
-      <TouchableOpacity
+      <NoOutlineTouchableOpacity
         style={styles.overlay}
         activeOpacity={1}
         onPress={onClose}
       >
-        <TouchableOpacity
+        <NoOutlineTouchableOpacity
           activeOpacity={1}
           // 阻止事件冒泡，防止点击内部区域时触发外层的关闭事件
           onPress={e => e.stopPropagation()}
         >
           {children}
-        </TouchableOpacity>
-      </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
+      </NoOutlineTouchableOpacity>
     </Modal>
   );
 }

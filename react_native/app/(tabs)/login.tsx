@@ -3,11 +3,12 @@ import { useApi } from '@/hooks/useApi';
 import { StorageKey, useStorage } from '@/hooks/useStorage';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTextInput } from '@/components/NoOutlineTextInput';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { NoOutlineTouchableOpacity } from '@/components/NoOutlineTouchableOpacity';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
@@ -62,13 +63,13 @@ const LoginScreen = () => {
             />
           </ThemedView>
 
-          <TouchableOpacity
+          <NoOutlineTouchableOpacity
             style={styles.loginButton}
             onPress={handleLogin}
             activeOpacity={0.8}
           >
             <ThemedText style={styles.loginButtonText}>登录</ThemedText>
-          </TouchableOpacity>
+          </NoOutlineTouchableOpacity>
         </ThemedView>
       </ThemedView>
     </ThemedView>

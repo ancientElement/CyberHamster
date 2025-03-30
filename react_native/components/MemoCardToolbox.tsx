@@ -1,8 +1,9 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useState, useRef, useCallback } from 'react';
 import { IconSymbol } from './ui/IconSymbol';
 import * as Clipboard from 'expo-clipboard';
 import { ThemedView } from '@/components/ThemedView';
+import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 
 interface MemoCardToolboxProps {
   copyContet: string;
@@ -44,29 +45,29 @@ export function MemoCardToolbox({ copyContet, onEdit, onDelete }: MemoCardToolbo
 
   return (
     <ThemedView style={styles.buttonGroup}>
-      <TouchableOpacity
+      <NoOutlineTouchableOpacity
         onPress={handleCopy}
         style={styles.iconButton}
       >
         <IconSymbol name={copySuccess ? "checkmark" : "text.document"} size={14} color={copySuccess ? "#4CAF50" : "#666"} />
-      </TouchableOpacity>
+      </NoOutlineTouchableOpacity>
 
       {onDelete && (
-        <TouchableOpacity
+        <NoOutlineTouchableOpacity
           onPress={onDelete}
           style={styles.iconButton}
         >
           <IconSymbol name="trash" size={14} color="#666" />
-        </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
       )}
 
       {onEdit && (
-        <TouchableOpacity
+        <NoOutlineTouchableOpacity
           onPress={onEdit}
           style={styles.iconButton}
         >
           <IconSymbol name="pencil.line" size={14} color="#666" />
-        </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
       )}
     </ThemedView>
   );

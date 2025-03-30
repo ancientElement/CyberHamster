@@ -1,7 +1,8 @@
-import { StyleSheet, TextInput, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, TextInput, Animated } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 
 interface HeaderBarProps {
   searchQuery: string;
@@ -24,9 +25,9 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
         }],
         transformOrigin: 'center'
       }]}>
-        <TouchableOpacity onPress={onRefresh}>
+        <NoOutlineTouchableOpacity onPress={onRefresh}>
           <IconSymbol name="car.side.air.fresh" weight='light' size={20} color="#000" />
-        </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
       </Animated.View>
       <TextInput
         style={styles.searchInput}

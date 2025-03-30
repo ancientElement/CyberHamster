@@ -1,6 +1,7 @@
-import { TouchableOpacity, View, StyleSheet, useWindowDimensions } from "react-native";
+import { View, StyleSheet, useWindowDimensions } from "react-native";
 import { SimpleCenterCardModal } from "./SimpleCenterCardModal";
 import { ThemedText } from "./ThemedText";
+import { NoOutlineTouchableOpacity } from "./NoOutlineTouchableOpacity";
 
 interface Props {
   visible: boolean;
@@ -23,13 +24,13 @@ export function ConfirmCardModal({ visible: visible, message, cancelText, confir
         {message}
       </ThemedText>
       <View style={styles.modalButtons}>
-        <TouchableOpacity
+        <NoOutlineTouchableOpacity
           style={[styles.modalButton, styles.cancelButton]}
           onPress={onClose}
         >
           <ThemedText>{cancelText}</ThemedText>
-        </TouchableOpacity>
-        <TouchableOpacity
+        </NoOutlineTouchableOpacity>
+        <NoOutlineTouchableOpacity
           style={[styles.modalButton, styles.deleteButton]}
           onPress={() => {
             onConfirm();
@@ -37,7 +38,7 @@ export function ConfirmCardModal({ visible: visible, message, cancelText, confir
           }}
         >
           <ThemedText style={styles.deleteButtonText}>{confirmText}</ThemedText>
-        </TouchableOpacity>
+        </NoOutlineTouchableOpacity>
       </View>
     </View>
   </SimpleCenterCardModal>;

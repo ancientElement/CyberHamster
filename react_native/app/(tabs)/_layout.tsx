@@ -88,6 +88,7 @@ export default function TabLayout() {
         tabBarPosition: mediumScreen ? 'left' : 'bottom',
         tabBarActiveTintColor: tabBarActiveColor.tabIconSelected,
         tabBarInactiveTintColor: tabBarActiveColor.tabIconDefault,
+        tabBarStyle: {minWidth: 200},
       }}>
       {tabConfigs.map((tab) => {
         // 检查当前路径是否匹配此标签
@@ -97,7 +98,6 @@ export default function TabLayout() {
         } else if (pathname.startsWith(`/${tab.name}`)) {
           isActive = true;
         }
-
         return (
           <Tabs.Screen
             key={tab.name}

@@ -4,9 +4,11 @@ import {
   Memo,
   MemoType,
   CreateMemoDto,
+  TagTreeNode,
 } from '../client-server-public/types';
 
 export class ApiService extends BaseApi implements IApiService {
+
   login(username: string, password: string): Promise<ApiResponse<{ access_token: string; }>> {
     return this.post('/auth/login', { username, password });
   }
@@ -41,5 +43,9 @@ export class ApiService extends BaseApi implements IApiService {
 
   async getMemosByType(type: MemoType): Promise<ApiResponse<Memo[]>> {
     return this.get<Memo[]>(`/memos/type/${type}`);
+  }
+
+  async getTags(): Promise<ApiResponse<TagTreeNode[]>> {
+    return this.get<TagTreeNode[]>(`/memos/tags`);
   }
 }

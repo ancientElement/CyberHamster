@@ -15,14 +15,24 @@ export class MemosController {
     return this.memosService.getMemos();
   }
 
-  @Get(':id')
-  async getMemo(@Param('id') id: string) {
-    return this.memosService.getMemo(parseInt(id));
+  @Get('tags')
+  async getTags() {
+    return this.memosService.getTags();
+  }
+
+  @Get('search')
+  async searchMemos(@Query('q') query: string) {
+    return this.memosService.searchMemos(query);
   }
 
   @Post()
   async createMemo(@Body() createMemoDto: CreateMemoDto) {
     return this.memosService.createMemo(createMemoDto);
+  }
+
+  @Get(':id')
+  async getMemo(@Param('id') id: string) {
+    return this.memosService.getMemo(parseInt(id));
   }
 
   @Put(':id')
@@ -36,11 +46,6 @@ export class MemosController {
   @Delete(':id')
   async deleteMemo(@Param('id') id: string) {
     return this.memosService.deleteMemo(parseInt(id));
-  }
-
-  @Get('search')
-  async searchMemos(@Query('q') query: string) {
-    return this.memosService.searchMemos(query);
   }
 
   @Get('type/:type')

@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    margin: 20,
+    margin: 10,
   },
   leftContainer: {
     flexDirection: 'row',

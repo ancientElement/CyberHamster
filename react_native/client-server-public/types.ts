@@ -47,6 +47,16 @@ export interface Tag {
   createdAt: string;   // 创建时间
 }
 
+
+export interface TagTreeNode {
+  id: number;
+  path: string;
+  name: string;
+  children: TagTreeNode[];
+  memoCount: number;
+}
+
+
 // 备忘录和标签的关联接口，用于实现多对多关系
 export interface MemoTag {
   id: number;          // 关联记录ID

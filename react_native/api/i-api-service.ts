@@ -3,6 +3,7 @@ import {
   Memo,
   CreateMemoDto,
   UpdateMemoDto,
+  TagTreeNode,
 } from '../client-server-public/types';
 
 export interface IApiService {
@@ -18,4 +19,5 @@ export interface IApiService {
   deleteMemo(id: number): Promise<ApiResponse<void>>;
   searchMemos(query: string): Promise<ApiResponse<Memo[]>>;
   getMemosByType(type: number): Promise<ApiResponse<Memo[]>>;
+  getTags(): Promise<ApiResponse<TagTreeNode[]>>;
 }

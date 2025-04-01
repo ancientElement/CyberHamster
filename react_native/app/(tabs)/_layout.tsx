@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useApi } from '@/hooks/useApi';
 
 type TabConfig = {
   name: string;

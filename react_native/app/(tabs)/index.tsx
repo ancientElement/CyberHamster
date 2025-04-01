@@ -22,6 +22,14 @@ export default function CollectionScreen() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const rotateAnim = useState(new Animated.Value(0))[0];
+  // 根据屏幕尺寸设置初始列数，并遵循限制规则
+  // 小屏幕：固定为1列
+  // 中屏幕：最多2列
+  // 大屏幕：最多3列
+  const [columnCount, setColumnCount] = useState<number>(
+    width <= ScreenAdapt.smallScreen ? 1 :
+      width <= ScreenAdapt.mediumScreen ? 2 : 3
+  );
 
   useEffect(() => {
     loadMemos();
@@ -132,6 +140,8 @@ export default function CollectionScreen() {
           loadMemos();
         }}
         rotateAnim={rotateAnim}
+        onLayoutChange={setColumnCount}
+        currentColumns={columnCount}
       />
 
       <MemoEditor
@@ -155,7 +165,7 @@ export default function CollectionScreen() {
         onRefresh={loadMemos}
         data={memos}
         keyExtractor={(item) => item.id}
-        numColumns={isMediumScreen ? (isWideScreen ? 3 : 2) : 1}
+        numColumns={columnCount}
         contentContainerStyle={styles.cardGrid}
         renderItem={({ item, i }) => {
           const memo = item as Memo;

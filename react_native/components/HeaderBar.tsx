@@ -10,9 +10,36 @@ interface HeaderBarProps {
   onSearch: () => void;
   onRefresh: () => void;
   rotateAnim: Animated.Value;
+  onLayoutChange?: (columns: number) => void;
+  currentColumns?: number;
 }
 
-export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim }: HeaderBarProps) {
+export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim, onLayoutChange, currentColumns = 0 }: HeaderBarProps) {
+  const handleLayoutChange = () => {
+    if (onLayoutChange) {
+      // 根据当前列数和屏幕尺寸限制列数切换
+      // 使用window.innerWidth获取当前屏幕宽度
+      const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
+      const isSmallScreen = screenWidth <= 768; // ScreenAdapt.smallScreen
+      const isMediumScreen = screenWidth > 768 && screenWidth <= 992; // ScreenAdapt.mediumScreen
+      
+      let nextColumns = currentColumns;
+      
+      if (isSmallScreen) {
+        // 小屏幕固定为1列
+        nextColumns = 1;
+      } else if (isMediumScreen) {
+        // 中屏幕只允许1-2列
+        nextColumns = currentColumns >= 2 ? 1 : 2;
+      } else {
+        // 大屏幕允许1-3列
+        nextColumns = currentColumns >= 3 ? 1 : currentColumns + 1;
+      }
+      
+      onLayoutChange(nextColumns);
+    }
+  };
+
   return (
     <View style={styles.header}>
       <View style={styles.leftContainer}>
@@ -32,14 +59,21 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
         </Animated.View>
       </View>
 
-      <NoOutlineTextInput
-        style={styles.searchInput}
-        placeholder="搜索收藏..."
-        placeholderTextColor="#999"
-        value={searchQuery}
-        onChangeText={onSearchChange}
-        onSubmitEditing={onSearch}
-      />
+      <View style={styles.rightContainer}>
+        <NoOutlineTextInput
+          style={styles.searchInput}
+          placeholder="搜索收藏..."
+          placeholderTextColor="#999"
+          value={searchQuery}
+          onChangeText={onSearchChange}
+          onSubmitEditing={onSearch}
+        />
+        {onLayoutChange && (
+          <NoOutlineTouchableOpacity style={styles.layoutButton} onPress={handleLayoutChange}>
+            <ThemedText style={styles.layoutButtonText}>{currentColumns}</ThemedText>
+          </NoOutlineTouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }
@@ -55,6 +89,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  rightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   logoBorder: {
     width: 4,
@@ -83,5 +122,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
     elevation: 2,
+  },
+  layoutButton: {
+    height: 36,
+    width: 36,
+    borderRadius: 8,
+    backgroundColor: '#0a7ea4',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#888',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  layoutButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   }
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Animated,View } from 'react-native';
+import { StyleSheet, Animated, View } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
@@ -10,35 +10,35 @@ interface HeaderBarProps {
   onSearch: () => void;
   onRefresh: () => void;
   rotateAnim: Animated.Value;
-  onLayoutChange?: (columns: number) => void;
+  onLayoutChange?: () => void;
   currentColumns?: number;
 }
 
 export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim, onLayoutChange, currentColumns = 0 }: HeaderBarProps) {
-  const handleLayoutChange = () => {
-    if (onLayoutChange) {
-      // 根据当前列数和屏幕尺寸限制列数切换
-      // 使用window.innerWidth获取当前屏幕宽度
-      const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
-      const isSmallScreen = screenWidth <= 768; // ScreenAdapt.smallScreen
-      const isMediumScreen = screenWidth > 768 && screenWidth <= 992; // ScreenAdapt.mediumScreen
-      
-      let nextColumns = currentColumns;
-      
-      if (isSmallScreen) {
-        // 小屏幕固定为1列
-        nextColumns = 1;
-      } else if (isMediumScreen) {
-        // 中屏幕只允许1-2列
-        nextColumns = currentColumns >= 2 ? 1 : 2;
-      } else {
-        // 大屏幕允许1-3列
-        nextColumns = currentColumns >= 3 ? 1 : currentColumns + 1;
-      }
-      
-      onLayoutChange(nextColumns);
-    }
-  };
+  // const handleLayoutChange = () => {
+  //   if (onLayoutChange) {
+  //     // 根据当前列数和屏幕尺寸限制列数切换
+  //     // 使用window.innerWidth获取当前屏幕宽度
+  //     const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
+  //     const isSmallScreen = screenWidth <= 768; // ScreenAdapt.smallScreen
+  //     const isMediumScreen = screenWidth > 768 && screenWidth <= 992; // ScreenAdapt.mediumScreen
+
+  //     let nextColumns = currentColumns;
+
+  //     if (isSmallScreen) {
+  //       // 小屏幕固定为1列
+  //       nextColumns = 1;
+  //     } else if (isMediumScreen) {
+  //       // 中屏幕只允许1-2列
+  //       nextColumns = currentColumns >= 2 ? 1 : 2;
+  //     } else {
+  //       // 大屏幕允许1-3列
+  //       nextColumns = currentColumns >= 3 ? 1 : currentColumns + 1;
+  //     }
+
+  //     onLayoutChange(nextColumns);
+  //   }
+  // };
 
   return (
     <View style={styles.header}>
@@ -69,7 +69,7 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
           onSubmitEditing={onSearch}
         />
         {onLayoutChange && (
-          <NoOutlineTouchableOpacity style={styles.layoutButton} onPress={handleLayoutChange}>
+          <NoOutlineTouchableOpacity style={styles.layoutButton} onPress={onLayoutChange}>
             <ThemedText style={styles.layoutButtonText}>{currentColumns}</ThemedText>
           </NoOutlineTouchableOpacity>
         )}

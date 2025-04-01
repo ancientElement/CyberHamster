@@ -9,6 +9,7 @@ import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
 import { CreateMemoDto, Memo, MemoType } from '@/client-server-public/types';
 import { HeaderBar } from '@/components/HeaderBar';
+import { StorageKey, useStorage } from '@/hooks/useStorage';
 
 
 export default function CollectionScreen() {
@@ -16,6 +17,7 @@ export default function CollectionScreen() {
   const isWideScreen = width > ScreenAdapt.mediumScreen;
   const isMediumScreen = width > ScreenAdapt.smallScreen;
   const api = useApi();
+  const storage = useStorage();
 
   const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,14 +28,16 @@ export default function CollectionScreen() {
   // 小屏幕：固定为1列
   // 中屏幕：最多2列
   // 大屏幕：最多3列
-  const [columnCount, setColumnCount] = useState<number>(
-    width <= ScreenAdapt.smallScreen ? 1 :
-      width <= ScreenAdapt.mediumScreen ? 2 : 3
-  );
+  const [columnCount, setColumnCount] = useState<number>(1);
+
+  useEffect(() => {
+    handleLayoutChange(false);
+  }, [width]);
 
   useEffect(() => {
     loadMemos();
   }, []);
+
 
   const loadMemos = async () => {
     try {
@@ -125,6 +129,36 @@ export default function CollectionScreen() {
     }
   };
 
+  const handleLayoutChange = (click?: boolean) => {
+    // 根据当前列数和屏幕尺寸限制列数切换
+    // 使用window.innerWidth获取当前屏幕宽度
+    const screenWidth = width;
+    const isSmallScreen = screenWidth <= 768; // ScreenAdapt.smallScreen
+    const isMediumScreen = screenWidth > 768 && screenWidth <= 992; // ScreenAdapt.mediumScreen
+
+    let nextColumns = columnCount;
+
+    if (isSmallScreen) {
+      // 小屏幕固定为1列
+      nextColumns = 1;
+    } else if (isMediumScreen) {
+      // 中屏幕只允许1-2列
+      if (click) { //点击
+        nextColumns = columnCount >= 2 ? 1 : 2;
+      } else { //屏幕大小变化
+        nextColumns = columnCount;
+      }
+    } else {
+      // 大屏幕允许1-3列
+      if (click) {
+        nextColumns = columnCount >= 3 ? 1 : columnCount + 1;
+      } else {
+        nextColumns = columnCount;
+      }
+    }
+    setColumnCount(nextColumns);
+  };
+
   return (
     <ThemedView style={styles.container}>
       <HeaderBar
@@ -140,7 +174,7 @@ export default function CollectionScreen() {
           loadMemos();
         }}
         rotateAnim={rotateAnim}
-        onLayoutChange={setColumnCount}
+        onLayoutChange={handleLayoutChange}
         currentColumns={columnCount}
       />
 

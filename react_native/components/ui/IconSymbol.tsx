@@ -28,6 +28,10 @@ const MAPPING = {
   'house': {name:'people',lib:'material'},
   'car.side.air.fresh': {name:'refresh',lib:'font-awesome'},
   'doc.text.image': {name:'file-image-o',lib:'font-awesome'},
+  'gear': {name:'settings',lib:'material'},
+  'person': {name:'person',lib:'material'},
+  'lock': {name:'lock',lib:'material'},
+  'person.circle': {name:'account-circle',lib:'material'},
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'], {

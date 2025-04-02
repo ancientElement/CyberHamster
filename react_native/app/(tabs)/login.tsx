@@ -34,7 +34,6 @@ const LoginScreen = () => {
     <ThemedView style={styles.container}>
       <ThemedView style={[styles.card, styles.cardShadow]}>
         <ThemedView style={styles.header}>
-          <IconSymbol name="person.circle" size={48} color="#0078D4" />
           <ThemedText style={styles.title}>登录</ThemedText>
           <ThemedText style={styles.subtitle}>欢迎使用 CyberHamster</ThemedText>
         </ThemedView>

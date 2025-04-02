@@ -11,7 +11,6 @@ export function NoOutlineTextInput (props:TextInputProps) {
         {...Platform.select({
           web: {
             outline: 'none',
-            border: 'none'
           }
         })}
       ]}

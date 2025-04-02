@@ -29,11 +29,6 @@ const tabConfigs: TabConfig[] = [
     icon: 'globe',
   },
   {
-    name: 'login',
-    title: 'Login',
-    icon: 'house',
-  },
-  {
     name: 'settings',
     title: '设置',
     icon: 'gear',

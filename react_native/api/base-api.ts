@@ -1,3 +1,5 @@
+import { router } from "expo-router";
+
 export type SUCCESS = boolean;
 
 export enum STATUS_CODE {
@@ -16,7 +18,7 @@ export interface ApiResponse<T = any> {
 
 export class BaseApi {
   private baseUrl: string;
-  private getToken:  () => Promise<string | null>;
+  private getToken: () => Promise<string | null>;
 
   constructor(baseUrl: string = '/api', getToken: () => Promise<string | null>) {
     this.baseUrl = baseUrl;
@@ -54,6 +56,11 @@ export class BaseApi {
       }
 
       if (!response.ok) {
+        console.log('api response: ', response);
+        if (response.statusText === 'Unauthorized') {
+          router.replace('/login');
+          throw new Error('Unauthorized');
+        }
         throw new Error(response.statusText || '请求失败');
       }
 

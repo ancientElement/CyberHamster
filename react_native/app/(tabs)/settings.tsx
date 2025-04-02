@@ -3,13 +3,11 @@ import { StyleSheet, Platform, useWindowDimensions, ScrollView } from 'react-nat
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { NoOutlineTouchableOpacity } from '@/components/NoOutlineTouchableOpacity';
-import { NoOutlineTextInput } from '@/components/NoOutlineTextInput';
-import { SimpleCenterCardModal } from '@/components/SimpleCenterCardModal';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
-import { useApi } from '@/hooks/useApi';
 import { useStorage, StorageKey } from '@/hooks/useStorage';
 import { AlertHelper } from '@/components/AlertHelper';
 import { ScreenAdapt } from '@/constants/ScreenAdapt';
+import { router } from 'expo-router';
 
 type TabItem = {
   id: string;
@@ -44,8 +42,6 @@ export default function SettingsScreen() {
   const { width } = useWindowDimensions();
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
   const [activeSubTab, setActiveSubTab] = useState<string>(subTabs[0].id);
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
   const storage = useStorage();
   const isMediumScreen = width > ScreenAdapt.smallScreen;
@@ -85,6 +81,7 @@ export default function SettingsScreen() {
   const handleLogout = async () => {
     storage.deleteItem(StorageKey.USER_TOKEN)
     storage.deleteItem(StorageKey.USERNAME)
+    router.replace('/login')
   };
 
   const renderTabContent = () => {
@@ -294,7 +291,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   actionRow: {
-    marginTop: 16,
     flexDirection: 'row',
   },
   actionButton: {

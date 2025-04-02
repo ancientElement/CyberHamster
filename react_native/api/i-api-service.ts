@@ -4,11 +4,12 @@ import {
   CreateMemoDto,
   UpdateMemoDto,
   TagTreeNode,
+  LoginDot,
 } from '../client-server-public/types';
 
 export interface IApiService {
   // Auth APIs
-  login(username: string, password: string): Promise<ApiResponse<{ access_token: string}>>;
+  login(username: string, password: string): Promise<ApiResponse<LoginDot>>;
   register(username: string, password: string): Promise<ApiResponse<void>>;
 
   // Memo APIs

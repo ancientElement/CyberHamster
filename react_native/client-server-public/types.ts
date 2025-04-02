@@ -87,3 +87,8 @@ export interface CreateMemoDto {
 export interface UpdateMemoDto {
   data: NoteUniFields | Partial<BookmarkUniFields>; // 备忘录具体内容
 }
+
+export interface LoginDot {
+  username: string;
+  accessToken: string;
+}

@@ -5,11 +5,12 @@ import {
   MemoType,
   CreateMemoDto,
   TagTreeNode,
+  LoginDot,
 } from '../client-server-public/types';
 
 export class ApiService extends BaseApi implements IApiService {
 
-  login(username: string, password: string): Promise<ApiResponse<{ access_token: string; }>> {
+  login(username: string, password: string): Promise<ApiResponse<LoginDot>> {
     return this.post('/auth/login', { username, password });
   }
 

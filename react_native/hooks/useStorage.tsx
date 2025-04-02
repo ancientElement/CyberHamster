@@ -3,7 +3,8 @@ import { Platform } from 'react-native';
 
 export enum StorageKey {
   USER_TOKEN = 'userToken',
-  MEMO_COLUMN = 'memoColumn'
+  MEMO_COLUMN = 'memoColumn',
+  USERNAME = "username"
 }
 
 export function useStorage() {

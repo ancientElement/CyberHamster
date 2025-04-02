@@ -34,7 +34,8 @@ export class AuthController implements OnModuleInit {
     if (!await this.authService.comparePassword(body.password, user.password)) {
       throw new UnauthorizedException('Incorrect password');
     }
-    return this.authService.generateToken(user.id, user.username);
+    const accessToken = await this.authService.generateToken(user.id, user.username);
+    return { accessToken, username: user.username };
   }
 
   @Post('register')

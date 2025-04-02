@@ -44,8 +44,6 @@ export default function SettingsScreen() {
   const { width } = useWindowDimensions();
   const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
   const [activeSubTab, setActiveSubTab] = useState<string>(subTabs[0].id);
-  const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
-  const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -56,17 +54,12 @@ export default function SettingsScreen() {
     // 获取当前用户信息
     const fetchUserInfo = async () => {
       try {
-        // 这里假设有一个获取用户信息的API
-        // const response = await api.getUserInfo();
-        // if (response.success && response.data) {
-        //   setUsername(response.data.username);
-        // }
-
         // 由于目前没有获取用户信息的API，我们从token中获取用户名
-        const token = await storage.getItem(StorageKey.USER_TOKEN);
-        if (token) {
+        const _username = await storage.getItem(StorageKey.USERNAME);
+
+        if (_username) {
           // 这里简单处理，实际应该从token中解析用户信息
-          setUsername('当前用户');
+          setUsername(_username);
         }
       } catch (error) {
         AlertHelper(`获取用户信息失败: ${error}`);
@@ -89,34 +82,9 @@ export default function SettingsScreen() {
     setActiveSubTab(subTabId);
   };
 
-  const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      AlertHelper('两次输入的密码不一致');
-      return;
-    }
-
-    try {
-      // 这里应该调用修改密码的API
-      // const response = await api.changePassword(oldPassword, newPassword);
-      // if (response.success) {
-      //   AlertHelper('密码修改成功');
-      //   setIsPasswordModalVisible(false);
-      //   setOldPassword('');
-      //   setNewPassword('');
-      //   setConfirmPassword('');
-      // } else {
-      //   AlertHelper(`密码修改失败: ${response.message}`);
-      // }
-
-      // 由于目前没有修改密码的API，我们模拟成功
-      AlertHelper('密码修改成功');
-      setIsPasswordModalVisible(false);
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } catch (error) {
-      AlertHelper(`密码修改失败: ${error}`);
-    }
+  const handleLogout = async () => {
+    storage.deleteItem(StorageKey.USER_TOKEN)
+    storage.deleteItem(StorageKey.USERNAME)
   };
 
   const renderTabContent = () => {
@@ -131,9 +99,9 @@ export default function SettingsScreen() {
           <ThemedView style={styles.actionRow}>
             <NoOutlineTouchableOpacity
               style={styles.actionButton}
-              onPress={() => setIsPasswordModalVisible(true)}
+              onPress={handleLogout}
             >
-              <ThemedText style={styles.actionButtonText}>修改密码</ThemedText>
+              <ThemedText style={styles.actionButtonText}>退出登录</ThemedText>
             </NoOutlineTouchableOpacity>
           </ThemedView>
         </ThemedView>
@@ -188,64 +156,6 @@ export default function SettingsScreen() {
           </ScrollView>
         </ThemedView>
       </ThemedView>
-
-      {/* 修改密码模态框 */}
-      <SimpleCenterCardModal
-        visible={isPasswordModalVisible}
-        onClose={() => setIsPasswordModalVisible(false)}
-      >
-        <ThemedView style={styles.modalContent}>
-          <ThemedText style={styles.modalTitle}>修改密码</ThemedText>
-
-          <ThemedView style={styles.inputContainer}>
-            <ThemedText style={styles.inputLabel}>当前密码</ThemedText>
-            <NoOutlineTextInput
-              style={styles.input}
-              secureTextEntry
-              value={oldPassword}
-              onChangeText={setOldPassword}
-              placeholder="请输入当前密码"
-            />
-          </ThemedView>
-
-          <ThemedView style={styles.inputContainer}>
-            <ThemedText style={styles.inputLabel}>新密码</ThemedText>
-            <NoOutlineTextInput
-              style={styles.input}
-              secureTextEntry
-              value={newPassword}
-              onChangeText={setNewPassword}
-              placeholder="请输入新密码"
-            />
-          </ThemedView>
-
-          <ThemedView style={styles.inputContainer}>
-            <ThemedText style={styles.inputLabel}>确认新密码</ThemedText>
-            <NoOutlineTextInput
-              style={styles.input}
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              placeholder="请再次输入新密码"
-            />
-          </ThemedView>
-
-          <ThemedView style={styles.modalButtons}>
-            <NoOutlineTouchableOpacity
-              style={[styles.modalButton, styles.cancelButton]}
-              onPress={() => setIsPasswordModalVisible(false)}
-            >
-              <ThemedText>取消</ThemedText>
-            </NoOutlineTouchableOpacity>
-            <NoOutlineTouchableOpacity
-              style={[styles.modalButton, styles.confirmButton]}
-              onPress={handleChangePassword}
-            >
-              <ThemedText style={styles.confirmButtonText}>确认</ThemedText>
-            </NoOutlineTouchableOpacity>
-          </ThemedView>
-        </ThemedView>
-      </SimpleCenterCardModal>
 
     </ThemedView>
   );

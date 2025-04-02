@@ -19,8 +19,9 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       const response = await api.login(username, password);
-      if (response.success && response.data && response.data.access_token) {
-        await storage.setItem(StorageKey.USER_TOKEN, response.data.access_token);
+      if (response.success && response.data && response.data.accessToken) {
+        await storage.setItem(StorageKey.USER_TOKEN, response.data.accessToken);
+        await storage.setItem(StorageKey.USERNAME,response.data.username);
         router.replace('/');
       } else {
         AlertHelper(`登录失败, ${response.message}`);

@@ -8,9 +8,7 @@ export class AuthService {
 
   async generateToken(userId: number, username: string) {
     const payload = { sub: userId, username };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    return  this.jwtService.sign(payload);
   }
 
   async validateToken(token: string) {

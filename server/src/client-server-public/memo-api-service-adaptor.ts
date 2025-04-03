@@ -72,28 +72,29 @@ export class MemoApiServiceAdaptor {
       let parentId: number | null = null;
       let tagIds: number[] = []; // 存储路径中所有标签的ID
 
+      // 为路径中的每个部分创建单独的标签条目
+      for (const part of tagParts) {
+        // 检查单独的标签是否已存在
+        const existingTag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [part]);
+
+        let tagId: number;
+        if (existingTag) {
+          tagId = existingTag.id;
+        } else {
+          // 创建单独的标签条目
+          const tagResult = await this.db.run(
+            'INSERT INTO tags (path, parentId, createdAt) VALUES (?, NULL, ?)',
+            [part, new Date().toISOString()]
+          );
+          tagId = tagResult.lastID;
+        }
+
+        // 将标签ID添加到列表
+        tagIds.push(tagId);
+      }
+
       // 为最后一个标签单独创建一个条目（不带路径）
       const lastTagName = tagParts[tagParts.length - 1];
-      let lastTagId: number | null = null;
-
-      // 检查最后一个标签是否已存在（不带路径）
-      const existingLastTag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [lastTagName]);
-
-      if (existingLastTag) {
-        lastTagId = existingLastTag.id;
-      } else {
-        // 创建最后一个标签的单独条目
-        const lastTagResult = await this.db.run(
-          'INSERT INTO tags (path, parentId, createdAt) VALUES (?, NULL, ?)',
-          [lastTagName, new Date().toISOString()]
-        );
-        lastTagId = lastTagResult.lastID;
-      }
-
-      // 将最后一个标签的ID添加到列表
-      if (lastTagId !== null) {
-        tagIds.push(lastTagId);
-      }
 
       // 逐级创建或获取标签
       for (let i = 0; i < tagParts.length; i++) {
@@ -135,6 +136,7 @@ export class MemoApiServiceAdaptor {
         }
       }
     }
+
   }
 
   async updateMemo(id: number, updateMemoDto: UpdateMemoDto): Promise<Memo> {

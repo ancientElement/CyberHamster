@@ -1,159 +1,127 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Platform, useWindowDimensions, ScrollView } from 'react-native';
-import { ThemedView } from '@/components/ThemedView';
-import { ThemedText } from '@/components/ThemedText';
-import { NoOutlineTouchableOpacity } from '@/components/NoOutlineTouchableOpacity';
-import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
-import { useStorage, StorageKey } from '@/hooks/useStorage';
-import { AlertHelper } from '@/components/AlertHelper';
-import { ScreenAdapt } from '@/constants/ScreenAdapt';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
+import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { NoOutlineTouchableOpacity } from '@/components/NoOutlineTouchableOpacity';
+import { useStorage, StorageKey } from '@/hooks/useStorage';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors';
 
 type TabItem = {
-  id: string;
+  key: string;
   title: string;
   icon: IconSymbolName;
 };
 
 const tabs: TabItem[] = [
-  {
-    id: 'account',
-    title: '账号管理',
-    icon: 'person.fill',
-  },
-  // 可以在这里添加更多的设置标签
-];
-
-type SubTabItem = {
-  id: string;
-  title: string;
-  parentId: string;
-};
-
-const subTabs: SubTabItem[] = [
-  {
-    id: 'account-info',
-    title: '账号信息',
-    parentId: 'account',
-  },
+  { key: 'account', title: '账户设置', icon: 'person.circle' },
+  { key: 'general', title: '通用设置', icon: 'gear' },
+  { key: 'about', title: '关于', icon: 'lock' },
 ];
 
 export default function SettingsScreen() {
-  const { width } = useWindowDimensions();
-  const [activeTab, setActiveTab] = useState<string>(tabs[0].id);
-  const [activeSubTab, setActiveSubTab] = useState<string>(subTabs[0].id);
-  const [username, setUsername] = useState('');
+  const [activeTab, setActiveTab] = useState('account');
+  const [username, setUsername] = useState<string | null>(null);
   const storage = useStorage();
-  const isMediumScreen = width > ScreenAdapt.smallScreen;
+  const colorScheme = useColorScheme();
+  const colors = Colors[colorScheme ?? 'light'];
 
   useEffect(() => {
-    // 获取当前用户信息
-    const fetchUserInfo = async () => {
-      try {
-        // 由于目前没有获取用户信息的API，我们从token中获取用户名
-        const _username = await storage.getItem(StorageKey.USERNAME);
-
-        if (_username) {
-          // 这里简单处理，实际应该从token中解析用户信息
-          setUsername(_username);
-        }
-      } catch (error) {
-        AlertHelper(`获取用户信息失败: ${error}`);
-      }
+    const fetchUsername = async () => {
+      const storedUsername = await storage.getItem(StorageKey.USERNAME);
+      setUsername(storedUsername);
     };
-
-    fetchUserInfo();
+    fetchUsername();
   }, []);
 
-  const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
-    // 切换到该标签下的第一个子标签
-    const firstSubTab = subTabs.find(tab => tab.parentId === tabId);
-    if (firstSubTab) {
-      setActiveSubTab(firstSubTab.id);
-    }
-  };
-
-  const handleSubTabChange = (subTabId: string) => {
-    setActiveSubTab(subTabId);
-  };
-
   const handleLogout = async () => {
-    storage.deleteItem(StorageKey.USER_TOKEN)
-    storage.deleteItem(StorageKey.USERNAME)
-    router.replace('/login')
+    await storage.deleteItem(StorageKey.USER_TOKEN);
+    await storage.deleteItem(StorageKey.USERNAME);
+    router.replace('/login');
   };
 
-  const renderTabContent = () => {
-    if (activeSubTab === 'account-info') {
-      return (
-        <ThemedView style={styles.contentSection}>
-          <ThemedText style={styles.sectionTitle}>账号信息</ThemedText>
-          <ThemedView style={styles.infoRow}>
-            <ThemedText style={styles.infoLabel}>用户名:</ThemedText>
-            <ThemedText style={styles.infoValue}>{username}</ThemedText>
-          </ThemedView>
-          <ThemedView style={styles.actionRow}>
-            <NoOutlineTouchableOpacity
-              style={styles.actionButton}
-              onPress={handleLogout}
+  const renderTabBar = () => {
+    return (
+      <ThemedView style={styles.tabBar}>
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.key}
+            style={[styles.tabItem, activeTab === tab.key && styles.activeTabItem]}
+            onPress={() => setActiveTab(tab.key)}
+          >
+            <IconSymbol
+              name={tab.icon}
+              size={20}
+              color={activeTab === tab.key ? colors.tabIconSelected : colors.tabIconDefault}
+            />
+            <ThemedText
+              style={[styles.tabText, activeTab === tab.key && styles.activeTabText]}
             >
-              <ThemedText style={styles.actionButtonText}>退出登录</ThemedText>
-            </NoOutlineTouchableOpacity>
-          </ThemedView>
+              {tab.title}
+            </ThemedText>
+          </TouchableOpacity>
+        ))}
+      </ThemedView>
+    );
+  };
+
+  const renderAccountSettings = () => {
+    return (
+      <ThemedView style={styles.tabContent}>
+        <ThemedView style={styles.settingItem}>
+          <ThemedText style={styles.settingLabel}>用户名</ThemedText>
+          <ThemedText style={styles.settingValue}>{username || '未登录'}</ThemedText>
         </ThemedView>
-      );
+        <ThemedView style={styles.settingItem}>
+          <NoOutlineTouchableOpacity
+            style={styles.logoutButton}
+            onPress={handleLogout}
+          >
+            <ThemedText style={styles.logoutButtonText}>退出登录</ThemedText>
+          </NoOutlineTouchableOpacity>
+        </ThemedView>
+      </ThemedView>
+    );
+  };
+
+  const renderGeneralSettings = () => {
+    return (
+      <ThemedView style={styles.tabContent}>
+        <ThemedText>通用设置内容</ThemedText>
+      </ThemedView>
+    );
+  };
+
+  const renderAboutSettings = () => {
+    return (
+      <ThemedView style={styles.tabContent}>
+        <ThemedText>关于内容</ThemedText>
+      </ThemedView>
+    );
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'account':
+        return renderAccountSettings();
+      case 'general':
+        return renderGeneralSettings();
+      case 'about':
+        return renderAboutSettings();
+      default:
+        return renderAccountSettings();
     }
-    return null;
   };
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedView style={[styles.card, isMediumScreen ? styles.cardMedium : styles.cardSmall]}>
-        <ThemedView style={[styles.sidebar, isMediumScreen ? styles.sidebarMedium : styles.sidebarSmall]}>
-          {tabs.map((tab) => (
-            <NoOutlineTouchableOpacity
-              key={tab.id}
-              style={[styles.tabItem, activeTab === tab.id && styles.activeTabItem]}
-              onPress={() => handleTabChange(tab.id)}
-            >
-              <IconSymbol
-                name={tab.icon}
-                size={24}
-                color={activeTab === tab.id ? '#0a7ea4' : '#687076'}
-              />
-              <ThemedText style={[styles.tabText, activeTab === tab.id && styles.activeTabText]}>
-                {tab.title}
-              </ThemedText>
-            </NoOutlineTouchableOpacity>
-          ))}
-        </ThemedView>
-
-        <ThemedView style={styles.content}>
-          {/* 子标签栏 */}
-          <ThemedView style={styles.subTabBar}>
-            {subTabs
-              .filter((subTab) => subTab.parentId === activeTab)
-              .map((subTab) => (
-                <NoOutlineTouchableOpacity
-                  key={subTab.id}
-                  style={[styles.subTabItem, activeSubTab === subTab.id && styles.activeSubTabItem]}
-                  onPress={() => handleSubTabChange(subTab.id)}
-                >
-                  <ThemedText style={[styles.subTabText, activeSubTab === subTab.id && styles.activeSubTabText]}>
-                    {subTab.title}
-                  </ThemedText>
-                </NoOutlineTouchableOpacity>
-              ))}
-          </ThemedView>
-
-          {/* 内容区域 */}
-          <ScrollView style={styles.contentContainer}>
-            {renderTabContent()}
-          </ScrollView>
-        </ThemedView>
+      <ThemedView style={styles.header}>
+        <ThemedText style={styles.headerTitle}>设置</ThemedText>
       </ThemedView>
-
+      {renderTabBar()}
+      {renderContent()}
     </ThemedView>
   );
 }
@@ -161,202 +129,71 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
-    padding: 20,
-    ...Platform.select({
-      ios: {
-        paddingTop: 50
-      },
-      android: {
-        paddingTop: 50
-      }
-    }),
-  },
-  card: {
-    backgroundColor: '#fff',
+    margin: 16,
+    padding: 16,
     borderRadius: 16,
-    overflow: 'hidden',
+  },
+  header: {
+    marginBottom: 20,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  tabBar: {
     flexDirection: 'row',
-    flex: 1,
-    ...Platform.select({
-      web: {
-        boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-      },
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  cardMedium: {
-    // 移除maxWidth和marginHorizontal属性，使卡片占满整个容器
-    width: '100%',
-  },
-  cardSmall: {
-    width: '100%',
-  },
-  sidebar: {
-    borderRightWidth: 1,
-    borderRightColor: '#e0e0e0',
-  },
-  sidebarMedium: {
-    width: 200,
-  },
-  sidebarSmall: {
-    width: 150,
+    marginBottom: 20,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
   tabItem: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    gap: 8,
   },
   activeTabItem: {
-    backgroundColor: '#f0f8ff',
-    borderLeftWidth: 3,
-    borderLeftColor: '#0a7ea4',
+    backgroundColor: '#e6f7fc',
   },
   tabText: {
-    marginLeft: 12,
-    fontSize: 16,
-    color: '#687076',
+    fontSize: 14,
   },
   activeTabText: {
-    color: '#0a7ea4',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
-  content: {
+  tabContent: {
     flex: 1,
-    flexDirection: 'column',
   },
-  subTabBar: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    backgroundColor: '#f9f9f9',
-  },
-  subTabItem: {
-    padding: 12,
-    marginRight: 8,
-  },
-  activeSubTabItem: {
-    borderBottomWidth: 2,
-    borderBottomColor: '#0a7ea4',
-  },
-  subTabText: {
-    fontSize: 14,
-    color: '#687076',
-  },
-  activeSubTabText: {
-    color: '#0a7ea4',
-    fontWeight: '600',
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 16,
-  },
-  contentSection: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    color: '#11181C',
-  },
-  description: {
-    fontSize: 14,
-    color: '#687076',
-    marginBottom: 16,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  infoLabel: {
-    width: 80,
-    fontSize: 14,
-    color: '#687076',
-  },
-  infoValue: {
-    fontSize: 14,
-    color: '#11181C',
-    fontWeight: '500',
-  },
-  actionRow: {
-    flexDirection: 'row',
-  },
-  actionButton: {
-    backgroundColor: '#0a7ea4',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-  },
-  actionButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-  emptyText: {
-    marginTop: 16,
-    fontSize: 14,
-    color: '#687076',
-    fontStyle: 'italic',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    width: 320,
-    maxWidth: '90%',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  inputContainer: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    fontSize: 14,
-    marginBottom: 8,
-    color: '#687076',
-  },
-  input: {
-    borderWidth: 2,
-    borderColor: '#e0e0e0',
-    borderRadius: 8,
-    padding: 10,
-    fontSize: 14,
-  },
-  modalButtons: {
+  settingItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 16,
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
   },
-  modalButton: {
-    flex: 1,
-    padding: 10,
+  settingLabel: {
+    fontSize: 16,
+  },
+  settingValue: {
+    fontSize: 16,
+    color: '#666',
+  },
+  logoutButton: {
+    backgroundColor: '#0a7ea4',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 8,
     alignItems: 'center',
-    marginHorizontal: 4,
+    justifyContent: 'center',
   },
-  cancelButton: {
-    backgroundColor: '#E2E8F0',
-  },
-  confirmButton: {
-    backgroundColor: '#0a7ea4',
-  },
-  confirmButtonText: {
+  logoutButtonText: {
     color: 'white',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });

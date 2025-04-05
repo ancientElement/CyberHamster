@@ -100,6 +100,13 @@ async function getPageMetadata() {
 
 async function saveBookmark(metadata) {
   const saveStatus = document.getElementById('saveStatus');
+  const loadingSpinner = document.getElementById('loadingSpinner');
+
+  // 显示加载指示器
+  loadingSpinner.classList.add('show');
+  saveStatus.textContent = '';
+  saveStatus.classList.remove('show', 'error');
+
   try {
     const res = await api.createMemo({
       data: {
@@ -111,17 +118,23 @@ async function saveBookmark(metadata) {
       }
     });
 
+    // 隐藏加载指示器
+    loadingSpinner.classList.remove('show');
+
     if (res.success) {
       saveStatus.textContent = '收藏成功';
       saveStatus.classList.add('show');
     } else {
       saveStatus.textContent = `收藏失败${res}`;
-      saveStatus.classList.add('error');
+      saveStatus.classList.add('error', 'show');
       console.error('Failed to save bookmark:', res);
     }
   } catch (error) {
+    // 隐藏加载指示器
+    loadingSpinner.classList.remove('show');
+
     saveStatus.textContent = `收藏失败${error}`;
-    saveStatus.classList.add('error');
+    saveStatus.classList.add('error', 'show');
     console.error('Failed to save bookmark:', error);
   }
 }

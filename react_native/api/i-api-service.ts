@@ -20,5 +20,5 @@ export interface IApiService {
   deleteMemo(id: number): Promise<ApiResponse<void>>;
   searchMemos(query: string): Promise<ApiResponse<Memo[]>>;
   getMemosByType(type: number): Promise<ApiResponse<Memo[]>>;
-  getTags(): Promise<ApiResponse<TagTreeNode[]>>;
+  getTags(): Promise<ApiResponse<string[]>>;
 }

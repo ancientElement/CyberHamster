@@ -126,6 +126,7 @@
       transition: opacity var(--transition-duration) ease;
       text-align: center;
       margin-bottom: 10px;
+      position: relative;
     }
 
     .save-status.show {
@@ -135,12 +136,32 @@
     .save-status.error {
       color: var(--error-color);
     }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(74, 144, 226, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary-color);
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    .loading-spinner.show {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
   </style>
 </head>
 
 <body>
 
   <div id="saveStatus" class="save-status"></div>
+  <div id="loadingSpinner" class="loading-spinner"></div>
 
   <div class="form-group">
     <label class="label" for="title">标题</label>

@@ -165,9 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       api = new ApiService(apiUrl, apiToken);
       // 自动保存书签
-      setTimeout(() => {
-        saveBookmark(metadata);
-      }, 2000);
+      saveBookmark(metadata);
     });
   });
 });

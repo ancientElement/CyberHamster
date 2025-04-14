@@ -81,9 +81,34 @@ async function getPageIcon() {
 
 async function getPageMetadata() {
   const { url, title } = await getCurrentTabInfo();
-  const { description } = await getBrowserMetadata();
-  const icon = await getPageIcon();
+  let { description } = await getBrowserMetadata();
 
+  // 如果description为空，尝试从页面获取描述
+  if (!description) {
+    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+    const results = await browser.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        // 首先尝试获取meta描述
+        const metaDescription = document.querySelector('meta[name="description"]')?.content
+          || document.querySelector('meta[property="og:description"]')?.content;
+
+        if (metaDescription) return metaDescription;
+
+        // 如果没有meta描述，获取页面可见文本
+        const textContent = document.body.innerText
+          .replace(/[\r\n\s]+/g, ' ')  // 替换多个空白字符为单个空格
+          .trim()
+          .slice(0, 200);  // 只取前200个字符
+
+        return textContent || '';
+      }
+    });
+
+    description = results[0].result;
+  }
+
+  const icon = await getPageIcon();
   return {
     url,
     title,

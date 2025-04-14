@@ -38,6 +38,23 @@ export class AuthController implements OnModuleInit {
     return { accessToken, username: user.username };
   }
 
+  @Post('generate-token')
+  async refresh(@Body() body: { username: string; password: string; expiresIn: string }) {
+    const user = await this.databaseService.db.get<{ id: number, username: string, password: string }>('SELECT * FROM users WHERE username = ?', [body.username]);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    if (!await this.authService.comparePassword(body.password, user.password)) {
+      throw new UnauthorizedException('Incorrect password');
+    }
+    const accessToken = await this.authService.generateToken(
+      user.id,
+      user.username,
+      { expiresIn: body.expiresIn }
+    );
+    return { accessToken, username: user.username };
+  }
+
   @Post('register')
   async register(@Body() body: { username: string; password: string }) {
     if (!this.configService.get<boolean>(ALLOW_REGISTER, false)) {

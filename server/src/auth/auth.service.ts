@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(private jwtService: JwtService) { }
 
-  async generateToken(userId: number, username: string) {
+  async generateToken(userId: number, username: string,options?:JwtSignOptions) {
     const payload = { sub: userId, username };
-    return  this.jwtService.sign(payload);
+    return  this.jwtService.sign(payload,options);
   }
 
   async validateToken(token: string) {

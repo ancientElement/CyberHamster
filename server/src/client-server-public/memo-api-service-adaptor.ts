@@ -3,6 +3,21 @@ import { DatabaseAdaptor } from './database-adaptor';
 import OpenAI from 'openai';
 import { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat';
 
+export interface TagItem {
+  id: number;
+  path: string;
+  parentId: number | null;
+  createdAt: string;
+}
+
+export interface TagTreeNode {
+  id: number;
+  name: string;
+  path: string;
+  children: TagTreeNode[];
+  createdAt: string;
+}
+
 export class MemoApiServiceAdaptor {
   private db!: DatabaseAdaptor;
   private openai!: OpenAI;
@@ -310,5 +325,52 @@ export class MemoApiServiceAdaptor {
 
     const tags = await this.db.all<{ path: string }>(sql);
     return tags.map(tag => tag.path);
+  }
+
+
+
+  /**
+   * 获取标签树结构
+   * @returns 标签树结构
+   */
+  async getTagsTree(): Promise<TagTreeNode[]> {
+    const sql = `
+      SELECT id, path, parentId, createdAt FROM tags ORDER BY path
+    `;
+
+    const tags = await this.db.all<TagItem>(sql);
+
+    // 构建树结构
+    const tagMap: Record<number, TagTreeNode> = {};
+    const rootNodes: TagTreeNode[] = [];
+
+    // 首先创建所有节点
+    tags.forEach(tag => {
+      const pathParts = tag.path.split('/');
+      const name = pathParts[pathParts.length - 1];
+
+      tagMap[tag.id] = {
+        id: tag.id,
+        name,
+        path: tag.path,
+        children: [],
+        createdAt: tag.createdAt
+      };
+    });
+
+    // 然后构建树结构
+    tags.forEach(tag => {
+      const node = tagMap[tag.id];
+
+      if (tag.parentId === null) {
+        // 根节点
+        rootNodes.push(node);
+      } else if (tagMap[tag.parentId]) {
+        // 添加到父节点的children中
+        tagMap[tag.parentId].children.push(node);
+      }
+    });
+
+    return rootNodes;
   }
 }

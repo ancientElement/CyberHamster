@@ -20,6 +20,12 @@ export class MemosController {
     return this.memosService.getTags();
   }
 
+  @Get('tagsTree')
+  async getTagsTree() {
+    return this.memosService.getTagsTree();
+  }
+
+
   @Get('search')
   async searchMemos(@Query('q') query: string) {
     return this.memosService.searchMemos(query);

@@ -23,10 +23,10 @@ interface TagFilterModalProps {
 }
 
 // 单个标签项组件
-const TagItem = ({ tag, level = 0, onSelect, selectedTags = [] }: {
+const TagItem = ({ tag, level = 0, onSelect, selectedTags}: {
   tag: TagTreeNode;
   level?: number;
-  selectedTags?: TagTreeNode[];
+  selectedTags: TagTreeNode[];
   onSelect?: (tag: TagTreeNode, hasChildren: boolean) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -75,6 +75,7 @@ const TagItem = ({ tag, level = 0, onSelect, selectedTags = [] }: {
               tag={child}
               level={level + 1}
               onSelect={onSelect}
+              selectedTags={selectedTags}
             />
           ))}
         </ThemedView>

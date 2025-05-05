@@ -37,21 +37,7 @@ export default function CollectionScreen() {
 
 
   const loadMemos = async () => {
-    try {
-      // console.log(await api.getTags());
-      setLoading(true);
-      setError(null);
-      const response = await api.getMemos();
-      if (response.success && response.data) {
-        setMemos(response.data);
-      } else {
-        setError(`获取备忘录失败${response.message}`);
-      }
-    } catch (err) {
-      setError(`加载数据时发生错误${err}`);
-    } finally {
-      setLoading(false);
-    }
+    await loadMemosWithTags(selectedTags);
   };
 
   const handleSearch = async () => {
@@ -183,18 +169,59 @@ export default function CollectionScreen() {
     const tagIndex = selectedTags.findIndex(t => t.id === tag.id);
     if (tagIndex === -1) {
       // 如果标签不在列表中，添加它
-      setSelectedTags([...selectedTags, tag]);
+      const newTags = [...selectedTags, tag];
+      setSelectedTags(newTags);
+      // 使用新的标签列表加载数据
+      await loadMemosWithTags(newTags);
+    } else {
+      // 如果标签已在列表中，移除它
+      const newTags = [...selectedTags];
+      newTags.splice(tagIndex, 1);
+      setSelectedTags(newTags);
+      // 使用新的标签列表加载数据
+      await loadMemosWithTags(newTags);
     }
-    setFilterModalVisible(false);
   };
 
   // 清除选中的标签
-  const handleClearTag = (tag: TagTreeNode) => {
-    // 如果标签已在列表中，移除它（切换选择状态）
+  const handleClearTag = async (tag: TagTreeNode) => {
+    // 如果标签已在列表中，移除它
     const tagIndex = selectedTags.findIndex(t => t.id === tag.id);
-    const newTags = [...selectedTags];
-    newTags.splice(tagIndex, 1);
-    setSelectedTags(newTags);
+    if (tagIndex !== -1) {
+      const newTags = [...selectedTags];
+      newTags.splice(tagIndex, 1);
+      setSelectedTags(newTags);
+      // 使用新的标签列表加载数据
+      await loadMemosWithTags(newTags);
+    }
+  };
+
+  // 使用指定标签列表加载数据
+  const loadMemosWithTags = async (tags: TagTreeNode[]) => {
+    try {
+      setLoading(true);
+      setError(null);
+      let response;
+
+      if (tags.length > 0) {
+        // 如果有选中的标签，使用标签ID数组进行筛选
+        const tagIds = tags.map(tag => tag.id);
+        response = await api.getMemosByTagIds(tagIds);
+      } else {
+        // 如果没有选中的标签，获取所有备忘录
+        response = await api.getMemos();
+      }
+
+      if (response.success && response.data) {
+        setMemos(response.data);
+      } else {
+        setError(`获取备忘录失败${response.message}`);
+      }
+    } catch (err) {
+      setError(`加载数据时发生错误${err}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

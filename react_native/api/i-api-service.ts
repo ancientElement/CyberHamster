@@ -20,6 +20,7 @@ export interface IApiService {
   deleteMemo(id: number): Promise<ApiResponse<void>>;
   searchMemos(query: string): Promise<ApiResponse<Memo[]>>;
   getMemosByType(type: number): Promise<ApiResponse<Memo[]>>;
+  getMemosByTagIds(ids: number[]): Promise<ApiResponse<Memo[]>>;
   getTags(): Promise<ApiResponse<string[]>>;
   getTagsTree(): Promise<ApiResponse<TagTreeNode[]>>;
 }

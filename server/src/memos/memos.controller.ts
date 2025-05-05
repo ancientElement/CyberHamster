@@ -58,4 +58,10 @@ export class MemosController {
   async getMemosByType(@Param('type') type: string) {
     return this.memosService.getMemosByType(parseInt(type) as MemoType);
   }
+
+  @Get('memobytagid/:ids')
+  async getMemosByTagIds(@Param('ids') ids: string) {
+    const tagIds = ids.split('&').map(id => parseInt(id));
+    return this.memosService.getMemosByTagIds(tagIds);
+  }
 }

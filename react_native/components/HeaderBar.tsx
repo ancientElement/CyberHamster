@@ -46,12 +46,6 @@ export function HeaderBar({
       </View>
 
       <View style={styles.rightContainer}>
-        {/* 添加筛选按钮 */}
-        {onFilter && (
-          <NoOutlineTouchableOpacity style={styles.filterButton} onPress={onFilter}>
-            <IconSymbol name="fuelpump.and.filter" weight='light' size={18} color="#fff" />
-          </NoOutlineTouchableOpacity>
-        )}
 
         <NoOutlineTextInput
           style={styles.searchInput}
@@ -67,6 +61,14 @@ export function HeaderBar({
             <ThemedText style={styles.layoutButtonText}>{currentColumns}</ThemedText>
           </NoOutlineTouchableOpacity>
         )}
+
+        {/* 添加筛选按钮 */}
+        {onFilter && (
+          <NoOutlineTouchableOpacity style={styles.filterButton} onPress={onFilter}>
+            <IconSymbol name="fuelpump.and.filter" weight='light' size={18} color="#fff" />
+          </NoOutlineTouchableOpacity>
+        )}
+
       </View>
     </View>
   );

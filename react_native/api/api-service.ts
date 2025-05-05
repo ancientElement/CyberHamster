@@ -53,4 +53,8 @@ export class ApiService extends BaseApi implements IApiService {
   async getTagsTree(): Promise<ApiResponse<TagTreeNode[]>> {
     return this.get<TagTreeNode[]>(`/memos/tagstree`);
   }
+
+  async getMemosByTagIds(ids: number[]): Promise<ApiResponse<Memo[]>> {
+    return this.get<Memo[]>(`/memos/memobytagid/${ids.join('&')}`);
+  }
 }

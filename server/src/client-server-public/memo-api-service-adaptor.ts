@@ -122,12 +122,19 @@ export class MemoApiServiceAdaptor {
       const suggestedTags = completion.choices[0]?.message?.content?.trim() || "";
 
       // 验证返回的标签格式是否正确
-      if (suggestedTags && suggestedTags.includes('#')) {
-        processedContent = `${suggestedTags}\n${content}`;
-        console.log(`成功生成标签: ${suggestedTags}`);
+      if (suggestedTags) {
+        const tags = suggestedTags.split(' ').filter(tag => tag.trim() !== '');
+        const isValidTags = tags.every(tag => tag.startsWith('#'));
+
+        if (isValidTags && tags.length > 0) {
+          processedContent = `${suggestedTags}\n${content}`;
+          console.log(`成功生成标签: ${suggestedTags}`);
+        } else {
+          console.warn("AI返回的标签格式不正确，每个标签必须以#号开头:", suggestedTags);
+          processedContent = content; // 如果格式不正确，返回原始内容
+        }
       } else {
-        console.warn("AI返回的标签格式不正确:", suggestedTags);
-        processedContent = content; // 如果格式不正确，返回原始内容
+        processedContent = content;
       }
 
       return processedContent;
@@ -161,50 +168,32 @@ export class MemoApiServiceAdaptor {
       let parentId: number | null = null;
       let tagIds: number[] = []; // 存储路径中所有标签的ID
 
-      // 为路径中的每个部分创建单独的标签条目
-      for (const part of tagParts) {
-        // 检查单独的标签是否已存在
-        const existingTag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [part]);
-
-        let tagId: number;
-        if (existingTag) {
-          tagId = existingTag.id;
-        } else {
-          // 创建单独的标签条目
-          const tagResult = await this.db.run(
-            'INSERT INTO tags (path, parentId, createdAt) VALUES (?, NULL, ?)',
-            [part, new Date().toISOString()]
-          );
-          tagId = tagResult.lastID;
-        }
-
-        // 将标签ID添加到列表
-        tagIds.push(tagId);
-      }
-
-      // 为最后一个标签单独创建一个条目（不带路径）
-      const lastTagName = tagParts[tagParts.length - 1];
-
-      // 逐级创建或获取标签
+      // 逐级创建或获取标签，例如对于1/2/3/4，依次创建1、1/2、1/2/3、1/2/3/4
       for (let i = 0; i < tagParts.length; i++) {
         const part = tagParts[i];
+        // 构建当前层级的路径
         currentPath = currentPath ? `${currentPath}/${part}` : part;
 
         // 检查当前路径的标签是否存在
         const existingTag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [currentPath]);
 
+        let tagId: number;
         if (existingTag) {
-          parentId = existingTag.id;
-          tagIds.push(parentId); // 添加到标签ID列表
+          // 标签已存在，使用现有标签ID
+          tagId = existingTag.id;
         } else {
           // 创建新标签，关联到父标签
           const tagResult = await this.db.run(
             'INSERT INTO tags (path, parentId, createdAt) VALUES (?, ?, ?)',
             [currentPath, parentId, new Date().toISOString()]
           );
-          parentId = tagResult.lastID;
-          tagIds.push(parentId!); // 添加到标签ID列表
+          tagId = tagResult.lastID;
         }
+
+        // 更新父标签ID为当前标签ID，用于下一级标签
+        parentId = tagId;
+        // 将标签ID添加到列表
+        tagIds.push(tagId);
       }
 
       // 创建备忘录与路径中所有标签的关联
@@ -385,4 +374,27 @@ export class MemoApiServiceAdaptor {
     return this.db.all<Memo>(memosSql, [tag.id]);
   }
 
+  /**
+   * 根据标签ID数组获取相关备忘录
+   * @param tagIds 标签ID数组
+   * @returns 与这些标签关联的备忘录列表
+   */
+  async getMemosByTagIds(tagIds: number[]): Promise<Memo[]> {
+    if (!tagIds || tagIds.length === 0) {
+      return this.getMemos(); // 如果没有标签ID，返回所有备忘录
+    }
+
+    console.log(tagIds);
+
+    // 使用 IN 子句查询与这些标签关联的所有备忘录
+    const memosSql = `
+      SELECT DISTINCT m.*
+      FROM memos m
+      JOIN memo_tags mt ON m.id = mt.memoId
+      WHERE mt.tagId IN (${tagIds.join(',')})
+      ORDER BY m.createdAt DESC
+    `;
+
+    return this.db.all<Memo>(memosSql);
+  }
 }

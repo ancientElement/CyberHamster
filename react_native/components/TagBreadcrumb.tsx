@@ -1,9 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { NoOutlineTouchableOpacity } from './NoOutlineTouchableOpacity';
 import { TagTreeNode } from '@/client-server-public/types';
 
 interface TagBreadcrumbProps {
@@ -19,16 +17,24 @@ export function TagBreadcrumb({ selectedTags, onClearTag }: TagBreadcrumbProps) 
       <ThemedView style={styles.breadcrumbContent}>
         {selectedTags.map((tag, index) => (
           <React.Fragment key={index}>
-            <NoOutlineTouchableOpacity
-              style={styles.clearButton}
+            <Pressable
+              style={({ hovered }) => [
+                styles.clearButton,
+                hovered && styles.hoveredButton
+              ]}
               onPress={() => {
                 if (onClearTag) {
                   onClearTag(tag);
                 }
               }}
             >
-              <ThemedText style={styles.breadcrumbText}>{tag.path}</ThemedText>
-            </NoOutlineTouchableOpacity>
+              {({ hovered }) => (
+                <ThemedText style={[
+                  styles.breadcrumbText,
+                  hovered && styles.hoveredText
+                ]}>{tag.path}</ThemedText>
+              )}
+            </Pressable>
           </React.Fragment>
         ))}
       </ThemedView>
@@ -60,5 +66,11 @@ const styles = StyleSheet.create({
   },
   clearButton: {
     marginLeft: 2,
+  },
+  hoveredButton: {
+    opacity: 0.8,
+  },
+  hoveredText: {
+    textDecorationLine: 'line-through',
   },
 });

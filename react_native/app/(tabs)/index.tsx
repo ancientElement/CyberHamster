@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { CreateMemoDto, Memo, MemoType, TagTreeNode } from '@/client-server-public/types';
 import { HeaderBar } from '@/components/HeaderBar';
 import { TagFilterModal } from '@/components/TagFilterModal';
+import { TagBreadcrumb } from '@/components/TagBreadcrumb';
 
 
 export default function CollectionScreen() {
@@ -158,7 +159,7 @@ export default function CollectionScreen() {
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [tagsTree, setTagsTree] = useState<TagTreeNode[]>([]);
-  const [selectedTag, setSelectedTag] = useState<TagTreeNode | null>(null);
+  const [selectedTags, setSelectedTags] = useState<TagTreeNode[]>([]);
 
   // 处理筛选按钮点击
   const handleFilter = async () => {
@@ -178,7 +179,22 @@ export default function CollectionScreen() {
 
   // 处理标签选择
   const handleTagSelect = async (tag: TagTreeNode, hasChildren: boolean) => {
-    setSelectedTag(tag);
+    // 检查标签是否已经被选中
+    const tagIndex = selectedTags.findIndex(t => t.id === tag.id);
+    if (tagIndex === -1) {
+      // 如果标签不在列表中，添加它
+      setSelectedTags([...selectedTags, tag]);
+    }
+    setFilterModalVisible(false);
+  };
+
+  // 清除选中的标签
+  const handleClearTag = (tag: TagTreeNode) => {
+    // 如果标签已在列表中，移除它（切换选择状态）
+    const tagIndex = selectedTags.findIndex(t => t.id === tag.id);
+    const newTags = [...selectedTags];
+    newTags.splice(tagIndex, 1);
+    setSelectedTags(newTags);
   };
 
   return (
@@ -207,6 +223,7 @@ export default function CollectionScreen() {
         onClose={() => setFilterModalVisible(false)}
         tagsTree={tagsTree}
         onSelectTag={handleTagSelect}
+        selectedTags={selectedTags}
       />
 
       <MemoEditor
@@ -227,6 +244,12 @@ export default function CollectionScreen() {
 
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
+
+      {/* 标签面包屑导航 */}
+      <TagBreadcrumb
+        selectedTags={selectedTags}
+        onClearTag={handleClearTag}
+      />
 
       <MasonryList
         onRefresh={loadMemos}

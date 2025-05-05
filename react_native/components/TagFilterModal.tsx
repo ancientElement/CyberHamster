@@ -18,13 +18,15 @@ interface TagFilterModalProps {
   visible: boolean;
   onClose: () => void;
   tagsTree: TagTreeNode[];
+  selectedTags?: TagTreeNode[];
   onSelectTag?: (tag: TagTreeNode, hasChildren: boolean) => void;
 }
 
 // 单个标签项组件
-const TagItem = ({ tag, level = 0, onSelect }: {
+const TagItem = ({ tag, level = 0, onSelect, selectedTags = [] }: {
   tag: TagTreeNode;
   level?: number;
+  selectedTags?: TagTreeNode[];
   onSelect?: (tag: TagTreeNode, hasChildren: boolean) => void;
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -54,6 +56,14 @@ const TagItem = ({ tag, level = 0, onSelect }: {
             </TouchableOpacity>
           )}
           <ThemedText style={styles.tagName}>{tag.name}</ThemedText>
+          {selectedTags && selectedTags.some(t => t.id === tag.id) && (
+            <IconSymbol
+              name="checkmark"
+              size={16}
+              color="#0a7ea4"
+              style={styles.checkIcon}
+            />
+          )}
         </ThemedView>
       </TouchableOpacity>
 
@@ -73,7 +83,7 @@ const TagItem = ({ tag, level = 0, onSelect }: {
   );
 };
 
-export function TagFilterModal({ visible, onClose, tagsTree, onSelectTag }: TagFilterModalProps) {
+export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], onSelectTag }: TagFilterModalProps) {
   return (
     <SimpleCenterCardModal visible={visible} onClose={onClose}>
       <ThemedView style={styles.modalContent}>
@@ -89,6 +99,7 @@ export function TagFilterModal({ visible, onClose, tagsTree, onSelectTag }: TagF
             <TagItem
               key={tag.id}
               tag={tag}
+              selectedTags={selectedTags}
               onSelect={(selectedTag, hasChildren) => {
                 if (onSelectTag) {
                   onSelectTag(selectedTag, hasChildren);
@@ -148,5 +159,8 @@ const styles = StyleSheet.create({
   },
   tagName: {
     fontSize: 16,
+  },
+  checkIcon: {
+    marginLeft: 8,
   }
 });

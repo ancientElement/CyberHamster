@@ -3,21 +3,17 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { MemoCard } from '@/components/MemoCard';
 import { EditorMode, MemoEditor } from '@/components/MemoEditor';
-import { ScreenAdapt } from '@/constants/ScreenAdapt';
 import MasonryList from '@react-native-seoul/masonry-list';
 import { useApi } from '@/hooks/useApi';
 import { useState, useEffect } from 'react';
-import { CreateMemoDto, Memo, MemoType } from '@/client-server-public/types';
+import { CreateMemoDto, Memo, MemoType, TagTreeNode } from '@/client-server-public/types';
 import { HeaderBar } from '@/components/HeaderBar';
-import { StorageKey, useStorage } from '@/hooks/useStorage';
+import { TagFilterModal } from '@/components/TagFilterModal';
 
 
 export default function CollectionScreen() {
   const { width } = useWindowDimensions();
-  const isWideScreen = width > ScreenAdapt.mediumScreen;
-  const isMediumScreen = width > ScreenAdapt.smallScreen;
   const api = useApi();
-  const storage = useStorage();
 
   const [memos, setMemos] = useState<Memo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -159,6 +155,32 @@ export default function CollectionScreen() {
     setColumnCount(nextColumns);
   };
 
+
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [tagsTree, setTagsTree] = useState<TagTreeNode[]>([]);
+  const [selectedTag, setSelectedTag] = useState<TagTreeNode | null>(null);
+
+  // 处理筛选按钮点击
+  const handleFilter = async () => {
+    try {
+      // 获取标签树数据
+      const response = await api.getTagsTree();
+      if (response.success && response.data) {
+        setTagsTree(response.data);
+        setFilterModalVisible(true);
+      } else {
+        setError(`获取标签树失败: ${response.message}`);
+      }
+    } catch (err) {
+      setError(`加载标签树时发生错误: ${err}`);
+    }
+  };
+
+  // 处理标签选择
+  const handleTagSelect = async (tag: TagTreeNode, hasChildren: boolean) => {
+    setSelectedTag(tag);
+  };
+
   return (
     <ThemedView style={styles.container}>
       <HeaderBar
@@ -176,6 +198,15 @@ export default function CollectionScreen() {
         rotateAnim={rotateAnim}
         onLayoutChange={handleLayoutChange}
         currentColumns={columnCount}
+        onFilter={handleFilter}
+      />
+
+      {/* 标签筛选模态框 */}
+      <TagFilterModal
+        visible={filterModalVisible}
+        onClose={() => setFilterModalVisible(false)}
+        tagsTree={tagsTree}
+        onSelectTag={handleTagSelect}
       />
 
       <MemoEditor
@@ -193,8 +224,10 @@ export default function CollectionScreen() {
           });
         }}
       />
+
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
       {loading && <ActivityIndicator style={styles.loading} />}
+
       <MasonryList
         onRefresh={loadMemos}
         data={memos}
@@ -218,6 +251,8 @@ export default function CollectionScreen() {
         }
         }
       />
+
+
     </ThemedView>
   );
 }

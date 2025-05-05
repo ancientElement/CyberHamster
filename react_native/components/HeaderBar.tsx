@@ -12,33 +12,19 @@ interface HeaderBarProps {
   rotateAnim: Animated.Value;
   onLayoutChange?: () => void;
   currentColumns?: number;
+  onFilter?: () => void; // 添加筛选按钮的回调函数
 }
 
-export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, rotateAnim, onLayoutChange, currentColumns = 0 }: HeaderBarProps) {
-  // const handleLayoutChange = () => {
-  //   if (onLayoutChange) {
-  //     // 根据当前列数和屏幕尺寸限制列数切换
-  //     // 使用window.innerWidth获取当前屏幕宽度
-  //     const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
-  //     const isSmallScreen = screenWidth <= 768; // ScreenAdapt.smallScreen
-  //     const isMediumScreen = screenWidth > 768 && screenWidth <= 992; // ScreenAdapt.mediumScreen
-
-  //     let nextColumns = currentColumns;
-
-  //     if (isSmallScreen) {
-  //       // 小屏幕固定为1列
-  //       nextColumns = 1;
-  //     } else if (isMediumScreen) {
-  //       // 中屏幕只允许1-2列
-  //       nextColumns = currentColumns >= 2 ? 1 : 2;
-  //     } else {
-  //       // 大屏幕允许1-3列
-  //       nextColumns = currentColumns >= 3 ? 1 : currentColumns + 1;
-  //     }
-
-  //     onLayoutChange(nextColumns);
-  //   }
-  // };
+export function HeaderBar({
+  searchQuery,
+  onSearchChange,
+  onSearch,
+  onRefresh,
+  rotateAnim,
+  onLayoutChange,
+  currentColumns = 0,
+  onFilter
+}: HeaderBarProps) {
 
   return (
     <View style={styles.header}>
@@ -60,6 +46,13 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
       </View>
 
       <View style={styles.rightContainer}>
+        {/* 添加筛选按钮 */}
+        {onFilter && (
+          <NoOutlineTouchableOpacity style={styles.filterButton} onPress={onFilter}>
+            <IconSymbol name="fuelpump.and.filter" weight='light' size={18} color="#fff" />
+          </NoOutlineTouchableOpacity>
+        )}
+
         <NoOutlineTextInput
           style={styles.searchInput}
           placeholder="搜索收藏..."
@@ -68,6 +61,7 @@ export function HeaderBar({ searchQuery, onSearchChange, onSearch, onRefresh, ro
           onChangeText={onSearchChange}
           onSubmitEditing={onSearch}
         />
+
         {onLayoutChange && (
           <NoOutlineTouchableOpacity style={styles.layoutButton} onPress={onLayoutChange}>
             <ThemedText style={styles.layoutButtonText}>{currentColumns}</ThemedText>
@@ -107,6 +101,20 @@ const styles = StyleSheet.create({
   },
   refreshButton: {
     marginLeft: 5,
+  },
+  // 添加筛选按钮样式
+  filterButton: {
+    height: 36,
+    width: 36,
+    borderRadius: 8,
+    backgroundColor: '#0a7ea4',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#888',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   searchInput: {
     height: 36,

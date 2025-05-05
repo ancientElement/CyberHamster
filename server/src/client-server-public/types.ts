@@ -39,24 +39,6 @@ export interface Memo {
   bookmarkIcon?: string;        // 书签图标，base64编码的图片数据
 }
 
-// 标签接口，用于组织和分类备忘录
-export interface Tag {
-  id: number;          // 标签ID
-  path: string;        // 标签路径，表示标签的层级结构
-  parentId?: number;   // 父标签ID，可选，用于构建标签树
-  createdAt: string;   // 创建时间
-}
-
-
-export interface TagTreeNode {
-  id: number;
-  path: string;
-  name: string;
-  children: TagTreeNode[];
-  memoCount: number;
-}
-
-
 // 备忘录和标签的关联接口，用于实现多对多关系
 export interface MemoTag {
   id: number;          // 关联记录ID
@@ -91,4 +73,20 @@ export interface UpdateMemoDto {
 export interface LoginDot {
   username: string;
   accessToken: string;
+}
+
+
+export interface TagItem {
+  id: number;
+  path: string;
+  parentId: number | null;
+  createdAt: string;
+}
+
+export interface TagTreeNode {
+  id: number;
+  name: string;
+  path: string;
+  children: TagTreeNode[];
+  createdAt: string;
 }

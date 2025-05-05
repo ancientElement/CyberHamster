@@ -1,22 +1,9 @@
-import { CreateMemoDto, UpdateMemoDto, Memo, MemoType } from './types';
+import { CreateMemoDto, UpdateMemoDto, Memo, MemoType, TagTreeNode, TagItem } from './types';
 import { DatabaseAdaptor } from './database-adaptor';
 import OpenAI from 'openai';
 import { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat';
 
-export interface TagItem {
-  id: number;
-  path: string;
-  parentId: number | null;
-  createdAt: string;
-}
 
-export interface TagTreeNode {
-  id: number;
-  name: string;
-  path: string;
-  children: TagTreeNode[];
-  createdAt: string;
-}
 
 export class MemoApiServiceAdaptor {
   private db!: DatabaseAdaptor;
@@ -327,8 +314,6 @@ export class MemoApiServiceAdaptor {
     return tags.map(tag => tag.path);
   }
 
-
-
   /**
    * 获取标签树结构
    * @returns 标签树结构
@@ -373,4 +358,31 @@ export class MemoApiServiceAdaptor {
 
     return rootNodes;
   }
+
+  /**
+   * 根据标签路径获取相关备忘录
+   * @param tagPath 标签路径
+   * @returns 与该标签关联的备忘录列表
+   */
+  async getMemosByTag(tagPath: string): Promise<Memo[]> {
+    // 首先查找标签ID
+    const tagSql = `SELECT id FROM tags WHERE path = ?`;
+    const tag = await this.db.get<{ id: number }>(tagSql, [tagPath]);
+
+    if (!tag) {
+      return []; // 如果标签不存在，返回空数组
+    }
+
+    // 查询与该标签关联的所有备忘录
+    const memosSql = `
+      SELECT m.*
+      FROM memos m
+      JOIN memo_tags mt ON m.id = mt.memoId
+      WHERE mt.tagId = ?
+      ORDER BY m.createdAt DESC
+    `;
+
+    return this.db.all<Memo>(memosSql, [tag.id]);
+  }
+
 }

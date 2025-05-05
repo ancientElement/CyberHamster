@@ -20,7 +20,7 @@ export class MemosController {
     return this.memosService.getTags();
   }
 
-  @Get('tagsTree')
+  @Get('tagstree')
   async getTagsTree() {
     return this.memosService.getTagsTree();
   }

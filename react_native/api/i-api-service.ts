@@ -21,4 +21,5 @@ export interface IApiService {
   searchMemos(query: string): Promise<ApiResponse<Memo[]>>;
   getMemosByType(type: number): Promise<ApiResponse<Memo[]>>;
   getTags(): Promise<ApiResponse<string[]>>;
+  getTagsTree(): Promise<ApiResponse<TagTreeNode[]>>;
 }

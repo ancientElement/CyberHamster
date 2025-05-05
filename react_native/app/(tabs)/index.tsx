@@ -41,7 +41,7 @@ export default function CollectionScreen() {
 
   const loadMemos = async () => {
     try {
-      console.log(await api.getTags());
+      // console.log(await api.getTags());
       setLoading(true);
       setError(null);
       const response = await api.getMemos();

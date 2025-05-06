@@ -489,12 +489,6 @@ export class MemoApiServiceAdaptor {
       throw new Error('无法删除包含子标签的标签');
     }
 
-    // // 检查是否有关联的备忘录
-    // const hasMemos = await this.db.get('SELECT id FROM memo_tags WHERE tagId = ?', [id]);
-    // if (hasMemos) {
-    //   throw new Error('无法删除已关联备忘录的标签');
-    // }
-
     // 从备忘录内容中删除标签
     const tagPattern = `#${tag.path}`;
 
@@ -516,5 +510,39 @@ export class MemoApiServiceAdaptor {
 
     // 删除标签
     await this.db.run('DELETE FROM tags WHERE id = ?', [id]);
+  }
+
+  /**
+   * 修复所有标签的格式，确保标签前有#号
+   */
+  async fixTagFormat(): Promise<void> {
+    try {
+      // 获取所有标签
+      const tags = await this.getTags();
+
+      for (const tagPath of tags) {
+        const tagPattern = tagPath;
+        const tagWithHash = `#${tagPath}`;
+
+        // 更新笔记内容中的标签
+        await this.db.run(
+          `UPDATE memos
+           SET noteContent = REPLACE(noteContent, ?, ?)
+           WHERE noteContent LIKE ? AND noteContent NOT LIKE ?`,
+          [tagPattern, tagWithHash, `%${tagPattern}%`, `%${tagWithHash}%`]
+        );
+
+        // 更新书签描述中的标签
+        await this.db.run(
+          `UPDATE memos
+           SET bookmarkDescription = REPLACE(bookmarkDescription, ?, ?)
+           WHERE bookmarkDescription LIKE ? AND bookmarkDescription NOT LIKE ?`,
+          [tagPattern, tagWithHash, `%${tagPattern}%`, `%${tagWithHash}%`]
+        );
+      }
+    } catch (error) {
+      console.error('修复标签格式时发生错误:', error);
+      throw error;
+    }
   }
 }

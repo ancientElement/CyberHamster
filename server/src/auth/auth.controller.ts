@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UnauthorizedException, ConflictException, OnModuleInit, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, ConflictException, OnModuleInit, Get, UseGuards, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { DatabaseService } from 'src/database/database.service';
 import { ConfigService } from '@nestjs/config';
@@ -27,6 +27,7 @@ export class AuthController implements OnModuleInit {
   }
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body() body: { username: string; password: string }) {
     const user = await this.databaseService.db.get<{ id: number, username: string, password: string }>('SELECT * FROM users WHERE username = ?', [body.username]);
     if (!user) {
@@ -35,7 +36,11 @@ export class AuthController implements OnModuleInit {
     if (!await this.authService.comparePassword(body.password, user.password)) {
       throw new UnauthorizedException('Incorrect password');
     }
-    return this.authService.generateToken(user.id, user.username);
+    const token = await this.authService.generateToken(user.id, user.username);
+    return {
+      username: user.username,
+      accessToken: token
+    };
   }
 
   @Post('register')

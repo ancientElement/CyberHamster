@@ -77,4 +77,9 @@ export class MemosController {
   async deleteTag(@Param('id') id: string) {
     return this.memosService.deleteTag(parseInt(id));
   }
+
+  @Post('tags/fix-format')
+  async fixTagFormat() {
+    return this.memosService.fixTagFormat();
+  }
 }

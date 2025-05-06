@@ -66,4 +66,8 @@ export class ApiService extends BaseApi implements IApiService {
   async deleteTag(id: number): Promise<ApiResponse<void>> {
     return this.delete<void>(`/memos/tags/${id}`);
   }
+
+  async fixTagFormat(): Promise<ApiResponse<void>> {
+    return this.get<void>('/memos/tags/fix-format');
+  }
 }

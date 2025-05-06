@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { router } from 'expo-router';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
 import { ThemedText } from '@/components/ThemedText';
@@ -8,6 +8,7 @@ import { NoOutlineTouchableOpacity } from '@/components/NoOutlineTouchableOpacit
 import { useStorage, StorageKey } from '@/hooks/useStorage';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
+import { useApi } from '@/hooks/useApi';
 
 type TabItem = {
   key: string;
@@ -27,6 +28,7 @@ export default function SettingsScreen() {
   const storage = useStorage();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
+  const api = useApi();
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -89,7 +91,26 @@ export default function SettingsScreen() {
   const renderGeneralSettings = () => {
     return (
       <ThemedView style={styles.tabContent}>
-        <ThemedText>通用设置内容</ThemedText>
+        <ThemedView style={styles.settingItem}>
+          <ThemedText style={styles.settingLabel}>修复标签格式</ThemedText>
+          <NoOutlineTouchableOpacity
+            style={[styles.actionButton, { backgroundColor: colors.tabIconSelected }]}
+            onPress={async () => {
+              try {
+                const response = await api.fixTagFormat();
+                if (response.success) {
+                  Alert.alert('成功', '标签格式修复完成');
+                } else {
+                  Alert.alert('错误', response.message || '修复标签格式失败');
+                }
+              } catch (err) {
+                Alert.alert('错误', '修复标签格式时发生错误');
+              }
+            }}
+          >
+            <ThemedText style={styles.actionButtonText}>修复</ThemedText>
+          </NoOutlineTouchableOpacity>
+        </ThemedView>
       </ThemedView>
     );
   };
@@ -193,6 +214,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoutButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  actionButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  actionButtonText: {
     color: 'white',
     fontWeight: 'bold',
   },

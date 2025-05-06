@@ -28,4 +28,11 @@ export interface IApiService {
   // Tag APIs
   updateTag(id: number, data: UpdateTagDto): Promise<ApiResponse<TagTreeNode>>;
   deleteTag(id: number): Promise<ApiResponse<void>>;
+  fixTagFormat(): Promise<ApiResponse<void>>;
+
+  // Base HTTP methods
+  post<T>(path: string, data?: any): Promise<ApiResponse<T>>;
+  get<T>(path: string): Promise<ApiResponse<T>>;
+  put<T>(path: string, data?: any): Promise<ApiResponse<T>>;
+  delete<T>(path: string): Promise<ApiResponse<T>>;
 }

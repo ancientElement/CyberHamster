@@ -1,8 +1,9 @@
-import { Controller, Post, Body, UnauthorizedException, ConflictException, OnModuleInit } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, ConflictException, OnModuleInit, Get, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { DatabaseService } from 'src/database/database.service';
 import { ConfigService } from '@nestjs/config';
 import { ALLOW_REGISTER, REGISTER_PASSWORD, REGISTER_USER } from 'src/const';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController implements OnModuleInit {
@@ -34,25 +35,7 @@ export class AuthController implements OnModuleInit {
     if (!await this.authService.comparePassword(body.password, user.password)) {
       throw new UnauthorizedException('Incorrect password');
     }
-    const accessToken = await this.authService.generateToken(user.id, user.username);
-    return { accessToken, username: user.username };
-  }
-
-  @Post('generate-token')
-  async refresh(@Body() body: { username: string; password: string; expiresIn: string }) {
-    const user = await this.databaseService.db.get<{ id: number, username: string, password: string }>('SELECT * FROM users WHERE username = ?', [body.username]);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    if (!await this.authService.comparePassword(body.password, user.password)) {
-      throw new UnauthorizedException('Incorrect password');
-    }
-    const accessToken = await this.authService.generateToken(
-      user.id,
-      user.username,
-      { expiresIn: body.expiresIn }
-    );
-    return { accessToken, username: user.username };
+    return this.authService.generateToken(user.id, user.username);
   }
 
   @Post('register')
@@ -61,6 +44,17 @@ export class AuthController implements OnModuleInit {
       throw new UnauthorizedException('Server not allowed to register');
     }
     await this._register(body);
+  }
+
+  @Get('token')
+  @UseGuards(AuthGuard('cyberhamster-jwt'))
+  async createToken(@Body() body: { expiresIn?: string }) {
+    const expiresIn = body.expiresIn || '1d'; // 默认1天，支持自定义过期时间
+    return {
+      message: 'Token is valid',
+      timestamp: new Date().toISOString(),
+      token: await this.authService.generateToken(1, 'user', { expiresIn })
+    };
   }
 
   private async _register(body: { username: string; password: string }) {

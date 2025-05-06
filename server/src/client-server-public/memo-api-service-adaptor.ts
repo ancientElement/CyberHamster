@@ -1,4 +1,4 @@
-import { CreateMemoDto, UpdateMemoDto, Memo, MemoType, TagTreeNode, TagItem } from './types';
+import { CreateMemoDto, UpdateMemoDto, Memo, MemoType, TagTreeNode, TagItem, UpdateTagDto } from './types';
 import { DatabaseAdaptor } from './database-adaptor';
 import OpenAI from 'openai';
 import { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat';
@@ -309,10 +309,14 @@ export class MemoApiServiceAdaptor {
    */
   async getTagsTree(): Promise<TagTreeNode[]> {
     const sql = `
-      SELECT id, path, parentId, createdAt FROM tags ORDER BY path
+      SELECT t.id, t.path, t.parentId, t.createdAt, COUNT(mt.memoId) as number
+      FROM tags t
+      LEFT JOIN memo_tags mt ON t.id = mt.tagId
+      GROUP BY t.id
+      ORDER BY t.path
     `;
 
-    const tags = await this.db.all<TagItem>(sql);
+    const tags = await this.db.all<(TagItem)>(sql);
 
     // 构建树结构
     const tagMap: Record<number, TagTreeNode> = {};
@@ -328,7 +332,8 @@ export class MemoApiServiceAdaptor {
         name,
         path: tag.path,
         children: [],
-        createdAt: tag.createdAt
+        createdAt: tag.createdAt,
+        number: tag.number
       };
     });
 
@@ -396,5 +401,120 @@ export class MemoApiServiceAdaptor {
     `;
 
     return this.db.all<Memo>(memosSql);
+  }
+
+  /**
+   * 更新标签路径
+   * @param id 标签ID
+   * @param updateTagDto 更新标签的DTO
+   * @returns 更新后的标签信息
+   */
+  async updateTag(id: number, updateTagDto: UpdateTagDto): Promise<TagItem> {
+    // 检查标签是否存在
+    const existingTag = await this.db.get<TagItem>('SELECT * FROM tags WHERE id = ?', [id]);
+    if (!existingTag) {
+      throw new Error('标签不存在');
+    }
+
+    // 检查新路径是否已存在
+    const pathExists = await this.db.get('SELECT id FROM tags WHERE path = ? AND id != ?', [updateTagDto.path, id]);
+    if (pathExists) {
+      throw new Error('标签路径已存在');
+    }
+
+    // 获取新路径的父标签ID
+    const pathParts = updateTagDto.path.split('/');
+    const parentPath = pathParts.slice(0, -1).join('/');
+    let parentId: number | null = null;
+
+    if (parentPath) {
+      const parentTag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [parentPath]);
+      if (parentTag) {
+        parentId = parentTag.id;
+      }
+    }
+
+    // 更新标签
+    await this.db.run(
+      'UPDATE tags SET path = ?, parentId = ? WHERE id = ?',
+      [updateTagDto.path, parentId, id]
+    );
+
+    // 更新所有子标签的路径
+    const oldPath = existingTag.path;
+    const newPath = updateTagDto.path;
+    await this.db.run(
+      'UPDATE tags SET path = REPLACE(path, ?, ?) WHERE path LIKE ?',
+      [oldPath, newPath, `${oldPath}/%`]
+    );
+
+    // 更新备忘录内容中的标签
+    const oldTagPattern = `#${oldPath}`;
+    const newTagPattern = `#${newPath}`;
+
+    // 更新笔记内容中的标签
+    await this.db.run(
+      `UPDATE memos
+       SET noteContent = REPLACE(noteContent, ?, ?)
+       WHERE noteContent LIKE ?`,
+      [oldTagPattern, newTagPattern, `%${oldTagPattern}%`]
+    );
+
+    // 更新书签描述中的标签
+    await this.db.run(
+      `UPDATE memos
+       SET bookmarkDescription = REPLACE(bookmarkDescription, ?, ?)
+       WHERE bookmarkDescription LIKE ?`,
+      [oldTagPattern, newTagPattern, `%${oldTagPattern}%`]
+    );
+
+    // 返回更新后的标签信息
+    return this.db.get<TagItem>('SELECT * FROM tags WHERE id = ?', [id]);
+  }
+
+  /**
+   * 删除标签
+   * @param id 标签ID
+   */
+  async deleteTag(id: number): Promise<void> {
+    // 检查标签是否存在
+    const tag = await this.db.get<TagItem>('SELECT * FROM tags WHERE id = ?', [id]);
+    if (!tag) {
+      throw new Error('标签不存在');
+    }
+
+    // 检查是否有子标签
+    const hasChildren = await this.db.get('SELECT id FROM tags WHERE parentId = ?', [id]);
+    if (hasChildren) {
+      throw new Error('无法删除包含子标签的标签');
+    }
+
+    // // 检查是否有关联的备忘录
+    // const hasMemos = await this.db.get('SELECT id FROM memo_tags WHERE tagId = ?', [id]);
+    // if (hasMemos) {
+    //   throw new Error('无法删除已关联备忘录的标签');
+    // }
+
+    // 从备忘录内容中删除标签
+    const tagPattern = `#${tag.path}`;
+
+    // 从笔记内容中删除标签
+    await this.db.run(
+      `UPDATE memos
+       SET noteContent = REPLACE(noteContent, ?, '')
+       WHERE noteContent LIKE ?`,
+      [tagPattern, `%${tagPattern}%`]
+    );
+
+    // 从书签描述中删除标签
+    await this.db.run(
+      `UPDATE memos
+       SET bookmarkDescription = REPLACE(bookmarkDescription, ?, '')
+       WHERE bookmarkDescription LIKE ?`,
+      [tagPattern, `%${tagPattern}%`]
+    );
+
+    // 删除标签
+    await this.db.run('DELETE FROM tags WHERE id = ?', [id]);
   }
 }

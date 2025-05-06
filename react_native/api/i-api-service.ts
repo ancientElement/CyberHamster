@@ -5,6 +5,7 @@ import {
   UpdateMemoDto,
   TagTreeNode,
   LoginDot,
+  UpdateTagDto,
 } from '../client-server-public/types';
 
 export interface IApiService {
@@ -23,4 +24,8 @@ export interface IApiService {
   getMemosByTagIds(ids: number[]): Promise<ApiResponse<Memo[]>>;
   getTags(): Promise<ApiResponse<string[]>>;
   getTagsTree(): Promise<ApiResponse<TagTreeNode[]>>;
+
+  // Tag APIs
+  updateTag(id: number, data: UpdateTagDto): Promise<ApiResponse<TagTreeNode>>;
+  deleteTag(id: number): Promise<ApiResponse<void>>;
 }

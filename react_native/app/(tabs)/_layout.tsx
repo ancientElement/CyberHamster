@@ -33,6 +33,11 @@ const tabConfigs: TabConfig[] = [
     title: '设置',
     icon: 'gear',
   },
+  {
+    name: 'tags',
+    title: '标签',
+    icon: 'tag.square',
+  },
 ];
 
 export default function TabLayout() {

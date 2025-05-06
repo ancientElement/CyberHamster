@@ -6,6 +6,7 @@ import {
   CreateMemoDto,
   TagTreeNode,
   LoginDot,
+  UpdateTagDto,
 } from '../client-server-public/types';
 
 export class ApiService extends BaseApi implements IApiService {
@@ -56,5 +57,13 @@ export class ApiService extends BaseApi implements IApiService {
 
   async getMemosByTagIds(ids: number[]): Promise<ApiResponse<Memo[]>> {
     return this.get<Memo[]>(`/memos/memobytagid/${ids.join('&')}`);
+  }
+
+  async updateTag(id: number, data: UpdateTagDto): Promise<ApiResponse<TagTreeNode>> {
+    return this.put<TagTreeNode>(`/memos/tags/${id}`, data);
+  }
+
+  async deleteTag(id: number): Promise<ApiResponse<void>> {
+    return this.delete<void>(`/memos/tags/${id}`);
   }
 }

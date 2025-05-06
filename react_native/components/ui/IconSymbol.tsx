@@ -33,6 +33,7 @@ const MAPPING = {
   'lock': {name:'lock',lib:'material'},
   'person.circle': {name:'account-circle',lib:'material'},
   'fuelpump.and.filter': {name:'filter-list',lib:'material'},
+  'tag.square' : {name:'tag',lib:'material'},
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'], {

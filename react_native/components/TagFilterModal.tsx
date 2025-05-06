@@ -12,6 +12,7 @@ interface TagTreeNode {
   path: string;
   children: TagTreeNode[];
   createdAt: string;
+  number: number;
 }
 
 interface TagFilterModalProps {
@@ -64,6 +65,7 @@ const TagItem = ({ tag, level = 0, onSelect, selectedTags}: {
               style={styles.checkIcon}
             />
           )}
+          <ThemedText style={styles.tagNumber}>({tag.number})</ThemedText>
         </ThemedView>
       </TouchableOpacity>
 
@@ -162,6 +164,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   checkIcon: {
+    marginLeft: 8,
+  },
+  tagNumber: {
     marginLeft: 8,
   }
 });

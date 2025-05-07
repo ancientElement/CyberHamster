@@ -390,7 +390,7 @@ export class MemoApiServiceAdaptor {
       return this.getMemos(); // 如果没有标签ID，返回所有备忘录
     }
 
-    console.log(tagIds);
+    // console.log(tagIds);
 
     // 使用 IN 子句查询与这些标签关联的所有备忘录
     const memosSql = `

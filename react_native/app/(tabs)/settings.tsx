@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { IconSymbol, IconSymbolName } from '@/components/ui/IconSymbol';
 import { ThemedText } from '@/components/ThemedText';
@@ -9,6 +9,7 @@ import { useStorage, StorageKey } from '@/hooks/useStorage';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
 import { useApi } from '@/hooks/useApi';
+import { ConfirmCardModal } from '@/components/ConfirmCardModal';
 
 type TabItem = {
   key: string;
@@ -25,6 +26,11 @@ const tabs: TabItem[] = [
 export default function SettingsScreen() {
   const [activeTab, setActiveTab] = useState('account');
   const [username, setUsername] = useState<string | null>(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [modalConfig, setModalConfig] = useState({
+    message: '',
+    onConfirm: () => {},
+  });
   const storage = useStorage();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
@@ -42,6 +48,11 @@ export default function SettingsScreen() {
     await storage.deleteItem(StorageKey.USER_TOKEN);
     await storage.deleteItem(StorageKey.USERNAME);
     router.replace('/login');
+  };
+
+  const showModal = (title: string, message: string, onConfirm: () => void) => {
+    setModalConfig({ title, message, onConfirm });
+    setShowConfirmModal(true);
   };
 
   const renderTabBar = () => {
@@ -99,18 +110,57 @@ export default function SettingsScreen() {
               try {
                 const response = await api.fixTagFormat();
                 if (response.success) {
-                  Alert.alert('成功', '标签格式修复完成');
+                  showModal('成功', '标签格式修复完成', () => {});
                 } else {
-                  Alert.alert('错误', response.message || '修复标签格式失败');
+                  showModal('错误', response.message || '修复标签格式失败', () => {});
                 }
               } catch (err) {
-                Alert.alert('错误', '修复标签格式时发生错误');
+                showModal('错误', '修复标签格式时发生错误', () => {});
               }
             }}
           >
             <ThemedText style={styles.actionButtonText}>修复</ThemedText>
           </NoOutlineTouchableOpacity>
         </ThemedView>
+
+        <ThemedView style={styles.settingItem}>
+          <ThemedText style={styles.settingLabel}>删除空标签</ThemedText>
+          <NoOutlineTouchableOpacity
+            style={[styles.actionButton, { backgroundColor: colors.tabIconSelected }]}
+            onPress={() => {
+              showModal(
+                '确认删除',
+                '确定要删除所有没有关联备忘录的标签吗？',
+                async () => {
+                  try {
+                    const response = await api.deleteEmptyTags();
+                    if (response.success) {
+                      showModal('成功', '空标签删除完成', () => {});
+                    } else {
+                      showModal('错误', response.message || '删除空标签失败', () => {});
+                    }
+                  } catch (err) {
+                    showModal('错误', '删除空标签时发生错误', () => {});
+                  }
+                }
+              );
+            }}
+          >
+            <ThemedText style={styles.actionButtonText}>删除</ThemedText>
+          </NoOutlineTouchableOpacity>
+        </ThemedView>
+
+        <ConfirmCardModal
+          visible={showConfirmModal}
+          message={modalConfig.message}
+          cancelText="取消"
+          confirmText="确认"
+          onClose={() => setShowConfirmModal(false)}
+          onConfirm={() => {
+            modalConfig.onConfirm();
+            setShowConfirmModal(false);
+          }}
+        />
       </ThemedView>
     );
   };

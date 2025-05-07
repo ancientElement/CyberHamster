@@ -10,7 +10,6 @@ import {
 } from '../client-server-public/types';
 
 export class ApiService extends BaseApi implements IApiService {
-
   login(username: string, password: string): Promise<ApiResponse<LoginDot>> {
     return this.post('/auth/login', { username, password });
   }
@@ -68,6 +67,10 @@ export class ApiService extends BaseApi implements IApiService {
   }
 
   async fixTagFormat(): Promise<ApiResponse<void>> {
-    return this.get<void>('/memos/tags/fix-format');
+    return this.get<void>('/memos/tags-fix/fix-format');
+  }
+
+  async deleteEmptyTags(): Promise<ApiResponse<void>> {
+    return this.delete<void>('/memos/tags-fix/delete-empty');
   }
 }

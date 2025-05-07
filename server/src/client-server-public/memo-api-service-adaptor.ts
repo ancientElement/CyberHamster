@@ -109,6 +109,7 @@ export class MemoApiServiceAdaptor {
               3. 对于层级标签，使用/分隔，如#技术/编程
               4. 标签应简洁、准确，能够反映内容的核心主题
               5. 只返回标签，不要有任何其他内容，不要使用"和"、"以及"等连接词
+              6. 请尽可能少的生成标签，标签对内容描述越准确越好
               输出格式示例：#标签1 #标签2 #标签3/子标签`
           },
           { role: "user", content: contentForAnalysis }
@@ -316,7 +317,7 @@ export class MemoApiServiceAdaptor {
       ORDER BY t.path
     `;
 
-    const tags = await this.db.all<(TagItem)>(sql);
+    const tags = await this.db.all<(TagItem & { number: number })>(sql);
 
     // 构建树结构
     const tagMap: Record<number, TagTreeNode> = {};
@@ -521,27 +522,64 @@ export class MemoApiServiceAdaptor {
       const tags = await this.getTags();
 
       for (const tagPath of tags) {
+        // 获取标签ID
+        const tag = await this.db.get<{ id: number }>('SELECT id FROM tags WHERE path = ?', [tagPath]);
+        if (!tag) continue;
+
+        // 获取与该标签关联的所有备忘录
+        const memos = await this.db.all<{ id: number, noteContent: string | null, bookmarkDescription: string | null }>(
+          `SELECT m.id, m.noteContent, m.bookmarkDescription
+           FROM memos m
+           JOIN memo_tags mt ON m.id = mt.memoId
+           WHERE mt.tagId = ?`,
+          [tag.id]
+        );
+
         const tagPattern = tagPath;
         const tagWithHash = `#${tagPath}`;
 
-        // 更新笔记内容中的标签
-        await this.db.run(
-          `UPDATE memos
-           SET noteContent = REPLACE(noteContent, ?, ?)
-           WHERE noteContent LIKE ? AND noteContent NOT LIKE ?`,
-          [tagPattern, tagWithHash, `%${tagPattern}%`, `%${tagWithHash}%`]
-        );
+        // 更新每个关联的备忘录
+        for (const memo of memos) {
+          if (memo.noteContent && memo.noteContent.includes(tagPattern) && !memo.noteContent.includes(tagWithHash)) {
+            await this.db.run(
+              `UPDATE memos
+               SET noteContent = REPLACE(noteContent, ?, ?)
+               WHERE id = ?`,
+              [tagPattern, tagWithHash, memo.id]
+            );
+          }
 
-        // 更新书签描述中的标签
-        await this.db.run(
-          `UPDATE memos
-           SET bookmarkDescription = REPLACE(bookmarkDescription, ?, ?)
-           WHERE bookmarkDescription LIKE ? AND bookmarkDescription NOT LIKE ?`,
-          [tagPattern, tagWithHash, `%${tagPattern}%`, `%${tagWithHash}%`]
-        );
+          if (memo.bookmarkDescription && memo.bookmarkDescription.includes(tagPattern) && !memo.bookmarkDescription.includes(tagWithHash)) {
+            await this.db.run(
+              `UPDATE memos
+               SET bookmarkDescription = REPLACE(bookmarkDescription, ?, ?)
+               WHERE id = ?`,
+              [tagPattern, tagWithHash, memo.id]
+            );
+          }
+        }
       }
     } catch (error) {
       console.error('修复标签格式时发生错误:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * 删除所有没有关联备忘录的标签
+   */
+  async deleteEmptyTags(): Promise<void> {
+    try {
+      // 删除所有没有关联备忘录的标签
+      await this.db.run(
+        `DELETE FROM tags
+         WHERE id NOT IN (
+           SELECT DISTINCT tagId
+           FROM memo_tags
+         )`,undefined
+      );
+    } catch (error) {
+      console.error('删除空标签时发生错误:', error);
       throw error;
     }
   }

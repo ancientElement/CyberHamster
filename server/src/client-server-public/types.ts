@@ -81,7 +81,6 @@ export interface TagItem {
   path: string;
   parentId: number | null;
   createdAt: string;
-  number: number;
 }
 
 export interface TagTreeNode {

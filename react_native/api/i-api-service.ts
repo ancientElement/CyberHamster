@@ -29,6 +29,7 @@ export interface IApiService {
   updateTag(id: number, data: UpdateTagDto): Promise<ApiResponse<TagTreeNode>>;
   deleteTag(id: number): Promise<ApiResponse<void>>;
   fixTagFormat(): Promise<ApiResponse<void>>;
+  deleteEmptyTags(): Promise<ApiResponse<void>>;
 
   // Base HTTP methods
   post<T>(path: string, data?: any): Promise<ApiResponse<T>>;

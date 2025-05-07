@@ -78,8 +78,13 @@ export class MemosController {
     return this.memosService.deleteTag(parseInt(id));
   }
 
-  @Get('tags/fix-format')
+  @Get('tags-fix/fix-format')
   async fixTagFormat() {
     return this.memosService.fixTagFormat();
+  }
+
+  @Delete('tags-fix/delete-empty')
+  async deleteEmptyTags() {
+    return this.memosService.deleteEmptyTags();
   }
 }

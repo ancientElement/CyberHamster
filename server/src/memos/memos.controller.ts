@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { MemosService } from './memos.service';
-import { CreateMemoDto, UpdateMemoDto, MemoType, UpdateTagDto } from '../client-server-public/types';
+import { CreateMemoDto, UpdateMemoDto, MemoType, UpdateTagDto, TagPathDto } from '../client-server-public/types';
 import { AuthGuard } from '@nestjs/passport';
 import { Throttle } from '@nestjs/throttler';
 
@@ -63,6 +63,11 @@ export class MemosController {
   async getMemosByTagIds(@Param('ids') ids: string) {
     const tagIds = ids.split('&').map(id => parseInt(id));
     return this.memosService.getMemosByTagIds(tagIds);
+  }
+
+  @Post('tagbytagpath')
+  async getTagByTagPath(@Body() tagPathDto: TagPathDto) {
+    return this.memosService.findTagByPath(tagPathDto.path);
   }
 
   @Put('tags/:id')

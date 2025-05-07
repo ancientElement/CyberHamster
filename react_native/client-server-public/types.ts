@@ -81,7 +81,6 @@ export interface TagItem {
   path: string;
   parentId: number | null;
   createdAt: string;
-  number: number;
 }
 
 export interface TagTreeNode {
@@ -99,4 +98,8 @@ export interface UpdateTagDto {
 
 export interface DeleteTagDto {
   id: number;    // 要删除的标签ID
+}
+
+export interface TagPathDto {
+  path: string;
 }

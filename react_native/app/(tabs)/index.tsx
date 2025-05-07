@@ -10,6 +10,7 @@ import { CreateMemoDto, Memo, MemoType, TagTreeNode } from '@/client-server-publ
 import { HeaderBar } from '@/components/HeaderBar';
 import { TagFilterModal } from '@/components/TagFilterModal';
 import { TagBreadcrumb } from '@/components/TagBreadcrumb';
+import { eventManager } from '@/events/event-manager';
 
 
 export default function CollectionScreen() {
@@ -223,6 +224,46 @@ export default function CollectionScreen() {
       setLoading(false);
     }
   };
+
+  // 添加tag点击事件监听
+  useEffect(() => {
+    const handleTagClick = async (tagPath: string) => {
+      try {
+        const response = await api.getTagByTagPath({ path: tagPath });
+        if (response.success && response.data) {
+          // 将tag转换为TagTreeNode格式
+          const tagNode: TagTreeNode = {
+            id: response.data.id,
+            name: response.data.path.split('/').pop() || '',
+            path: response.data.path,
+            children: [],
+            createdAt: response.data.createdAt,
+            number: 0 // 这里可能需要从其他地方获取number
+          };
+
+          // 检查标签是否已经被选中
+          const tagIndex = selectedTags.findIndex(t => t.id === tagNode.id);
+          if (tagIndex === -1) {
+            // 如果标签不在列表中，添加它
+            const newTags = [...selectedTags, tagNode];
+            setSelectedTags(newTags);
+            // 使用新的标签列表加载数据
+            await loadMemosWithTags(newTags);
+          }
+        }
+      } catch (err) {
+        setError(`处理标签点击时发生错误: ${err}`);
+      }
+    };
+
+    // 添加事件监听
+    eventManager.addEvent('tagClick', handleTagClick, CollectionScreen);
+
+    // 清理函数
+    return () => {
+      eventManager.removeEvent('tagClick', CollectionScreen);
+    };
+  }, [selectedTags]); // 依赖selectedTags以确保使用最新的状态
 
   return (
     <ThemedView style={styles.container}>

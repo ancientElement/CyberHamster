@@ -6,6 +6,8 @@ import {
   TagTreeNode,
   LoginDot,
   UpdateTagDto,
+  TagItem,
+  TagPathDto,
 } from '../client-server-public/types';
 
 export interface IApiService {
@@ -30,10 +32,5 @@ export interface IApiService {
   deleteTag(id: number): Promise<ApiResponse<void>>;
   fixTagFormat(): Promise<ApiResponse<void>>;
   deleteEmptyTags(): Promise<ApiResponse<void>>;
-
-  // Base HTTP methods
-  post<T>(path: string, data?: any): Promise<ApiResponse<T>>;
-  get<T>(path: string): Promise<ApiResponse<T>>;
-  put<T>(path: string, data?: any): Promise<ApiResponse<T>>;
-  delete<T>(path: string): Promise<ApiResponse<T>>;
+  getTagByTagPath(tagPathDto: TagPathDto): Promise<ApiResponse<TagItem>>;
 }

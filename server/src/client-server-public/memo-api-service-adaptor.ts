@@ -566,6 +566,18 @@ export class MemoApiServiceAdaptor {
   }
 
   /**
+   * 通过tagPath查询tag
+   * @param tagPath tag的路径，例如 "工作/项目/前端"
+   * @returns 找到的tag对象，如果未找到则返回undefined
+   */
+  async findTagByPath(tagPath: string): Promise<TagItem | undefined> {
+    if (!tagPath) return undefined;
+
+    const sql = 'SELECT * FROM tags WHERE path = ?';
+    return this.db.get<TagItem>(sql, [tagPath]);
+  }
+
+  /**
    * 删除所有没有关联备忘录的标签
    */
   async deleteEmptyTags(): Promise<void> {

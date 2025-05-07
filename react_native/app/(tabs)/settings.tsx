@@ -51,7 +51,7 @@ export default function SettingsScreen() {
   };
 
   const showModal = (title: string, message: string, onConfirm: () => void) => {
-    setModalConfig({ title, message, onConfirm });
+    setModalConfig({ message, onConfirm });
     setShowConfirmModal(true);
   };
 

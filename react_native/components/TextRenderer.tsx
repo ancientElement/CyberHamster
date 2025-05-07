@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { ExternalLink } from './ExternalLink';
 import { ThemedText } from './ThemedText';
+import { eventManager } from '@/events/event-manager';
 
 interface TextRendererProps {
   text: string;
@@ -50,7 +51,7 @@ export function TextRenderer({ text, style }: TextRendererProps) {
     // 处理所有匹配项和文本
     for (const match of matches) {
       if (match.index > currentIndex) {
-      // 处理匹配项之前的文本
+        // 处理匹配项之前的文本
         processTextWithLineBreaks(text.slice(currentIndex, match.index), segments);
       }
 
@@ -110,9 +111,18 @@ export function TextRenderer({ text, style }: TextRendererProps) {
         );
       case SegmentType.Tag:
         return (
-          <ThemedText key={index} style={[style, styles.tag]}>
-            {segment.content}
-          </ThemedText>
+          <TouchableOpacity
+            key={index}
+            onPress={() => {
+              // 去掉#号后发送tagPath
+              const tagPath = segment.content.substring(1);
+              eventManager.dispatchEvent('tagClick', tagPath);
+            }}
+          >
+            <ThemedText style={[style, styles.tag]}>
+              {segment.content}
+            </ThemedText>
+          </TouchableOpacity>
         );
       default:
         // 处理换行符

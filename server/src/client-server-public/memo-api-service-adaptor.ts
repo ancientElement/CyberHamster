@@ -100,7 +100,7 @@ export class MemoApiServiceAdaptor {
         messages: [
           {
             role: "system",
-            content: `你是一个专业的内容标签提取助手，使用中文返回数据。请分析用户提供的${contentType}，生成1-5个最相关的内容标签。
+            content: `你是一个专业的内容标签提取助手，使用中文返回数据。请分析用户提供的${contentType}，生成1-3个最相关的内容标签，最好有一个最大概方向的父标签，例如#技术 #生活 #工作。
               现有标签列表：${existingTags.join(' ')}
               严格遵循以下规则：
               1. 每个标签以#开头，多个标签之间用单个空格分隔

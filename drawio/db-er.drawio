@@ -1,97 +1,91 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net" modified="2024-03-21T00:00:00.000Z" agent="Mozilla/5.0" version="21.7.5" etag="your-etag" type="device">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram id="db-er" name="数据库ER图">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+    <mxGraphModel dx="1050" dy="638" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
       <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        <!-- users表 -->
-        <mxCell id="users" value="users" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="80" y="80" width="180" height="140" as="geometry"/>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="users" value="USERS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="80" y="60" width="180" height="96" as="geometry" />
         </mxCell>
-        <mxCell id="users-id" value="id (PK)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="users">
-          <mxGeometry y="26" width="180" height="24" as="geometry"/>
+        <mxCell id="users-id" value="id : INTEGER (PK)" style="text;align=left;verticalAlign=middle;" parent="users" vertex="1">
+          <mxGeometry x="30" width="150" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="users-username" value="username" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="users">
-          <mxGeometry y="50" width="180" height="24" as="geometry"/>
+        <mxCell id="users-username" value="username : TEXT" style="text;align=left;verticalAlign=middle;" parent="users" vertex="1">
+          <mxGeometry x="30" y="24" width="150" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="users-password" value="password" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="users">
-          <mxGeometry y="74" width="180" height="24" as="geometry"/>
+        <mxCell id="users-password" value="password : TEXT" style="text;align=left;verticalAlign=middle;" parent="users" vertex="1">
+          <mxGeometry x="30" y="48" width="150" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="users-creatAt" value="creatAt" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="users">
-          <mxGeometry y="98" width="180" height="24" as="geometry"/>
+        <mxCell id="users-createdAt" value="creatAt : TEXT" style="text;align=left;verticalAlign=middle;" vertex="1" parent="users">
+          <mxGeometry x="30" y="72" width="150" height="24" as="geometry" />
         </mxCell>
-        <!-- memos表 -->
-        <mxCell id="memos" value="memos" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="400" y="40" width="220" height="220" as="geometry"/>
+        <mxCell id="memos" value="MEMOS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="340" y="60" width="220" height="192" as="geometry" />
         </mxCell>
-        <mxCell id="memos-id" value="id (PK)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="26" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-id" value="id : INTEGER (PK)" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-type" value="type" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="50" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-type" value="type : INTEGER" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="24" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-createdAt" value="createdAt" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="74" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-createdAt" value="createdAt : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="48" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-noteContent" value="noteContent" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="98" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-noteContent" value="noteContent : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="72" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkTitle" value="bookmarkTitle" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="122" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-bookmarkTitle" value="bookmarkTitle : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="96" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkUrl" value="bookmarkUrl" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="146" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-bookmarkUrl" value="bookmarkUrl : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="120" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkDescription" value="bookmarkDescription" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="170" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-bookmarkDescription" value="bookmarkDescription : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="144" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkIcon" value="bookmarkIcon" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memos">
-          <mxGeometry y="194" width="220" height="24" as="geometry"/>
+        <mxCell id="memos-bookmarkIcon" value="bookmarkIcon : TEXT" style="text;align=left;verticalAlign=middle;" parent="memos" vertex="1">
+          <mxGeometry x="30" y="168" width="190" height="24" as="geometry" />
         </mxCell>
-        <!-- tags表 -->
-        <mxCell id="tags" value="tags" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
-          <mxGeometry x="400" y="320" width="220" height="170" as="geometry"/>
+        <mxCell id="tags" value="TAGS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+          <mxGeometry x="640" y="60" width="200" height="96" as="geometry" />
         </mxCell>
-        <mxCell id="tags-id" value="id (PK)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="tags">
-          <mxGeometry y="26" width="220" height="24" as="geometry"/>
+        <mxCell id="tags-id" value="id : INTEGER (PK)" style="text;align=left;verticalAlign=middle;" parent="tags" vertex="1">
+          <mxGeometry x="30" width="170" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="tags-path" value="path (唯一)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="tags">
-          <mxGeometry y="50" width="220" height="24" as="geometry"/>
+        <mxCell id="tags-path" value="path : TEXT (UNIQUE)" style="text;align=left;verticalAlign=middle;" parent="tags" vertex="1">
+          <mxGeometry x="30" y="24" width="170" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="tags-parentId" value="parentId (FK→tags.id)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="tags">
-          <mxGeometry y="74" width="220" height="24" as="geometry"/>
+        <mxCell id="tags-parentId" value="parentId : INTEGER (FK)" style="text;align=left;verticalAlign=middle;" parent="tags" vertex="1">
+          <mxGeometry x="30" y="48" width="170" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="tags-createdAt" value="createdAt" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="tags">
-          <mxGeometry y="98" width="220" height="24" as="geometry"/>
+        <mxCell id="tags-createdAt" value="createdAt : TEXT" style="text;align=left;verticalAlign=middle;" parent="tags" vertex="1">
+          <mxGeometry x="30" y="72" width="170" height="24" as="geometry" />
         </mxCell>
-        <!-- memo_tags表 -->
-        <mxCell id="memo_tags" value="memo_tags" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="80" y="320" width="220" height="146" as="geometry"/>
+        <mxCell id="memo_tags" value="MEMO_TAGS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=0;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="400" y="350" width="220" height="96" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-id" value="id (PK)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memo_tags">
-          <mxGeometry y="26" width="220" height="24" as="geometry"/>
+        <mxCell id="memo_tags-id" value="id : INTEGER (PK)" style="text;align=left;verticalAlign=middle;" parent="memo_tags" vertex="1">
+          <mxGeometry x="30" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-memoId" value="memoId (FK→memos.id)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memo_tags">
-          <mxGeometry y="50" width="220" height="24" as="geometry"/>
+        <mxCell id="memo_tags-memoId" value="memoId : INTEGER (FK)" style="text;align=left;verticalAlign=middle;" parent="memo_tags" vertex="1">
+          <mxGeometry x="30" y="24" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-tagId" value="tagId (FK→tags.id)" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memo_tags">
-          <mxGeometry y="74" width="220" height="24" as="geometry"/>
+        <mxCell id="memo_tags-tagId" value="tagId : INTEGER (FK)" style="text;align=left;verticalAlign=middle;" parent="memo_tags" vertex="1">
+          <mxGeometry x="30" y="48" width="190" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-createdAt" value="createdAt" style="text;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="memo_tags">
-          <mxGeometry y="98" width="220" height="24" as="geometry"/>
+        <mxCell id="memo_tags-createdAt" value="createdAt : TEXT" style="text;align=left;verticalAlign=middle;" parent="memo_tags" vertex="1">
+          <mxGeometry x="30" y="72" width="190" height="24" as="geometry" />
         </mxCell>
-        <!-- 关系连线 -->
-        <mxCell id="rel1" style="endArrow=block;html=1;dashed=0;" edge="1" parent="1" source="memo_tags-memoId" target="memos-id">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="rel1" style="endArrow=block;html=1;" parent="1" source="memo_tags-memoId" target="memos-id" edge="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel2" style="endArrow=block;html=1;dashed=0;" edge="1" parent="1" source="memo_tags-tagId" target="tags-id">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="rel2" style="endArrow=block;html=1;" parent="1" source="memo_tags-tagId" target="tags-id" edge="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel3" style="endArrow=block;html=1;dashed=1;" edge="1" parent="1" source="tags-parentId" target="tags-id">
-          <mxGeometry relative="1" as="geometry"/>
+        <mxCell id="rel3" style="endArrow=block;html=1;dashed=1;" parent="1" source="tags-parentId" target="tags-id" edge="1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
-</mxfile> 
+</mxfile>

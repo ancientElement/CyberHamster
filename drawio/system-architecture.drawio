@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-08-01T00:00:00.000Z" agent="Mozilla/5.0" version="21.7.5" etag="system-architecture" type="device">
+  <diagram id="system-architecture" name="系统架构图">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- JWT身份验证 -->
+        <mxCell id="jwt-auth" value="JWT身份验证" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="80" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- 请求频率限制 -->
+        <mxCell id="rate-limit" value="请求频率限制" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="200" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- 客户端 -->
+        <mxCell id="client" value="客户端&#xa;浏览器扩展、移动应用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="130" y="350" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- NestJS服务器 -->
+        <mxCell id="nestjs-server" value="NestJS服务器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="400" y="300" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- SQLite数据库 -->
+        <mxCell id="sqlite-db" value="SQLite数据库" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="650" y="300" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- 连接线：JWT到NestJS -->
+        <mxCell id="jwt-to-nestjs" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="jwt-auth" target="nestjs-server">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+            <Array as="points"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：频率限制到NestJS -->
+        <mxCell id="rate-to-nestjs" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="rate-limit" target="nestjs-server">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：客户端到NestJS -->
+        <mxCell id="client-to-nestjs-1" value="请求" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="client" target="nestjs-server">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：NestJS到客户端 -->
+        <mxCell id="nestjs-to-client" value="响应" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="nestjs-server" target="client">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：NestJS到客户端API服务 -->
+        <mxCell id="nestjs-to-client-api" value="API服务" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;" edge="1" parent="1" source="nestjs-server" target="client">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+            <Array as="points">
+              <mxPoint x="430" y="450"/>
+              <mxPoint x="220" y="450"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：NestJS到SQLite查询 -->
+        <mxCell id="nestjs-to-sqlite-query" value="查询、插入、更新、删除" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="nestjs-server" target="sqlite-db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 连接线：SQLite到NestJS数据返回 -->
+        <mxCell id="sqlite-to-nestjs-data" value="数据返回" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="sqlite-db" target="nestjs-server">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint"/>
+            <mxPoint x="440" y="360" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

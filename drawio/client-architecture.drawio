@@ -1,0 +1,124 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram id="client-architecture" name="客户端架构">
+    <mxGraphModel dx="1615" dy="982" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="event-system" target="component1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="event-system" target="component2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="279.96999999999997" y="420" />
+              <mxPoint x="279.96999999999997" y="544" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="event-system" value="事件系统" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="309.96999999999997" y="400" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="component1" value="组件1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="309.96999999999997" y="464" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="component2" value="组件2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="309.96999999999997" y="524" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ui-layer-group" value="UILayer" style="group;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=16;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="280" y="80" width="180" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="ui-title" value="UILayer" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="ui-layer-group">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="home-page" value="主页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="ui-layer-group" vertex="1">
+          <mxGeometry x="40" y="40" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="nav-page" value="导航页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="ui-layer-group" vertex="1">
+          <mxGeometry x="40" y="100" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-page" value="标签页" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="ui-layer-group" vertex="1">
+          <mxGeometry x="40" y="160" width="100" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="iapiservice-group" target="ui-layer-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="150" />
+              <mxPoint x="500" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="event-system" target="home-page">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="370" />
+              <mxPoint x="300" y="370" />
+              <mxPoint x="300" y="136" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="iapiservice-group" target="ui-layer-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="210" />
+              <mxPoint x="500" y="210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="iapiservice-group" target="ui-layer-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="270" />
+              <mxPoint x="500" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iapiservice-group" value="IAPIService" style="group;strokeColor=#000000;fillColor=#ffffff;fontSize=16;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="540" y="60" width="240" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="iapiservice-title" value="IAPIService" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="iapiservice-group">
+          <mxGeometry width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-apis" value="Auth APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="iapiservice-group" vertex="1">
+          <mxGeometry x="20" y="40" width="200" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="tag-apis" value="Tag APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="iapiservice-group" vertex="1">
+          <mxGeometry x="20" y="82" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="memo-apis" value="Memo APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="iapiservice-group" vertex="1">
+          <mxGeometry x="20" y="152" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="datalayer-group" value="DataLayer" style="group;strokeColor=#000000;fillColor=#ffffff;fontSize=16;fontStyle=1;align=center;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="570" y="420" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="datalayer-title" value="DataLayer" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;strokeColor=none;fillColor=none;" vertex="1" parent="datalayer-group">
+          <mxGeometry width="180" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="apiservice" value="APIService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="datalayer-group" vertex="1">
+          <mxGeometry x="20" y="40" width="140" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="mockapiservice" value="MockAPIService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" parent="datalayer-group" vertex="1">
+          <mxGeometry x="20" y="100" width="140" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="datalayer-title" target="iapiservice-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="610" y="390" />
+              <mxPoint x="610" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="datalayer-title" target="iapiservice-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="iOJQ_p4vkRXk15dSR9FO-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="datalayer-title" target="iapiservice-group">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="710" y="390" />
+              <mxPoint x="710" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

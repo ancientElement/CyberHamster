@@ -149,6 +149,16 @@ async function saveBookmark(metadata) {
     if (res.success) {
       saveStatus.textContent = '收藏成功';
       saveStatus.classList.add('show');
+      // 通知 background 刷新 memos 并刷新当前 tab 图标
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]) {
+          chrome.runtime.sendMessage({
+            type: 'REFRESH_MEMOS_AND_ICON',
+            tabId: tabs[0].id,
+            url: metadata.url
+          });
+        }
+      });
     } else {
       saveStatus.textContent = `收藏失败${res}`;
       saveStatus.classList.add('error', 'show');
@@ -162,6 +172,18 @@ async function saveBookmark(metadata) {
     saveStatus.classList.add('error', 'show');
     console.error('Failed to save bookmark:', error);
   }
+}
+
+// 检查当前网址是否已被收藏
+async function checkIfBookmarked(url) {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage(
+      { type: 'CHECK_BOOKMARKED', url },
+      (response) => {
+        resolve(response);
+      }
+    );
+  });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -180,6 +202,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 从storage中获取API地址
   let apiUrl = DEFAULT_API_URL;
   let apiToken;
+
   browser.storage.sync.get(['apiUrl'], (result) => {
     if (result.apiUrl) {
       apiUrl = result.apiUrl;
@@ -189,7 +212,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         apiToken = result1.apiToken;
       }
       api = new ApiService(apiUrl, apiToken);
-      // 自动保存书签
+      // 只有未收藏时才自动保存
       saveBookmark(metadata);
     });
   });

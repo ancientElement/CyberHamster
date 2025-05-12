@@ -70,4 +70,16 @@ export class ApiService extends BaseApi {
   async createMemo(data) {
     return this.post('/memos', data);
   }
+
+  async getAllMemos() {
+    return this.get('/memos');
+  }
+
+  async updateMemo(id, data) {
+    return this.put(`/memos/${id}`, data);
+  }
+
+  async deleteMemo(id) {
+    return this.delete(`/memos/${id}`);
+  }
 }

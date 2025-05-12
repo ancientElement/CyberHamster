@@ -5,9 +5,12 @@ class EventManager {
   // 第一层Map: listener -> 第二层Map
   // 第二层Map: eventName -> handler
   private listeners: Map<any, Map<string, EventHandler>>;
+  // 新增：事件名称到监听者列表的映射
+  private eventListeners: Map<string, Set<any>>;
 
   private constructor() {
     this.listeners = new Map();
+    this.eventListeners = new Map();
   }
 
   static getInstance(): EventManager {
@@ -35,6 +38,13 @@ class EventManager {
     }
 
     listenerEvents.set(eventName, handler);
+
+    // 更新事件监听者映射
+    if (!this.eventListeners.has(eventName)) {
+      this.eventListeners.set(eventName, new Set());
+    }
+    this.eventListeners.get(eventName)!.add(listener);
+
     return true;
   }
 
@@ -44,13 +54,19 @@ class EventManager {
    * @param args 传递给处理函数的参数
    */
   dispatchEvent(eventName: string, ...args: any[]): void {
-    for (const [_, listenerEvents] of this.listeners.entries()) {
-      const handler = listenerEvents.get(eventName);
-      if (handler) {
-        try {
-          handler(...args);
-        } catch (error) {
-          console.error(`Error in event handler for ${eventName}:`, error);
+    const listeners = this.eventListeners.get(eventName);
+    if (!listeners) return;
+
+    for (const listener of listeners) {
+      const listenerEvents = this.listeners.get(listener);
+      if (listenerEvents) {
+        const handler = listenerEvents.get(eventName);
+        if (handler) {
+          try {
+            handler(...args);
+          } catch (error) {
+            console.error(`Error in event handler for ${eventName}:`, error);
+          }
         }
       }
     }
@@ -69,6 +85,15 @@ class EventManager {
         this.listeners.delete(listener);
       }
     }
+
+    // 更新事件监听者映射
+    const eventListeners = this.eventListeners.get(eventName);
+    if (eventListeners) {
+      eventListeners.delete(listener);
+      if (eventListeners.size === 0) {
+        this.eventListeners.delete(eventName);
+      }
+    }
   }
 
   /**
@@ -76,6 +101,19 @@ class EventManager {
    * @param listener 监听者对象
    */
   removeEventAll(listener: any): void {
+    const listenerEvents = this.listeners.get(listener);
+    if (listenerEvents) {
+      // 更新事件监听者映射
+      for (const [eventName, _] of listenerEvents) {
+        const eventListeners = this.eventListeners.get(eventName);
+        if (eventListeners) {
+          eventListeners.delete(listener);
+          if (eventListeners.size === 0) {
+            this.eventListeners.delete(eventName);
+          }
+        }
+      }
+    }
     this.listeners.delete(listener);
   }
 
@@ -84,6 +122,7 @@ class EventManager {
    */
   clearAll(): void {
     this.listeners.clear();
+    this.eventListeners.clear();
   }
 }
 

@@ -1,20 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, TextInput, useWindowDimensions, ViewStyle, TextStyle } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, useWindowDimensions, ViewStyle, TextStyle, View } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { SimpleCenterCardModal } from '@/components/SimpleCenterCardModal';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { NoOutlineTextInput } from './NoOutlineTextInput';
-
-// 标签树节点类型定义
-interface TagTreeNode {
-  id: number;
-  name: string;
-  path: string;
-  children: TagTreeNode[];
-  createdAt: string;
-  number: number;
-}
+import { TagTreeNode } from '@/client-server-public/types';
 
 interface TagFilterModalProps {
   visible: boolean;
@@ -24,98 +15,54 @@ interface TagFilterModalProps {
   onSelectTag?: (tag: TagTreeNode, hasChildren: boolean) => void;
 }
 
-// 单个标签项组件
-const TagItem = ({ tag, level = 0, onSelect, selectedTags}: {
-  tag: TagTreeNode;
-  level?: number;
-  selectedTags: TagTreeNode[];
-  onSelect?: (tag: TagTreeNode, hasChildren: boolean) => void;
-}) => {
-  const [expanded, setExpanded] = useState(false);
-  const hasChildren = tag.children && tag.children.length > 0;
+// 扁平化标签树，父标签在前，子标签紧跟其后
+function flattenTags(tags: TagTreeNode[], prefix = ''): TagTreeNode[] {
+  let result: TagTreeNode[] = [];
+  for (const tag of tags) {
+    result.push(tag);
+    if (tag.children && tag.children.length > 0) {
+      result = result.concat(flattenTags(tag.children, tag.path + '/'));
+    }
+  }
+  return result;
+}
 
-  return (
-    <ThemedView>
-      <TouchableOpacity
-        style={[styles.tagItem, { paddingLeft: 16 + level * 20 }]}
-        onPress={() => {
-          if (onSelect) {
-            onSelect(tag, hasChildren);
-          }
-        }}
-      >
-        <ThemedView style={styles.tagItemContent}>
-          {hasChildren && (
-            <TouchableOpacity
-              onPress={() => setExpanded(!expanded)}
-            >
-              <IconSymbol
-                name={expanded ? "chevron.down" : "chevron.right"}
-                size={16}
-                color="#666"
-                style={styles.expandIcon}
-              />
-            </TouchableOpacity>
-          )}
-          <ThemedText style={styles.tagName}>{tag.name}</ThemedText>
-          {selectedTags && selectedTags.some(t => t.id === tag.id) && (
-            <IconSymbol
-              name="checkmark"
-              size={16}
-              color="#0a7ea4"
-              style={styles.checkIcon}
-            />
-          )}
-          <ThemedText style={styles.tagNumber}>({tag.number})</ThemedText>
-        </ThemedView>
-      </TouchableOpacity>
-
-      {expanded && hasChildren && (
-        <ThemedView>
-          {tag.children.map((child) => (
-            <TagItem
-              key={child.id}
-              tag={child}
-              level={level + 1}
-              onSelect={onSelect}
-              selectedTags={selectedTags}
-            />
-          ))}
-        </ThemedView>
-      )}
-    </ThemedView>
-  );
-};
+// 按首字母分组
+function groupTagsByInitial(flatTags: TagTreeNode[]): Record<string, TagTreeNode[]> {
+  const groups: Record<string, TagTreeNode[]> = {};
+  for (const tag of flatTags) {
+    const initial = tag.path[0] ? tag.path[0].toUpperCase() : '#';
+    if (!groups[initial]) groups[initial] = [];
+    groups[initial].push(tag);
+  }
+  return groups;
+}
 
 export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], onSelectTag }: TagFilterModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
 
-  // 递归搜索标签树
-  const searchTags = (tags: TagTreeNode[], query: string): TagTreeNode[] => {
-    return tags.reduce((results: TagTreeNode[], tag) => {
-      if (tag.name.toLowerCase().includes(query.toLowerCase())) {
-        results.push(tag);
-      }
-      if (tag.children && tag.children.length > 0) {
-        results.push(...searchTags(tag.children, query));
-      }
-      return results;
-    }, []);
-  };
+  // 扁平化所有标签
+  const flatTags = useMemo(() => flattenTags(tagsTree), [tagsTree]);
 
-  // 使用 useMemo 优化搜索性能
+  // 搜索过滤
   const filteredTags = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return tagsTree;
-    }
-    return searchTags(tagsTree, searchQuery);
-  }, [tagsTree, searchQuery]);
+    if (!searchQuery.trim()) return flatTags;
+    return flatTags.filter(tag => tag.path.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [flatTags, searchQuery]);
 
-  // 计算模态框宽度和高度
+  // 按首字母分组排序，但不显示首字母
+  const groupedTags = useMemo(() => groupTagsByInitial(filteredTags), [filteredTags]);
+  const sortedTags: TagTreeNode[] = useMemo(() => {
+    return Object.keys(groupedTags)
+      .sort()
+      .flatMap(initial => groupedTags[initial]);
+  }, [groupedTags]);
+
+  // 计算模态框宽高
   const modalWidth = Math.min(windowWidth * 0.9, 400);
   const modalHeight = windowHeight * 0.8;
-  const tagListHeight = modalHeight - 120; // 减去头部和搜索框的高度
+  const tagListHeight = modalHeight - 120;
 
   return (
     <SimpleCenterCardModal visible={visible} onClose={onClose}>
@@ -144,18 +91,20 @@ export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], 
         </ThemedView>
 
         <ScrollView style={[styles.tagList, { maxHeight: tagListHeight }]}>
-          {filteredTags.map((tag) => (
-            <TagItem
-              key={tag.id}
-              tag={tag}
-              selectedTags={selectedTags}
-              onSelect={(selectedTag, hasChildren) => {
-                if (onSelectTag) {
-                  onSelectTag(selectedTag, hasChildren);
-                }
-              }}
-            />
-          ))}
+          <View style={styles.groupTagsRow}>
+            {sortedTags.map((tag: TagTreeNode) => (
+              <TouchableOpacity
+                key={tag.id}
+                style={styles.flatTagBtn}
+                onPress={() => onSelectTag && onSelectTag(tag, !!(tag.children && tag.children.length > 0))}
+              >
+                <ThemedText style={styles.flatTagText}>{tag.path}</ThemedText>
+                {selectedTags.some(t => t.id === tag.id) && (
+                  <IconSymbol name="checkmark" size={14} color="#0a7ea4" style={styles.checkIcon} />
+                )}
+              </TouchableOpacity>
+            ))}
+          </View>
         </ScrollView>
       </ThemedView>
     </SimpleCenterCardModal>
@@ -177,59 +126,66 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  } as TextStyle,
-  closeButton: {
-    padding: 4,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
     padding: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
+  title: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  } as TextStyle,
+  closeButton: {
+    padding: 2,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
   searchIcon: {
-    marginRight: 8,
+    marginRight: 4,
   },
   searchInput: {
     flex: 1,
-    height: 36,
-    fontSize: 14,
+    height: 28,
+    fontSize: 13,
     color: '#333',
   } as TextStyle,
   clearButton: {
-    padding: 4,
+    padding: 2,
   },
   tagList: {
     flex: 1,
+    paddingLeft: 12,
   },
-  tagItem: {
-    paddingVertical: 12,
-    paddingRight: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+  groupTagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    flex: 1,
+    gap: 6,
   },
-  tagItemContent: {
+  flatTagBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginRight: 0,
+    marginBottom: 4,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 0,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    minHeight: undefined,
   },
-  expandIcon: {
-    marginRight: 8,
+  flatTagText: {
+    fontSize: 13,
+    lineHeight: 18,
+    color: '#008080',
+    fontWeight: '400',
   },
-  tagName: {
-    fontSize: 16,
-  } as TextStyle,
   checkIcon: {
-    marginLeft: 8,
+    marginLeft: 3,
   },
-  tagNumber: {
-    marginLeft: 8,
-  } as TextStyle
 });

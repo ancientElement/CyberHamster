@@ -106,17 +106,23 @@ export default function SettingsScreen() {
           <ThemedText style={styles.settingLabel}>修复标签格式</ThemedText>
           <NoOutlineTouchableOpacity
             style={[styles.actionButton, { backgroundColor: colors.tabIconSelected }]}
-            onPress={async () => {
-              try {
-                const response = await api.fixTagFormat();
-                if (response.success) {
-                  showModal('成功', '标签格式修复完成', () => {});
-                } else {
-                  showModal('错误', response.message || '修复标签格式失败', () => {});
+            onPress={() => {
+              showModal(
+                '确认修复',
+                '确定要修复所有标签的格式吗？',
+                async () => {
+                  try {
+                    const response = await api.fixTagFormat();
+                    if (response.success) {
+                      showModal('成功', '标签格式修复完成', () => {});
+                    } else {
+                      showModal('错误', response.message || '修复标签格式失败', () => {});
+                    }
+                  } catch (err) {
+                    showModal('错误', '修复标签格式时发生错误', () => {});
+                  }
                 }
-              } catch (err) {
-                showModal('错误', '修复标签格式时发生错误', () => {});
-              }
+              );
             }}
           >
             <ThemedText style={styles.actionButtonText}>修复</ThemedText>

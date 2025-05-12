@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { StyleSheet, ScrollView, TouchableOpacity, TextInput, useWindowDimensions, ViewStyle, TextStyle } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { SimpleCenterCardModal } from '@/components/SimpleCenterCardModal';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { NoOutlineTextInput } from './NoOutlineTextInput';
 
 // 标签树节点类型定义
 interface TagTreeNode {
@@ -87,9 +88,38 @@ const TagItem = ({ tag, level = 0, onSelect, selectedTags}: {
 };
 
 export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], onSelectTag }: TagFilterModalProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
+
+  // 递归搜索标签树
+  const searchTags = (tags: TagTreeNode[], query: string): TagTreeNode[] => {
+    return tags.reduce((results: TagTreeNode[], tag) => {
+      if (tag.name.toLowerCase().includes(query.toLowerCase())) {
+        results.push(tag);
+      }
+      if (tag.children && tag.children.length > 0) {
+        results.push(...searchTags(tag.children, query));
+      }
+      return results;
+    }, []);
+  };
+
+  // 使用 useMemo 优化搜索性能
+  const filteredTags = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return tagsTree;
+    }
+    return searchTags(tagsTree, searchQuery);
+  }, [tagsTree, searchQuery]);
+
+  // 计算模态框宽度和高度
+  const modalWidth = Math.min(windowWidth * 0.9, 400);
+  const modalHeight = windowHeight * 0.8;
+  const tagListHeight = modalHeight - 120; // 减去头部和搜索框的高度
+
   return (
     <SimpleCenterCardModal visible={visible} onClose={onClose}>
-      <ThemedView style={styles.modalContent}>
+      <ThemedView style={[styles.modalContent, { width: modalWidth, maxHeight: modalHeight }]}>
         <ThemedView style={styles.header}>
           <ThemedText style={styles.title}>标签筛选</ThemedText>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -97,8 +127,24 @@ export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], 
           </TouchableOpacity>
         </ThemedView>
 
-        <ScrollView style={styles.tagList}>
-          {tagsTree.map((tag) => (
+        <ThemedView style={styles.searchContainer}>
+          <IconSymbol name="magnifyingglass" size={16} color="#666" style={styles.searchIcon} />
+          <NoOutlineTextInput
+            style={styles.searchInput}
+            placeholder="搜索标签..."
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholderTextColor="#999"
+          />
+          {searchQuery ? (
+            <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearButton}>
+              <IconSymbol name="xmark.circle.fill" size={16} color="#666" />
+            </TouchableOpacity>
+          ) : null}
+        </ThemedView>
+
+        <ScrollView style={[styles.tagList, { maxHeight: tagListHeight }]}>
+          {filteredTags.map((tag) => (
             <TagItem
               key={tag.id}
               tag={tag}
@@ -118,8 +164,6 @@ export function TagFilterModal({ visible, onClose, tagsTree, selectedTags = [], 
 
 const styles = StyleSheet.create({
   modalContent: {
-    width: 320,
-    maxHeight: 500,
     backgroundColor: '#fff',
     borderRadius: 12,
     overflow: 'hidden',
@@ -140,12 +184,31 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-  },
+  } as TextStyle,
   closeButton: {
     padding: 4,
   },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    height: 36,
+    fontSize: 14,
+    color: '#333',
+  } as TextStyle,
+  clearButton: {
+    padding: 4,
+  },
   tagList: {
-    maxHeight: 400,
+    flex: 1,
   },
   tagItem: {
     paddingVertical: 12,
@@ -162,11 +225,11 @@ const styles = StyleSheet.create({
   },
   tagName: {
     fontSize: 16,
-  },
+  } as TextStyle,
   checkIcon: {
     marginLeft: 8,
   },
   tagNumber: {
     marginLeft: 8,
-  }
+  } as TextStyle
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
@@ -10,12 +10,14 @@ import { ConfirmCardModal } from '@/components/ConfirmCardModal';
 import { NoOutlineTextInput } from '@/components/NoOutlineTextInput';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/constants/Colors';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { eventManager } from '@/events/event-manager';
 
 export default function TagsScreen() {
   const api = useApi();
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? 'light'];
+  const navigation = useNavigation();
   const [tagsTree, setTagsTree] = useState<TagTreeNode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,6 +25,7 @@ export default function TagsScreen() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedTag, setSelectedTag] = useState<TagTreeNode | null>(null);
   const [newPath, setNewPath] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   // 加载标签树
   const loadTags = async () => {
@@ -48,6 +51,27 @@ export default function TagsScreen() {
       loadTags();
     }, [])
   );
+
+  // 递归搜索标签树
+  const searchTags = (tags: TagTreeNode[], query: string): TagTreeNode[] => {
+    return tags.reduce((results: TagTreeNode[], tag) => {
+      if (tag.path.toLowerCase().includes(query.toLowerCase())) {
+        results.push(tag);
+      }
+      if (tag.children && tag.children.length > 0) {
+        results.push(...searchTags(tag.children, query));
+      }
+      return results;
+    }, []);
+  };
+
+  // 使用 useMemo 优化搜索性能
+  const filteredTags = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return tagsTree;
+    }
+    return searchTags(tagsTree, searchQuery);
+  }, [tagsTree, searchQuery]);
 
   // 处理标签编辑
   const handleEditTag = async () => {
@@ -89,15 +113,26 @@ export default function TagsScreen() {
     }
   };
 
+  // 处理标签点击
+  const handleTagClick = (tag: TagTreeNode) => {
+    // 触发标签点击事件
+    eventManager.dispatchEvent('tagClick', tag.path);
+    // 导航到主页
+    navigation.navigate('index' as never);
+  };
+
   // 渲染标签项
   const renderTagItem = (tag: TagTreeNode, level: number = 0) => {
     return (
       <ThemedView key={tag.id}>
         <ThemedView style={[styles.tagItem, { paddingLeft: 16 + level * 20 }]}>
-          <ThemedView style={styles.tagContent}>
+          <TouchableOpacity 
+            style={styles.tagContent}
+            onPress={() => handleTagClick(tag)}
+          >
             <ThemedText style={styles.tagName}>{tag.path}</ThemedText>
             <ThemedText style={styles.tagNumber}>({tag.number})</ThemedText>
-          </ThemedView>
+          </TouchableOpacity>
           <ThemedView style={styles.tagActions}>
             <TouchableOpacity
               onPress={() => {
@@ -128,10 +163,26 @@ export default function TagsScreen() {
         <ThemedText style={styles.headerTitle}>标签管理</ThemedText>
       </ThemedView>
 
+      <ThemedView style={styles.searchContainer}>
+        <IconSymbol name="magnifyingglass" size={16} color="#666" style={styles.searchIcon} />
+        <NoOutlineTextInput
+          style={styles.searchInput}
+          placeholder="搜索标签..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholderTextColor="#999"
+        />
+        {searchQuery ? (
+          <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearButton}>
+            <IconSymbol name="xmark.circle.fill" size={16} color="#666" />
+          </TouchableOpacity>
+        ) : null}
+      </ThemedView>
+
       {error && <ThemedText style={styles.errorText}>{error}</ThemedText>}
 
       <ScrollView style={styles.tagList}>
-        {tagsTree.map(tag => renderTagItem(tag))}
+        {filteredTags.map(tag => renderTagItem(tag))}
       </ScrollView>
 
       {/* 编辑标签模态框 */}
@@ -203,6 +254,26 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 8,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    height: 36,
+    fontSize: 14,
+    color: '#333',
+  },
+  clearButton: {
+    padding: 4,
   },
   errorText: {
     color: '#ff3b30',

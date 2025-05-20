@@ -1,148 +1,148 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram id="db-er-chickenfoot" name="数据库ER图-鸡爪型">
-    <mxGraphModel dx="1235" dy="751" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
+    <mxGraphModel dx="1050" dy="638" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="800" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="users" value="USERS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" parent="1" vertex="1">
-          <mxGeometry x="515" y="190" width="100" height="40" as="geometry" />
+        <mxCell id="users" value="USERS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="517.5" y="172" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="users-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="445" y="130" width="80" height="32" as="geometry" />
+        <mxCell id="users-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="410" y="100" width="115" height="62" as="geometry" />
         </mxCell>
-        <mxCell id="users-username" value="username" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="425" y="210" width="80" height="32" as="geometry" />
+        <mxCell id="users-username" value="username" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="370" y="190" width="115" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="users-password" value="password" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="535" y="250" width="80" height="32" as="geometry" />
+        <mxCell id="users-password" value="password" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="515" y="242" width="105" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="users-createdAt" value="creatAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="620" y="140" width="80" height="32" as="geometry" />
+        <mxCell id="users-createdAt" value="creatAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#6c8ebf;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="640" y="122" width="130" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="users-id-edge" style="endArrow=none;html=1;" parent="1" source="users-id" target="users" edge="1">
+        <mxCell id="users-id-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="users-id" target="users" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="users-username-edge" style="endArrow=none;html=1;" parent="1" source="users-username" target="users" edge="1">
+        <mxCell id="users-username-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="users-username" target="users" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="users-password-edge" style="endArrow=none;html=1;" parent="1" source="users-password" target="users" edge="1">
+        <mxCell id="users-password-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="users-password" target="users" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="users-createdAt-edge" style="endArrow=none;html=1;" parent="1" source="users-createdAt" target="users" edge="1">
+        <mxCell id="users-createdAt-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="users-createdAt" target="users" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos" value="MEMOS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+        <mxCell id="memos" value="MEMOS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=18;fontStyle=1;" parent="1" vertex="1">
           <mxGeometry x="860" y="250" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="memos-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
+        <mxCell id="memos-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="810" y="190" width="80" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="memos-type" value="type" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="780" y="270" width="80" height="32" as="geometry" />
+        <mxCell id="memos-type" value="type" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="750" y="282" width="80" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="memos-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="970" y="334" width="80" height="32" as="geometry" />
+        <mxCell id="memos-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="970" y="332" width="150" height="46" as="geometry" />
         </mxCell>
-        <mxCell id="memos-noteContent" value="noteContent" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="940" y="172" width="80" height="32" as="geometry" />
+        <mxCell id="memos-noteContent" value="noteContent" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="910" y="108" width="150" height="64" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkTitle" value="bookmarkTitle" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="1020" y="204" width="80" height="32" as="geometry" />
+        <mxCell id="memos-bookmarkTitle" value="bookmarkTitle" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="1020" y="168" width="150" height="76" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkUrl" value="bookmarkUrl" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="1010" y="270" width="80" height="32" as="geometry" />
+        <mxCell id="memos-bookmarkUrl" value="bookmarkUrl" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="1040" y="251" width="140" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkDescription" value="bookmarkDescription" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="890" y="378" width="80" height="32" as="geometry" />
+        <mxCell id="memos-bookmarkDescription" value="bookmarkDescription" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="860" y="378" width="200" height="82" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkIcon" value="bookmarkIcon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="800" y="350" width="80" height="32" as="geometry" />
+        <mxCell id="memos-bookmarkIcon" value="bookmarkIcon" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#82b366;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="760" y="334" width="130" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="memos-id-edge" style="endArrow=none;html=1;" parent="1" source="memos-id" target="memos" edge="1">
+        <mxCell id="memos-id-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-id" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-type-edge" style="endArrow=none;html=1;" parent="1" source="memos-type" target="memos" edge="1">
+        <mxCell id="memos-type-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-type" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-createdAt-edge" style="endArrow=none;html=1;" parent="1" source="memos-createdAt" target="memos" edge="1">
+        <mxCell id="memos-createdAt-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-createdAt" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-noteContent-edge" style="endArrow=none;html=1;" parent="1" source="memos-noteContent" target="memos" edge="1">
+        <mxCell id="memos-noteContent-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-noteContent" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkTitle-edge" style="endArrow=none;html=1;" parent="1" source="memos-bookmarkTitle" target="memos" edge="1">
+        <mxCell id="memos-bookmarkTitle-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-bookmarkTitle" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkUrl-edge" style="endArrow=none;html=1;" parent="1" source="memos-bookmarkUrl" target="memos" edge="1">
+        <mxCell id="memos-bookmarkUrl-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-bookmarkUrl" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkDescription-edge" style="endArrow=none;html=1;" parent="1" source="memos-bookmarkDescription" target="memos" edge="1">
+        <mxCell id="memos-bookmarkDescription-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-bookmarkDescription" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memos-bookmarkIcon-edge" style="endArrow=none;html=1;" parent="1" source="memos-bookmarkIcon" target="memos" edge="1">
+        <mxCell id="memos-bookmarkIcon-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memos-bookmarkIcon" target="memos" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tags" value="TAGS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+        <mxCell id="tags" value="TAGS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=18;fontStyle=1;" parent="1" vertex="1">
           <mxGeometry x="810" y="520" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="tags-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="1" vertex="1">
+        <mxCell id="tags-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="770" y="460" width="80" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="tags-path" value="path (UNIQUE)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="1" vertex="1">
-          <mxGeometry x="870" y="608" width="80" height="32" as="geometry" />
+        <mxCell id="tags-path" value="path (UNIQUE)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="865" y="590" width="170" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="tags-parentId" value="parentId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="1" vertex="1">
-          <mxGeometry x="720" y="596" width="80" height="32" as="geometry" />
+        <mxCell id="tags-parentId" value="parentId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="670" y="572" width="150" height="68" as="geometry" />
         </mxCell>
-        <mxCell id="tags-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;" parent="1" vertex="1">
+        <mxCell id="tags-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d79b00;fontSize=18;" parent="1" vertex="1">
           <mxGeometry x="910" y="480" width="80" height="32" as="geometry" />
         </mxCell>
-        <mxCell id="tags-id-edge" style="endArrow=none;html=1;" parent="1" source="tags-id" target="tags" edge="1">
+        <mxCell id="tags-id-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="tags-id" target="tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tags-path-edge" style="endArrow=none;html=1;" parent="1" source="tags-path" target="tags" edge="1">
+        <mxCell id="tags-path-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="tags-path" target="tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tags-parentId-edge" style="endArrow=none;html=1;" parent="1" source="tags-parentId" target="tags" edge="1">
+        <mxCell id="tags-parentId-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="tags-parentId" target="tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="tags-createdAt-edge" style="endArrow=none;html=1;" parent="1" source="tags-createdAt" target="tags" edge="1">
+        <mxCell id="tags-createdAt-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="tags-createdAt" target="tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags" value="MEMO_TAGS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+        <mxCell id="memo_tags" value="MEMO_TAGS" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=18;fontStyle=1;" parent="1" vertex="1">
           <mxGeometry x="500" y="350" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="425" y="302" width="80" height="32" as="geometry" />
+        <mxCell id="memo_tags-id" value="id (PK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="395" y="282" width="115" height="74" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-memoId" value="memoId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="630" y="318" width="80" height="32" as="geometry" />
+        <mxCell id="memo_tags-memoId" value="memoId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="620" y="280" width="110" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-tagId" value="tagId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="620" y="400" width="80" height="32" as="geometry" />
+        <mxCell id="memo_tags-tagId" value="tagId (FK)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="590" y="400" width="110" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="425" y="410" width="80" height="32" as="geometry" />
+        <mxCell id="memo_tags-createdAt" value="createdAt" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b85450;fontSize=18;" parent="1" vertex="1">
+          <mxGeometry x="395" y="400" width="140" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-id-edge" style="endArrow=none;html=1;" parent="1" source="memo_tags-id" target="memo_tags" edge="1">
+        <mxCell id="memo_tags-id-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memo_tags-id" target="memo_tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-memoId-edge" style="endArrow=none;html=1;" parent="1" source="memo_tags-memoId" target="memo_tags" edge="1">
+        <mxCell id="memo_tags-memoId-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memo_tags-memoId" target="memo_tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-tagId-edge" style="endArrow=none;html=1;" parent="1" source="memo_tags-tagId" target="memo_tags" edge="1">
+        <mxCell id="memo_tags-tagId-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memo_tags-tagId" target="memo_tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="memo_tags-createdAt-edge" style="endArrow=none;html=1;" parent="1" source="memo_tags-createdAt" target="memo_tags" edge="1">
+        <mxCell id="memo_tags-createdAt-edge" style="endArrow=none;html=1;fontSize=18;" parent="1" source="memo_tags-createdAt" target="memo_tags" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel1" style="endArrow=block;html=1;" parent="1" source="memo_tags-memoId" target="memos-id" edge="1">
+        <mxCell id="rel1" style="endArrow=block;html=1;fontSize=18;" parent="1" source="memo_tags-memoId" target="memos-id" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel2" style="endArrow=block;html=1;" parent="1" source="memo_tags-tagId" target="tags-id" edge="1">
+        <mxCell id="rel2" style="endArrow=block;html=1;fontSize=18;" parent="1" source="memo_tags-tagId" target="tags-id" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="rel3" style="endArrow=block;html=1;dashed=1;" parent="1" source="tags-parentId" target="tags-id" edge="1">
+        <mxCell id="rel3" style="endArrow=block;html=1;dashed=1;fontSize=18;" parent="1" source="tags-parentId" target="tags-id" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

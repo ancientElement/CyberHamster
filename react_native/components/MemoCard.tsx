@@ -87,7 +87,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     elevation: 2,
-    maxHeight: 400,
     ...Platform.select({
       web: {
         boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',

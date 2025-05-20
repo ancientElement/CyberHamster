@@ -280,7 +280,7 @@ export class MemoApiServiceAdaptor {
   // 提取并保存标签
   private async extractAndSaveTags(content: string, memoId: number): Promise<void> {
     // 提取以#开头的标签，支持嵌套路径格式 #tag 或 #parent/child
-    const tagRegex = /#[\w\u4e00-\u9fa5\/]+/g;
+    const tagRegex = /#[\w\u4e00-\u9fa5\/\-\.\+\&\(\)\[\]\{\}\@\!\?\:\;\=\%\$]+/g;
     const matches = content.match(tagRegex);
 
     if (!matches || matches.length === 0) {

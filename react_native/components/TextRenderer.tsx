@@ -29,7 +29,7 @@ export function TextRenderer({ text, style }: TextRendererProps) {
 
     // URL和标签的正则表达式
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const tagRegex = /#[\w\u4e00-\u9fa5\/]+/g;
+    const tagRegex = /#[\w\u4e00-\u9fa5\/\-\.\+\&\(\)\[\]\{\}\@\!\?\:\;\=\%\$]+/g;
 
     // 收集所有匹配项
     const matches = [];

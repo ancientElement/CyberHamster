@@ -22,7 +22,8 @@ const improvedTagPrompt = `
    - 只返回标签，不要有任何其他内容
 
 4. 标签优先级：
-   - 优先使用现有标签库中的标签
+   - 首先忽略现有标签列表，生成标签
+   - 如果现有标签中有生成标签，优先使用该标签
    - 根据内容类型和主题选择合适的标签
    - 标签应该反映内容的来源、主题和技术特点
    - 标签应该便于后续检索和分类
@@ -44,32 +45,6 @@ const improvedTagPrompt = `
 内容：{content}
 
 请仔细分析内容，特别是标题和URL中的关键信息，生成最合适的标签。`;
-
-// 标签评估提示词
-const tagEvaluationPrompt = `
-请评估以下标签的质量：
-内容：{content}
-标签：{tags}
-
-请从以下维度评分（0-1分）：
-1. 相关性：标签与内容的匹配程度
-2. 准确性：标签描述内容的精确程度
-3. 通用性：标签的适用范围
-4. 区分度：标签的独特性和辨识度
-
-评分标准：
-- 0.9-1.0：标签完美匹配内容主题
-- 0.7-0.8：标签与内容高度相关
-- 0.5-0.6：标签与内容有一定相关性
-- 0.3-0.4：标签与内容相关性较弱
-- 0.1-0.2：标签与内容几乎无关
-
-只返回JSON格式的评分结果，格式如下：
-{
-  "#标签1": 0.8,
-  "#标签2": 0.6,
-  ...
-}`;
 
 export class MemoApiServiceAdaptor {
   private db!: DatabaseAdaptor;
@@ -189,29 +164,22 @@ export class MemoApiServiceAdaptor {
 
       const completion = await this.openai.chat.completions.create(body);
       const suggestedTags = completion.choices[0]?.message?.content?.trim() || "";
-      console.log(`AI生成的原始标签: ${suggestedTags}`);
+      console.log(`AI生成的标签: ${suggestedTags}`);
 
       if (suggestedTags) {
         const tags = suggestedTags.split(' ').filter(tag => tag.trim() !== '');
         const isValidTags = tags.every(tag => tag.startsWith('#'));
 
         if (isValidTags && tags.length > 0) {
-          console.log('开始评估标签质量...');
-          const evaluatedTags = await this.evaluateTags(tags, content);
-
-          const filteredTags = evaluatedTags
-            .filter(tag => tag.score >= 0.7)
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 3)
-            .map(tag => tag.tag);
-
-          console.log(`过滤后的高质量标签: ${filteredTags.join(', ')}`);
+          // 直接使用AI生成的标签，最多取前3个
+          const filteredTags = tags.slice(0, 3);
+          console.log(`使用的标签: ${filteredTags.join(', ')}`);
 
           if (filteredTags.length > 0) {
             processedContent = `${filteredTags.join(' ')}\n${content}`;
             console.log(`最终生成的标签: ${filteredTags.join(' ')}`);
           } else {
-            console.warn("没有找到高质量的标签，将使用原始内容");
+            console.warn("没有找到有效标签，将使用原始内容");
             processedContent = content;
           }
         } else {
@@ -229,51 +197,6 @@ export class MemoApiServiceAdaptor {
       console.error(`AI分析内容失败 [${contentType}]: ${errorMessage}`);
       console.error('错误详情:', error);
       return content;
-    }
-  }
-
-  /**
-   * 评估标签质量
-   * @param tags 要评估的标签列表
-   * @param content 原始内容
-   * @returns 带评分的标签列表
-   */
-  private async evaluateTags(tags: string[], content: string): Promise<Array<{tag: string, score: number}>> {
-    try {
-      console.log('开始评估标签质量...');
-      console.log(`待评估标签: ${tags.join(', ')}`);
-
-      const response = await this.openai.chat.completions.create({
-        model: "qwen-plus",
-        temperature: 0.3,
-        max_tokens: 200,
-        messages: [
-          {
-            role: "system",
-            content: tagEvaluationPrompt
-              .replace('{content}', content)
-              .replace('{tags}', tags.join(' '))
-          }
-        ],
-      });
-
-      const scores = JSON.parse(response.choices[0]?.message?.content || "{}");
-      console.log('AI返回的评分结果:', scores);
-
-      const evaluatedTags = tags.map(tag => {
-        // 移除标签中的#前缀以匹配AI返回的评分
-        return {
-          tag,
-          score: scores[tag] || 0
-        };
-      });
-
-      console.log('标签评估完成，结果:', evaluatedTags);
-      return evaluatedTags;
-    } catch (error) {
-      console.error('标签评估失败:', error);
-      console.error('错误详情:', error);
-      return tags.map(tag => ({ tag, score: 0 }));
     }
   }
 

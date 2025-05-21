@@ -5,6 +5,15 @@
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+      <domain includeSubdomains="false">localhost</domain>
+      <domain includeSubdomains="false">47.101.61.188</domain>
+      <domain includeSubdomains="false">10.152.160.219</domain>
+      <domain includeSubdomains="true">dev.local</domain>
+    </domain-config>
+  </network-security-config>
+
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>

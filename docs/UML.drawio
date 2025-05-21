@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram name="第 1 页" id="lp1SsSy7WhJ0Atb1i-o_">
-    <mxGraphModel dx="2113" dy="955" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1533" dy="603" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1162,7 +1162,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="SV_nuoQkgTj__UXkRsdC-71" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" edge="1" parent="1" target="SV_nuoQkgTj__UXkRsdC-50">
+        <mxCell id="SV_nuoQkgTj__UXkRsdC-71" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" edge="1" parent="1" target="SV_nuoQkgTj__UXkRsdC-50" source="SV_nuoQkgTj__UXkRsdC-75">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1104" y="2298" as="sourcePoint" />
             <mxPoint x="827" y="2424" as="targetPoint" />
@@ -1191,7 +1191,7 @@
         <mxCell id="SV_nuoQkgTj__UXkRsdC-74" value="数据存储" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
           <mxGeometry x="1024" y="2249" width="160" height="52" as="geometry" />
         </mxCell>
-        <mxCell id="SV_nuoQkgTj__UXkRsdC-75" value="安全存储" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="SV_nuoQkgTj__UXkRsdC-74">
+        <mxCell id="SV_nuoQkgTj__UXkRsdC-75" value="数据接口" style="text;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;" vertex="1" parent="SV_nuoQkgTj__UXkRsdC-74">
           <mxGeometry y="26" width="160" height="26" as="geometry" />
         </mxCell>
         <mxCell id="SV_nuoQkgTj__UXkRsdC-76" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" edge="1" parent="1" source="SV_nuoQkgTj__UXkRsdC-77" target="SV_nuoQkgTj__UXkRsdC-74">

@@ -39,7 +39,7 @@ export default function TagsScreen() {
         setError('加载标签失败');
       }
     } catch (err) {
-      setError('加载标签时发生错误');
+      setError(`加载标签时发生错误${err}`);
     } finally {
       setLoading(false);
     }

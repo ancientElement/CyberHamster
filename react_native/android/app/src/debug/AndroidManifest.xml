@@ -2,6 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
+    <application android:usesCleartextTraffic="true"/>
+    <network-security-config>
+      <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">47.101.61.188:8552</domain>
+        <domain includeSubdomains="false">10.152.160.219</domain>
+        <domain includeSubdomains="true">dev.local</domain>
+      </domain-config>
+    </network-security-config>
+    
     <application android:usesCleartextTraffic="true" tools:targetApi="28" tools:ignore="GoogleAppIndexingWarning" tools:replace="android:usesCleartextTraffic" />
 </manifest>

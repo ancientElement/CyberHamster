@@ -61,7 +61,8 @@ export class BaseApi {
           router.replace('/login');
           throw new Error('Unauthorized');
         }
-        throw new Error(response.statusText || '请求失败');
+        let jsonStr = responseData ? JSON.stringify(responseData) : '';
+        throw new Error(response.statusText || '请求失败' + jsonStr);
       }
 
       const success = response.status === STATUS_CODE.SUCCESS ||

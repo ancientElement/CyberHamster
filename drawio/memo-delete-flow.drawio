@@ -1,0 +1,157 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
+  <diagram id="C5RBs43odoN-OGVZpm-9" name="Page-1">
+    <mxGraphModel dx="2072" dy="1250" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="开始" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="364" y="260" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="Memo存在？" style="rhombus;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="340" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="删除关联的标签关系" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="460" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="返回错误：Memo不存在" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="560" y="350" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="是否为书签类型？" style="rhombus;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="555" width="140" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="NqZtvZmt4x-zIewHDxDS-28" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" edge="1" parent="1" source="8" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="删除书签数据" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="450" y="655" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="删除笔记数据" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="230" y="655" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="删除Memo基础数据" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="755" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="清理孤立标签" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="855" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="返回删除成功响应" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="344" y="955" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="end" value="结束" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="364" y="1040" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=16;" parent="1" source="start" target="4" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="580" as="sourcePoint" />
+            <mxPoint x="414" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow4" value="是" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="4" target="5" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow5" value="否" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="4" target="6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow6" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="5" target="7" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="610" as="sourcePoint" />
+            <mxPoint x="440" y="560" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow7" value="是" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=16;edgeStyle=orthogonalEdgeStyle;" parent="1" source="7" target="8" edge="1">
+          <mxGeometry x="0.6386" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="605" as="sourcePoint" />
+            <mxPoint x="440" y="555" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow8" value="否" style="endArrow=classic;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontSize=16;edgeStyle=orthogonalEdgeStyle;" parent="1" source="7" target="9" edge="1">
+          <mxGeometry x="0.4225" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="605" as="sourcePoint" />
+            <mxPoint x="440" y="555" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow10" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;fontSize=16;edgeStyle=orthogonalEdgeStyle;" parent="1" source="9" edge="1" target="10">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="605" as="sourcePoint" />
+            <mxPoint x="230" y="735" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow14" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="10" target="11" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow15" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="11" target="12" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow16" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="12" target="end" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow17" value="" style="endArrow=classic;html=1;fontSize=16;edgeStyle=orthogonalEdgeStyle;" parent="1" source="6" target="end" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="630" y="380" as="sourcePoint" />
+            <mxPoint x="440" y="760" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="840" y="380" />
+              <mxPoint x="840" y="1070" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="20" value="deleteBookmarkData" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="610" y="655" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="deleteNoteData" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="70" y="655" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="deleteTagRelations" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="500" y="460" width="190" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="cleanupOrphanTags" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="500" y="855" width="210" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="8" target="20" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="25" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="9" target="21" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="26" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="5" target="22" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="810" as="sourcePoint" />
+            <mxPoint x="440" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="27" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=16;" parent="1" source="11" target="23" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="805" as="sourcePoint" />
+            <mxPoint x="440" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="28" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b style=&quot;font-size: 16px;&quot;&gt;删除书签（笔记）流程图&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="264" y="180" width="300" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

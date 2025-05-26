@@ -1,97 +1,111 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mxfile host="app.diagrams.net" modified="2024-08-01T00:00:00.000Z" agent="Mozilla/5.0" version="21.7.5" etag="system-architecture" type="device">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.17 Chrome/128.0.6613.36 Electron/32.0.1 Safari/537.36" version="24.7.17">
   <diagram id="system-architecture" name="系统架构图">
-    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="942" dy="568" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
-        <mxCell id="0"/>
-        <mxCell id="1" parent="0"/>
-        
-        <!-- JWT身份验证 -->
-        <mxCell id="jwt-auth" value="JWT身份验证" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="130" y="80" width="120" height="60" as="geometry"/>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="jwt-auth" value="JWT身份验证" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="470" y="535" width="120" height="35" as="geometry" />
         </mxCell>
-        
-        <!-- 请求频率限制 -->
-        <mxCell id="rate-limit" value="请求频率限制" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="130" y="200" width="120" height="60" as="geometry"/>
+        <mxCell id="client" value="客户端、浏览器扩展" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="300" y="535" width="150" height="35" as="geometry" />
         </mxCell>
-        
-        <!-- 客户端 -->
-        <mxCell id="client" value="客户端&#xa;浏览器扩展、移动应用" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="130" y="350" width="120" height="60" as="geometry"/>
-        </mxCell>
-        
-        <!-- NestJS服务器 -->
-        <mxCell id="nestjs-server" value="NestJS服务器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="400" y="300" width="120" height="60" as="geometry"/>
-        </mxCell>
-        
-        <!-- SQLite数据库 -->
-        <mxCell id="sqlite-db" value="SQLite数据库" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="650" y="300" width="120" height="60" as="geometry"/>
-        </mxCell>
-        
-        <!-- 连接线：JWT到NestJS -->
-        <mxCell id="jwt-to-nestjs" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="jwt-auth" target="nestjs-server">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
-            <Array as="points"/>
-          </mxGeometry>
-        </mxCell>
-        
-        <!-- 连接线：频率限制到NestJS -->
-        <mxCell id="rate-to-nestjs" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;dashed=1;" edge="1" parent="1" source="rate-limit" target="nestjs-server">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
-          </mxGeometry>
-        </mxCell>
-        
-        <!-- 连接线：客户端到NestJS -->
-        <mxCell id="client-to-nestjs-1" value="请求" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="client" target="nestjs-server">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
-          </mxGeometry>
-        </mxCell>
-        
-        <!-- 连接线：NestJS到客户端 -->
-        <mxCell id="nestjs-to-client" value="响应" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="nestjs-server" target="client">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
-          </mxGeometry>
-        </mxCell>
-        
-        <!-- 连接线：NestJS到客户端API服务 -->
-        <mxCell id="nestjs-to-client-api" value="API服务" style="endArrow=classic;html=1;rounded=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;fillColor=#d5e8d4;strokeColor=#82b366;" edge="1" parent="1" source="nestjs-server" target="client">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="nestjs-server" target="OOT0RK8hkKZ_A57JeUHn-11">
+          <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="430" y="450"/>
-              <mxPoint x="220" y="450"/>
+              <mxPoint x="530" y="440" />
+              <mxPoint x="530" y="440" />
             </Array>
           </mxGeometry>
         </mxCell>
-        
-        <!-- 连接线：NestJS到SQLite查询 -->
-        <mxCell id="nestjs-to-sqlite-query" value="查询、插入、更新、删除" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="nestjs-server" target="sqlite-db">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;curved=0;" edge="1" parent="1" source="nestjs-server" target="OOT0RK8hkKZ_A57JeUHn-9">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="420" />
+              <mxPoint x="680" y="420" />
+            </Array>
           </mxGeometry>
         </mxCell>
-        
-        <!-- 连接线：SQLite到NestJS数据返回 -->
-        <mxCell id="sqlite-to-nestjs-data" value="数据返回" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="sqlite-db" target="nestjs-server">
+        <mxCell id="nestjs-server" value="主模块" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="470" y="370" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sqlite-db" value="SQLite数据库" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="620" y="535" width="130" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="jwt-to-nestjs" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" parent="1" source="jwt-auth" target="OOT0RK8hkKZ_A57JeUHn-11" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="390" y="410" as="sourcePoint"/>
-            <mxPoint x="440" y="360" as="targetPoint"/>
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+            <Array as="points" />
           </mxGeometry>
         </mxCell>
-        
+        <mxCell id="client-to-nestjs-1" value="请求" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="client" target="OOT0RK8hkKZ_A57JeUHn-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="410" y="520" />
+              <mxPoint x="410" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nestjs-to-client" value="响应" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="OOT0RK8hkKZ_A57JeUHn-8" target="client" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="340" y="510" />
+              <mxPoint x="340" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nestjs-to-client-api" value="" style="endArrow=classic;html=1;rounded=1;edgeStyle=orthogonalEdgeStyle;curved=0;" parent="1" source="nestjs-server" target="OOT0RK8hkKZ_A57JeUHn-8" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="410" as="sourcePoint" />
+            <mxPoint x="440" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="530" y="420" />
+              <mxPoint x="370" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nestjs-to-sqlite-query" value="查询、插入、更新、删除" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="OOT0RK8hkKZ_A57JeUHn-9" target="sqlite-db" edge="1">
+          <mxGeometry x="0.3333" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="480" as="sourcePoint" />
+            <mxPoint x="650" y="670" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="720" y="510" />
+              <mxPoint x="720" y="510" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sqlite-to-nestjs-data" value="数据返回" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;" parent="1" source="sqlite-db" target="OOT0RK8hkKZ_A57JeUHn-9" edge="1">
+          <mxGeometry x="0.2222" width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="480" as="sourcePoint" />
+            <mxPoint x="430" y="430" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="640" y="510" />
+              <mxPoint x="640" y="510" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-8" value="API模块" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-9" value="API模块" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-11" value="权限校验模块" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="450" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="OOT0RK8hkKZ_A57JeUHn-15" target="nestjs-server">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="OOT0RK8hkKZ_A57JeUHn-15" value="NestJS服务器" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="320" width="120" height="30" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
